@@ -20,7 +20,7 @@ namespace ncrunch
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:7167")
+                BaseAddress = new Uri("https://localhost:7078")
             };
 
             var response = client.GetAsync(client.BaseAddress).Result;
