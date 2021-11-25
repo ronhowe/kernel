@@ -9,10 +9,15 @@ namespace ncrunch
     public class CodeFactory
     {
         [TestMethod]
-        public void POST()
+        public void Post()
         {
             WritePostHeader();
+            Assert.IsTrue(true);
+        }
 
+        [TestMethod]
+        public void Run()
+        {
             var client = new HttpClient
             {
                 BaseAddress = new Uri("https://www.bing.com/")
