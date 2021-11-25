@@ -18,14 +18,16 @@ namespace ncrunch
         [TestMethod]
         public void Run()
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7078/weatherforecast")
-            };
+            // TODO - Use async
+            var client = new HttpClient();
 
-            var response = client.GetAsync(client.BaseAddress).Result;
+            var response = client.GetAsync("https://localhost:7078/weatherforecast").Result;
 
-            Trace.WriteLine(response.StatusCode);
+            response.EnsureSuccessStatusCode();
+
+            var responseBody = response.Content.ReadAsStringAsync().Result;
+
+            Trace.WriteLine(responseBody);
         }
 
         private static void WritePostHeader()
