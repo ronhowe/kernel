@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace ncrunch
 {
@@ -11,13 +12,21 @@ namespace ncrunch
         public void POST()
         {
             WritePostHeader();
-            Assert.IsTrue(true);
+
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.bing.com/")
+            };
+
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            Trace.WriteLine(response.StatusCode);
         }
 
         private static void WritePostHeader()
         {
-            Trace.WriteLine("POST");
-            Trace.WriteLine(DateTime.Now);
+            var header = String.Format("POST @ {0}", DateTime.Now);
+            Trace.WriteLine(header);
         }
     }
 }
