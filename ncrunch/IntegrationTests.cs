@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -31,6 +32,7 @@ namespace ncrunch
 
             });
 
+            Trace.TraceInformation("Client Calling");
             using var response = client.GetAsync("/weatherforecast");
 
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
@@ -58,6 +60,7 @@ namespace ncrunch
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
 
+            Trace.TraceInformation("Client Calling");
             var response = client.GetAsync("/weatherforecast");
 
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);

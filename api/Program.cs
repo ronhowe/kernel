@@ -35,7 +35,8 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 {
-    app.Logger.LogInformation("GetWeatherForecast Received");
+    app.Logger.LogInformation("Server Received");
+
     httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
     var forecast = Enumerable.Range(1, 5).Select(index =>

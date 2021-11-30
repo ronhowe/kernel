@@ -10,7 +10,7 @@ namespace ncrunch
         [TestMethod]
         public void Run()
         {
-            Trace.TraceInformation(DateTime.Now.ToString());
+            Trace.TraceInformation("Let's go exploring!");
             Assert.IsTrue(true);
         }
     }
