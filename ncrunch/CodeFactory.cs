@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
-using System.Net.Http;
+using System.Net;
 
 namespace ncrunch
 {
@@ -11,29 +11,38 @@ namespace ncrunch
         [TestMethod]
         public void Post()
         {
-            WritePostHeader();
+            WriteTestHeader("Post");
             Assert.IsTrue(true);
         }
 
         [TestMethod]
         public void Run()
         {
-            // TODO - Use async
-            var client = new HttpClient();
+            WriteTestHeader("Run");
+            Assert.IsTrue(true);
 
-            var response = client.GetAsync("https://localhost:7078/weatherforecast").Result;
-
-            response.EnsureSuccessStatusCode();
-
-            var responseBody = response.Content.ReadAsStringAsync().Result;
-
-            Trace.WriteLine(responseBody);
         }
 
-        private static void WritePostHeader()
+        [TestMethod]
+        public void Integration()
         {
-            var header = String.Format("POST @ {0}", DateTime.Now);
-            Trace.WriteLine(header);
+            WriteTestHeader("Integration");
+
+            using var sut = new SystemUnderTest();
+            using var client = sut.CreateClient();
+            using var response = client.GetAsync("/weatherforecast");
+
+            var responseBody = response.Result.Content.ReadAsStringAsync().Result;
+
+            Trace.WriteLine(responseBody);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+        }
+
+
+        private static void WriteTestHeader(string tag)
+        {
+            Trace.WriteLine(String.Format("{0} @ {1}", tag, DateTime.Now));
         }
     }
 }

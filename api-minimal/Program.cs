@@ -1,10 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
@@ -15,7 +11,8 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    app.Logger.LogWarning("there!");
+    app.Logger.LogWarning("*** real time ***");
+
     var forecast = Enumerable.Range(1, 5).Select(index =>
        new WeatherForecast
        (
@@ -24,6 +21,7 @@ app.MapGet("/weatherforecast", () =>
            summaries[Random.Shared.Next(summaries.Length)]
        ))
         .ToArray();
+
     return forecast;
 });
 
@@ -33,3 +31,5 @@ internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+public partial class Program { }
