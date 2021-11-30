@@ -19,6 +19,8 @@ namespace ncrunch
     [TestClass]
     public class CodeFactory
     {
+        private readonly Uri baseAddress = new Uri("https://localhost:9999");
+
         [TestMethod]
         public void Post()
         {
@@ -39,10 +41,10 @@ namespace ncrunch
         {
             WriteTestHeader("Unauthorized");
 
-            using var sut = new SystemUnderTest();
-            using var client = sut.CreateClient(new WebApplicationFactoryClientOptions
+            using var app = new Application();
+            using var client = app.CreateClient(new WebApplicationFactoryClientOptions
             {
-                BaseAddress = new Uri("https://localhost:9999")
+                BaseAddress = baseAddress
 
             });
             using var response = client.GetAsync("/weatherforecast");
@@ -50,15 +52,14 @@ namespace ncrunch
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
         }
 
-
         [TestMethod]
         public void Authorized()
         {
             WriteTestHeader("Authorized");
 
-            using var sut = new SystemUnderTest();
+            using var app = new Application();
 
-            var client = sut.WithWebHostBuilder(builder =>
+            var client = app.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
@@ -70,7 +71,7 @@ namespace ncrunch
             .CreateClient(new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false,
-                BaseAddress = new Uri("https://localhost:9999")
+                BaseAddress = baseAddress
             });
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
@@ -80,10 +81,9 @@ namespace ncrunch
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
         }
 
-
         private static void WriteTestHeader(string tag)
         {
-            Trace.WriteLine(String.Format("{0} @ {1}", tag, DateTime.Now));
+            Trace.TraceInformation(String.Format("{0} @ {1}", tag, DateTime.Now));
         }
     }
 

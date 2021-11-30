@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
@@ -36,6 +35,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 {
+    app.Logger.LogInformation("WEATHERFORECAST API CALL RECEIVED");
     httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
     var forecast = Enumerable.Range(1, 5).Select(index =>

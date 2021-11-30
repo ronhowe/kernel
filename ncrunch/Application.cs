@@ -3,11 +3,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace ncrunch;
 
-internal class SystemUnderTest : WebApplicationFactory<Program>
+internal class Application : WebApplicationFactory<Program>
 {
     private readonly string _environment;
 
-    public SystemUnderTest(string environment = "Development")
+    public Application(string environment = "Development")
     {
         _environment = environment;
     }
