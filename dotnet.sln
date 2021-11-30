@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ncrunch", "ncrunch\ncrunch.csproj", "{1828B771-CCCB-4BB8-8D2F-8E5939461A69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-minimal", "api-minimal\api-minimal.csproj", "{467A3854-3C9B-4F03-ADF5-700FF4C44EB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{1B32087E-99C4-4EAD-BF80-41D704811608}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1828B771-CCCB-4BB8-8D2F-8E5939461A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1828B771-CCCB-4BB8-8D2F-8E5939461A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1828B771-CCCB-4BB8-8D2F-8E5939461A69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{467A3854-3C9B-4F03-ADF5-700FF4C44EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{467A3854-3C9B-4F03-ADF5-700FF4C44EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{467A3854-3C9B-4F03-ADF5-700FF4C44EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{467A3854-3C9B-4F03-ADF5-700FF4C44EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B32087E-99C4-4EAD-BF80-41D704811608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B32087E-99C4-4EAD-BF80-41D704811608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B32087E-99C4-4EAD-BF80-41D704811608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B32087E-99C4-4EAD-BF80-41D704811608}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

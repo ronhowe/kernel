@@ -15,6 +15,7 @@ internal class SystemUnderTest : WebApplicationFactory<Program>
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.UseEnvironment(_environment);
+
         return base.CreateHost(builder);
     }
 }

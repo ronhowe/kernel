@@ -2,6 +2,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace ncrunch
 {
@@ -24,19 +26,24 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void Integration()
+        public void Unauthorized()
         {
-            WriteTestHeader("Integration");
+            WriteTestHeader("Unauthorized");
 
             using var sut = new SystemUnderTest();
             using var client = sut.CreateClient();
             using var response = client.GetAsync("/weatherforecast");
 
-            var responseBody = response.Result.Content.ReadAsStringAsync().Result;
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
+        }
 
-            Trace.WriteLine(responseBody);
 
-            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+        [TestMethod]
+        public void Authorized()
+        {
+            WriteTestHeader("Authorized");
+
+            Assert.Inconclusive("TODO");
         }
 
 
