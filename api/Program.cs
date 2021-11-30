@@ -35,7 +35,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 {
-    app.Logger.LogInformation("WEATHERFORECAST API CALL RECEIVED");
+    app.Logger.LogInformation("GetWeatherForecast Received");
     httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
     var forecast = Enumerable.Range(1, 5).Select(index =>
@@ -58,4 +58,6 @@ internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
+#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
+#pragma warning restore CA1050 // Declare types in namespaces

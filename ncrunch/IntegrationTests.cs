@@ -2,51 +2,35 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace ncrunch
 {
     [TestClass]
-    public class CodeFactory
+    public class IntegrationTests
     {
-        private readonly Uri baseAddress = new Uri("https://localhost:9999");
-
-        [TestMethod]
-        public void Post()
-        {
-            WriteTestHeader("Post");
-            Assert.IsTrue(true);
-        }
-
-        [TestMethod]
-        public void Run()
-        {
-            WriteTestHeader("Run");
-            Assert.IsTrue(true);
-
-        }
+        private readonly Uri baseAddress = new("https://localhost:9999");
 
         [TestMethod]
         public void Unauthorized()
         {
-            WriteTestHeader("Unauthorized");
+            using var app = new ApiProgram();
 
-            using var app = new Application();
             using var client = app.CreateClient(new WebApplicationFactoryClientOptions
             {
                 BaseAddress = baseAddress
 
             });
+
             using var response = client.GetAsync("/weatherforecast");
 
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
@@ -55,9 +39,7 @@ namespace ncrunch
         [TestMethod]
         public void Authorized()
         {
-            WriteTestHeader("Authorized");
-
-            using var app = new Application();
+            using var app = new ApiProgram();
 
             var client = app.WithWebHostBuilder(builder =>
             {
@@ -80,11 +62,6 @@ namespace ncrunch
 
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
         }
-
-        private static void WriteTestHeader(string tag)
-        {
-            Trace.TraceInformation(String.Format("{0} @ {1}", tag, DateTime.Now));
-        }
     }
 
     public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
@@ -105,6 +82,23 @@ namespace ncrunch
             var result = AuthenticateResult.Success(ticket);
 
             return Task.FromResult(result);
+        }
+    }
+
+    public class ApiProgram : WebApplicationFactory<Program>
+    {
+        private readonly string _environment;
+
+        public ApiProgram(string environment = "Development")
+        {
+            _environment = environment;
+        }
+
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.UseEnvironment(_environment);
+
+            return base.CreateHost(builder);
         }
     }
 }
