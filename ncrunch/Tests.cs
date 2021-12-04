@@ -17,9 +17,22 @@ using System.Threading.Tasks;
 namespace ncrunch
 {
     [TestClass]
-    public class IntegrationTests
+    public class Tests
     {
+        private const string message = "@Tests.cs";
         private readonly Uri baseAddress = new("https://localhost:9999");
+
+        [TestInitialize()]
+        public void BeforeEachTest()
+        {
+            Trace.WriteLine(message);
+        }
+
+        [TestMethod]
+        public void Debug()
+        {
+            Trace.WriteLine("@Debug");
+        }
 
         [TestMethod]
         public void Unauthorized()
@@ -32,14 +45,13 @@ namespace ncrunch
 
             });
 
-            Trace.TraceInformation("Client Calling");
             using var response = client.GetAsync("/weatherforecast");
 
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
         }
 
         [TestMethod]
-        public void Authorized()
+        public void MockAuthorized()
         {
             using var app = new ApiProgram();
 
@@ -59,10 +71,6 @@ namespace ncrunch
             });
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
-
-            Trace.TraceInformation("Client Calling");
-
-            Trace.WriteLine("// Hard-Coded Comment ");
 
             var response = client.GetAsync("/weatherforecast");
 
