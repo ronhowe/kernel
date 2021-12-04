@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
+using System.Diagnostics;
+
+const string message = "@Program.cs";
+
+Trace.WriteLine(message);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,8 +40,8 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", (HttpContext httpContext) =>
 {
-    app.Logger.LogInformation("Server Received");
-
+    const string source = "@MapGet";
+    app.Logger.LogTrace(source);
     httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
     var forecast = Enumerable.Range(1, 5).Select(index =>
