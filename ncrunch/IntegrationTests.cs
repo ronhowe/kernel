@@ -61,6 +61,9 @@ namespace ncrunch
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
 
             Trace.TraceInformation("Client Calling");
+
+            Trace.WriteLine("// Hard-Coded Comment ");
+
             var response = client.GetAsync("/weatherforecast");
 
             Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
