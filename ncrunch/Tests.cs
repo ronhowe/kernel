@@ -76,9 +76,9 @@ namespace ncrunch
 
                 try
                 {
-                    Trace.TraceInformation("@PreGetSecretAsync");
+                    Trace.TraceInformation("@PreGetSecretAsync @ExternalDependency");
                     secret = (await client.GetSecretAsync("mysecret", cancellationToken: new CancellationToken())).Value;
-                    Trace.TraceInformation("@PostGetSecretAsync");
+                    Trace.TraceInformation("@PostGetSecretAsync @ExternalDependency");
 
                     Assert.IsNotNull(secret);
 

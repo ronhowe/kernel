@@ -91,7 +91,7 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
 
     #region Application Logic
 
-    app.Logger.LogInformation("@PreApplicationLogic");
+    app.Logger.LogInformation("@PreApplicationLogic @ExternalDependency");
 
     app.Logger.LogWarning("@TODO @RefactorApplicationLogic");
     app.Logger.LogInformation("@ApplicationLogic");
@@ -104,7 +104,7 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
        ))
         .ToArray();
 
-    app.Logger.LogInformation("@PostApplicationLogic");
+    app.Logger.LogInformation("@PostApplicationLogic @ExternalDependency");
 
     return forecast;
 

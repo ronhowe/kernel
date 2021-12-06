@@ -48,9 +48,9 @@ namespace ncrunch
                 }
                 defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                Trace.TraceInformation("@PreGetAsync()");
+                Trace.TraceInformation("@PreGetAsync() @ExternalDependency");
                 HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                Trace.TraceInformation("@PostGetAsync()");
+                Trace.TraceInformation("@PostGetAsync() @ExternalDependency");
 
                 if (response.IsSuccessStatusCode)
                 {
