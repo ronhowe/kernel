@@ -135,7 +135,7 @@ namespace ncrunch
                 try
                 {
                     Trace.TraceInformation("@PreGetConfigurationSetting @ExternalDependency");
-                    ConfigurationSetting setting = client.GetConfigurationSetting("configuration");
+                    ConfigurationSetting setting = await client.GetConfigurationSettingAsync("configuration");
                     Trace.TraceInformation("@PostGetConfigurationSetting @ExternalDependency");
 
                     Assert.IsNotNull(setting);
