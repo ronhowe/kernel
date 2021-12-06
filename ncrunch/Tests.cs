@@ -1,4 +1,5 @@
 using Azure;
+using Azure.Data.AppConfiguration;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication;
@@ -53,7 +54,7 @@ namespace ncrunch
         [Ignore]
         public async Task PrototypeGetAzureKeyVaultSecretWithVisualStudioCredential()
         {
-            Trace.TraceInformation("@PrototypeGetAzureKeyVaultSecret()");
+            Trace.TraceInformation("@PrototypeGetAzureKeyVaultSecretWithVisualStudioCredential()");
 
             try
             {
@@ -70,26 +71,82 @@ namespace ncrunch
 
                 var credential = new DefaultAzureCredential(options);
 
-                SecretClient client = new(new Uri("https://idsokv1.vault.azure.net/"), credential);
+                SecretClient client = new(new Uri("https://ronhoweorg.vault.azure.net/"), credential);
 
                 KeyVaultSecret secret;
 
                 try
                 {
                     Trace.TraceInformation("@PreGetSecretAsync @ExternalDependency");
-                    secret = (await client.GetSecretAsync("mysecret", cancellationToken: new CancellationToken())).Value;
+                    secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
                     Trace.TraceInformation("@PostGetSecretAsync @ExternalDependency");
 
                     Assert.IsNotNull(secret);
+                    Assert.IsFalse(String.IsNullOrEmpty(secret.Value));
 
                     Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
-
-                    Assert.AreEqual("mysecret", secret.Name);
-                    Assert.AreEqual("mysecret", secret.Value);
                 }
                 catch (Exception ex)
                 {
                     Trace.TraceError(ex.Message);
+
+                    Assert.Fail(ex.Message);
+                }
+
+            }
+            catch (CredentialUnavailableException e)
+            {
+                // Handle errors with loading the Managed Identity
+            }
+            catch (RequestFailedException)
+            {
+                // Handle errors with fetching the secret
+            }
+            catch (Exception e)
+            {
+                // Handle generic errors
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task PrototypeGetAzureAppConfigurationWithVisualStudioCredential()
+        {
+            Trace.TraceInformation("@PrototypeGetAzureAppConfigurationWithVisualStudioCredential()");
+
+            try
+            {
+                var options = new DefaultAzureCredentialOptions
+                {
+                    ExcludeAzureCliCredential = true,
+                    ExcludeEnvironmentCredential = true,
+                    ExcludeInteractiveBrowserCredential = true,
+                    ExcludeManagedIdentityCredential = true,
+                    ExcludeSharedTokenCacheCredential = true,
+                    ExcludeVisualStudioCodeCredential = true,
+                    ExcludeVisualStudioCredential = false
+                };
+
+                var credential = new DefaultAzureCredential(options);
+
+                ConfigurationClient client = new(new Uri("https://ronhoweorg.azconfig.io"), credential);
+
+                try
+                {
+                    Trace.TraceInformation("@PreGetConfigurationSetting @ExternalDependency");
+                    ConfigurationSetting setting = client.GetConfigurationSetting("configuration");
+                    Trace.TraceInformation("@PostGetConfigurationSetting @ExternalDependency");
+
+                    Assert.IsNotNull(setting);
+                    Assert.IsFalse(String.IsNullOrEmpty(setting.Value));
+
+                    Trace.TraceInformation($"@setting.Value={setting.Value}");
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+
                     Assert.Fail(ex.Message);
                 }
 
