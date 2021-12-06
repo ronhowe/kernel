@@ -1,3 +1,6 @@
+using Azure;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -18,6 +21,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ncrunch
@@ -43,6 +47,61 @@ namespace ncrunch
             Trace.TraceInformation("@Debug()");
 
             Trace.WriteLine("@TODO @Debug");
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task PrototypeGetAzureKeyVaultSecretWithVisualStudioCredential()
+        {
+            Trace.TraceInformation("@PrototypeGetAzureKeyVaultSecret()");
+
+            try
+            {
+                var options = new DefaultAzureCredentialOptions
+                {
+                    ExcludeAzureCliCredential = true,
+                    ExcludeEnvironmentCredential = true,
+                    ExcludeInteractiveBrowserCredential = true,
+                    ExcludeManagedIdentityCredential = true,
+                    ExcludeSharedTokenCacheCredential = true,
+                    ExcludeVisualStudioCodeCredential = true,
+                    ExcludeVisualStudioCredential = false
+                };
+
+                var credential = new DefaultAzureCredential(options);
+
+                SecretClient client = new(new Uri("https://idsokv1.vault.azure.net/"), credential);
+
+                KeyVaultSecret secret;
+
+                try
+                {
+                    secret = (await client.GetSecretAsync("mysecret", cancellationToken: new CancellationToken())).Value;
+
+                    Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
+
+                    Assert.IsNotNull(secret);
+                    Assert.AreEqual("mysecret", secret.Name);
+                    Assert.AreEqual("mysecret", secret.Value);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                }
+
+            }
+            catch (CredentialUnavailableException e)
+            {
+                // Handle errors with loading the Managed Identity
+            }
+            catch (RequestFailedException)
+            {
+                // Handle errors with fetching the secret
+            }
+            catch (Exception e)
+            {
+                // Handle generic errors
+            }
         }
 
         [TestMethod]
