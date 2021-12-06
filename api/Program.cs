@@ -120,6 +120,4 @@ internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
-#pragma warning restore CA1050 // Declare types in namespaces
