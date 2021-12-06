@@ -102,7 +102,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void AuthorizedPost()
+        public void AuthorizedGet()
         {
             Trace.TraceInformation("@Authorized()");
 
