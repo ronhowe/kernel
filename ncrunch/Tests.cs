@@ -136,11 +136,11 @@ namespace ncrunch
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    Trace.TraceInformation("@AddAuthenticationMock");
+                    Trace.TraceInformation("@AddAuthentication @Mock");
 
-                    services.AddAuthentication("Mock")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                            "Mock", options => { });
+                    services.AddAuthentication("MockScheme")
+                        .AddScheme<AuthenticationSchemeOptions, MockAuthenticationHandler>(
+                            "MockScheme", options => { });
                 });
             })
             .CreateClient(new WebApplicationFactoryClientOptions
@@ -312,9 +312,9 @@ namespace ncrunch
         }
     }
 
-    public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class MockAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
+        public MockAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         {
@@ -330,9 +330,11 @@ namespace ncrunch
 
             var principal = new ClaimsPrincipal(identity);
 
-            var ticket = new AuthenticationTicket(principal, "Mock");
+            var ticket = new AuthenticationTicket(principal, "MockScheme");
 
             var result = AuthenticateResult.Success(ticket);
+
+            Trace.TraceInformation("@Authenticated @Mock");
 
             return Task.FromResult(result);
         }
