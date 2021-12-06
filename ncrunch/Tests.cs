@@ -43,11 +43,11 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void Debug()
+        public async Task Debug()
         {
             Trace.TraceInformation("@Debug()");
 
-            Trace.WriteLine("@TODO @Debug");
+            await Task.Run(() => Trace.WriteLine("@TODO @Debug"));
         }
 
         [TestMethod]
@@ -167,7 +167,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void GetPublicEndpointWhileAnonymousReturnsOK()
+        public async Task GetPublicEndpointWhileAnonymousReturnsOK()
         {
             Trace.TraceInformation("@Unauthenticated()");
 
@@ -185,16 +185,16 @@ namespace ncrunch
             // Act
             Trace.TraceInformation("@Act");
 
-            using var response = client.GetAsync(unauthenticatedEndpoint);
+            using var response = await client.GetAsync(unauthenticatedEndpoint);
 
             // Assert
             Trace.TraceInformation("@Assert");
 
-            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
         [TestMethod]
-        public void GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()
+        public async Task GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()
         {
             Trace.TraceInformation("@Unauthorized()");
 
@@ -212,16 +212,16 @@ namespace ncrunch
             // Act
             Trace.TraceInformation("@Act");
 
-            using var response = client.GetAsync(authenticatedEndpoint);
+            using var response = await client.GetAsync(authenticatedEndpoint);
 
             // Assert
             Trace.TraceInformation("@Assert");
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, response.Result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [TestMethod]
-        public void GetPrivateEndpointWhileAuthorizedReturnsOK()
+        public async Task GetPrivateEndpointWhileAuthorizedReturnsOK()
         {
             Trace.TraceInformation("@Authorized()");
 
@@ -231,7 +231,7 @@ namespace ncrunch
             // Act
             Trace.TraceWarning("@TODO @Act");
 
-            RunAsync().GetAwaiter().GetResult();
+            await RunAsync();
 
             // Assert
             Trace.TraceWarning("@TODO @Assert");
@@ -240,7 +240,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void Application()
+        public async Task Application()
         {
             Trace.TraceInformation("@Application()");
 
@@ -275,12 +275,12 @@ namespace ncrunch
             // Act
             Trace.TraceInformation("@Act");
 
-            var response = client.GetAsync(authenticatedEndpoint);
+            var response = await client.GetAsync(authenticatedEndpoint);
 
             // Assert
             Trace.TraceInformation("@Assert");
 
-            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
         private static async Task RunAsync()
