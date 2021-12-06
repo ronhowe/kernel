@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -173,7 +172,7 @@ namespace ncrunch
 
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("secrets.json");
 
-            Trace.WriteLine($"@config.ClientSecret {config.ClientSecret}");
+            Trace.TraceInformation($"@AuthenticationConfig {config}");
 
             // You can run this sample using ClientSecret or Certificate. The code will differ only when instantiating the IConfidentialClientApplication
             bool isUsingClientSecret = AppUsesClientSecret(config);
@@ -212,7 +211,7 @@ namespace ncrunch
                 result = await app.AcquireTokenForClient(scopes)
                     .ExecuteAsync();
 
-                Trace.TraceInformation("@PostAcquireTokenForClient @TokenAcquired");
+                Trace.TraceInformation("@PostAcquireTokenForClient");
             }
             catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
             {

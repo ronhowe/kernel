@@ -85,9 +85,14 @@ namespace ncrunch
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(path);
-            
+
             configuration = builder.Build();
             return configuration.Get<AuthenticationConfig>();
+        }
+
+        public override string ToString()
+        {
+            return $"\n@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}";
         }
     }
 }

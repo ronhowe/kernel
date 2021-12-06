@@ -28,7 +28,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    Trace.TraceInformation("@Environment @IsDevelopment @True");
+    Trace.TraceInformation("@IsDevelopmentEnvironment");
 
     Trace.TraceInformation("@UseSwagger");
     app.UseSwagger();
