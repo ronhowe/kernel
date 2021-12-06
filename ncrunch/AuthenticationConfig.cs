@@ -80,14 +80,15 @@ namespace ncrunch
         /// <returns>AuthenticationConfig read from the json file</returns>
         public static AuthenticationConfig ReadFromJsonFile(string path)
         {
-            IConfigurationRoot Configuration;
+            IConfigurationRoot configuration;
 
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(path);
-
-            Configuration = builder.Build();
-            return Configuration.Get<AuthenticationConfig>();
+            //.AddUserSecrets<AuthenticationConfig>();
+            
+            configuration = builder.Build();
+            return configuration.Get<AuthenticationConfig>();
         }
     }
 

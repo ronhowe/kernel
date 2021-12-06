@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,14 +13,12 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ncrunch
@@ -48,7 +47,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void AnonymousGet()
+        public void GetPublicEndpointWhileAnonymousReturnsOK()
         {
             Trace.TraceInformation("@Unauthenticated()");
 
@@ -75,7 +74,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void AuthenticatedGet()
+        public void GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()
         {
             Trace.TraceInformation("@Unauthorized()");
 
@@ -102,7 +101,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void AuthorizedGet()
+        public void GetPrivateEndpointWhileAuthorizedReturnsOK()
         {
             Trace.TraceInformation("@Authorized()");
 
@@ -117,7 +116,7 @@ namespace ncrunch
             // Assert
             Trace.TraceWarning("@TODO @Assert");
 
-            //Assert.AreEqual(HttpStatusCode.OK, HttpStatusCode.OK);
+            // Assert.AreEqual(HttpStatusCode.OK, HttpStatusCode.OK);
         }
 
         [TestMethod]
@@ -149,7 +148,7 @@ namespace ncrunch
                 BaseAddress = baseAddress
             });
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("MockScheme");
 
             #endregion Mock Authorization
 
@@ -173,6 +172,8 @@ namespace ncrunch
             Trace.TraceInformation("@PreClientAuthentication");
 
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
+
+            Trace.WriteLine(config.Tenant);
 
             // You can run this sample using ClientSecret or Certificate. The code will differ only when instantiating the IConfidentialClientApplication
             bool isUsingClientSecret = AppUsesClientSecret(config);
@@ -206,7 +207,6 @@ namespace ncrunch
             AuthenticationResult result = null;
             try
             {
-
                 Trace.TraceInformation("@PreAcquireTokenForClient");
 
                 result = await app.AcquireTokenForClient(scopes)
@@ -289,7 +289,8 @@ namespace ncrunch
 
             else
             {
-                throw new Exception("You must choose between using client secret or certificate. Please update appsettings.json file.");
+                Trace.TraceError("@MissingClientSecret @Or @MissingCertificate");
+                throw new Exception("You must choose between using client secret or certificate. Please update appsettings.json or secrets.json file.");
             }
         }
 
