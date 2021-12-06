@@ -76,17 +76,21 @@ namespace ncrunch
 
                 try
                 {
+                    Trace.TraceInformation("@PreGetSecretAsync");
                     secret = (await client.GetSecretAsync("mysecret", cancellationToken: new CancellationToken())).Value;
+                    Trace.TraceInformation("@PostGetSecretAsync");
+
+                    Assert.IsNotNull(secret);
 
                     Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
 
-                    Assert.IsNotNull(secret);
                     Assert.AreEqual("mysecret", secret.Name);
                     Assert.AreEqual("mysecret", secret.Value);
                 }
                 catch (Exception ex)
                 {
                     Trace.TraceError(ex.Message);
+                    Assert.Fail(ex.Message);
                 }
 
             }
@@ -101,6 +105,7 @@ namespace ncrunch
             catch (Exception e)
             {
                 // Handle generic errors
+                Assert.Fail();
             }
         }
 
