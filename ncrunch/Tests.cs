@@ -48,26 +48,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void Authorized()
-        {
-            Trace.TraceInformation("@Authorized()");
-
-            // Arrange
-            Trace.TraceWarning("@TODO @Arrange");
-
-            // Act
-            Trace.TraceWarning("@TODO @Act");
-
-            RunAsync().GetAwaiter().GetResult();
-
-            // Assert
-            Trace.TraceWarning("@TODO @Assert");
-
-            //Assert.AreEqual(HttpStatusCode.OK, HttpStatusCode.OK);
-        }
-
-        [TestMethod]
-        public void Unauthenticated()
+        public void AnonymousGet()
         {
             Trace.TraceInformation("@Unauthenticated()");
 
@@ -94,7 +75,7 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void Unauthorized()
+        public void AuthenticatedGet()
         {
             Trace.TraceInformation("@Unauthorized()");
 
@@ -121,11 +102,28 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public void MockAuthorized()
+        public void AuthorizedPost()
         {
-            Trace.TraceInformation("@MockAuthorized()");
+            Trace.TraceInformation("@Authorized()");
 
-            Trace.TraceWarning("@TODO @RenameToApplication");
+            // Arrange
+            Trace.TraceWarning("@TODO @Arrange");
+
+            // Act
+            Trace.TraceWarning("@TODO @Act");
+
+            RunAsync().GetAwaiter().GetResult();
+
+            // Assert
+            Trace.TraceWarning("@TODO @Assert");
+
+            //Assert.AreEqual(HttpStatusCode.OK, HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public void Application()
+        {
+            Trace.TraceInformation("@Application()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
