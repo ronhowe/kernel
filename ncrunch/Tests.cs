@@ -171,9 +171,9 @@ namespace ncrunch
 
             Trace.TraceInformation("@PreClientAuthentication");
 
-            AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
+            AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("secrets.json");
 
-            Trace.WriteLine(config.Tenant);
+            Trace.WriteLine($"@config.ClientSecret {config.ClientSecret}");
 
             // You can run this sample using ClientSecret or Certificate. The code will differ only when instantiating the IConfidentialClientApplication
             bool isUsingClientSecret = AppUsesClientSecret(config);
@@ -289,7 +289,7 @@ namespace ncrunch
 
             else
             {
-                Trace.TraceError("@MissingClientSecret @Or @MissingCertificate");
+                Trace.TraceError("@MissingConfiguration @ClientSecret @Or @Certificate");
                 throw new Exception("You must choose between using client secret or certificate. Please update appsettings.json or secrets.json file.");
             }
         }
@@ -300,7 +300,8 @@ namespace ncrunch
 
             if (string.IsNullOrWhiteSpace(certificateName))
             {
-                throw new ArgumentException("certificateName should not be empty. Please set the CertificateName setting in the appsettings.json", "certificateName");
+                Trace.TraceError("@MissingConfiguration @CertificateName @Empty");
+                throw new ArgumentException("certificateName should not be empty. Please set the CertificateName setting in the appsettings.json or secrets.json file.", "certificateName");
             }
 
             CertificateDescription certificateDescription = CertificateDescription.FromStoreWithDistinguishedName(certificateName);

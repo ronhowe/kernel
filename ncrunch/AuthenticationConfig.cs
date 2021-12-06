@@ -85,14 +85,9 @@ namespace ncrunch
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(path);
-            //.AddUserSecrets<AuthenticationConfig>();
             
             configuration = builder.Build();
             return configuration.Get<AuthenticationConfig>();
         }
     }
-
-
-
 }
-
