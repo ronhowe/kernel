@@ -8,42 +8,30 @@ const string unauthenticatedEndpoint = "/unauthenticatedEndpoint";
 
 Trace.WriteLine("@Program.cs");
 
-Trace.WriteLine("@CreateBuilder()");
 var builder = WebApplication.CreateBuilder(args);
 
-Trace.WriteLine("@AddAuthentication");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-Trace.WriteLine("@AddAuthorization");
 builder.Services.AddAuthorization();
 
-Trace.WriteLine("@AddEndpointsApiExplorer");
 builder.Services.AddEndpointsApiExplorer();
 
-Trace.WriteLine("@AddSwaggerGen");
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    Trace.WriteLine("@IsDevelopmentEnvironment");
-
-    Trace.WriteLine("@UseSwagger");
     app.UseSwagger();
 
-    Trace.WriteLine("@UseSwaggerUI");
     app.UseSwaggerUI();
 }
 
-Trace.WriteLine("@UseHttpsRedirection");
 app.UseHttpsRedirection();
 
-Trace.WriteLine("@UseAuthentication");
 app.UseAuthentication();
 
-Trace.WriteLine("@UseAuthorization");
 app.UseAuthorization();
 
 var summaries = new[]
@@ -54,8 +42,6 @@ var summaries = new[]
 app.MapGet(unauthenticatedEndpoint, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
-
-    app.Logger.LogTrace("@UnauthenticatedEndpoint");
 })
 .WithName("UnauthenticatedEndpoint");
 
@@ -63,45 +49,44 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 
-    app.Logger.LogTrace("@AuthenticatedEndpoint");
-
     #region Audit Logic
 
-    //app.Logger.LogWarning("@TODO @RefactorAuditLogic");
+    // @TODO @RefactorAuditLogic
 
-    //app.Logger.LogWarning("@TODO @AuditIdentity");
+    // @TODO @AuditIdentity
 
     #endregion Audit Logic
 
     #region Authorization Logic
 
-    app.Logger.LogTrace("@PreAuthorizationLogic @DaemonAppRole");
+    app.Logger.LogTrace("@PreAuthorizationLogic");
 
-    //app.Logger.LogWarning("@TODO @RefactorAuthorizationLogic");
+    // @TODO @RefactorAuthorizationLogic
 
-    app.Logger.LogTrace("@AuthorizationLogic");
+    //foreach (var claim in httpContext.User.Claims)
+    //{
+    //    app.Logger.LogTrace($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
+    //}
 
-    foreach (var claim in httpContext.User.Claims)
-    {
-        app.Logger.LogTrace($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
-    }
-
+    // e.g. Can Read
     httpContext.ValidateAppRole("DaemonAppRole");
+
+    // e.g. Can Write
     httpContext.ValidateAppRole("DataWriterRole");
 
     app.Logger.LogTrace("@PostAuthorizationLogic");
-
-    app.Logger.LogTrace("@AuthorizedEndpoint");
 
     #endregion Authorization Logic
 
     #region Application Logic
 
-    app.Logger.LogTrace("@PreApplicationLogic @ExternalDependency");
+    app.Logger.LogTrace("@PreApplicationLogic");
 
-    //app.Logger.LogWarning("@TODO @RefactorApplicationLogic");
+    // @TODO @RefactorApplicationLogic
+
     app.Logger.LogTrace("@ApplicationLogic");
-    var forecast = Enumerable.Range(1, 5).Select(index =>
+
+    var forecast = Enumerable.Range(1, 1).Select(index =>
        new WeatherForecast
        (
            DateTime.Now.AddDays(index),
@@ -110,7 +95,7 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
        ))
         .ToArray();
 
-    app.Logger.LogTrace("@PostApplicationLogic @ExternalDependency");
+    app.Logger.LogTrace("@PostApplicationLogic");
 
     return forecast;
 

@@ -197,9 +197,9 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.WriteLine("@PreGetConfigurationSetting @ExternalDependency");
+                    Trace.WriteLine("@PreGetConfigurationSetting");
                     ConfigurationSetting setting = await client.GetConfigurationSettingAsync("configuration");
-                    Trace.WriteLine("@PostGetConfigurationSetting @ExternalDependency");
+                    Trace.WriteLine("@PostGetConfigurationSetting");
 
                     Assert.IsNotNull(setting);
                     Assert.IsFalse(String.IsNullOrEmpty(setting.Value));
@@ -292,7 +292,7 @@ namespace TestProject1
         {
             Trace.WriteLine("@RunAsync()");
 
-            //Trace.TraceWarning("@TODO @RefactorClientAuthentication");
+            // @TODO @RefactorClientAuthentication
 
             Trace.WriteLine("@PreClientAuthentication");
 
@@ -332,21 +332,21 @@ namespace TestProject1
             AuthenticationResult result = null;
             try
             {
-                Trace.WriteLine("@PreAcquireTokenForClient @ExternalDependency");
+                Trace.WriteLine("@PreAcquireTokenForClient");
 
                 result = await app.AcquireTokenForClient(scopes)
                     .ExecuteAsync();
 
-                Trace.WriteLine("@PostAcquireTokenForClient @ExternalDependency");
+                Trace.WriteLine("@PostAcquireTokenForClient");
             }
             catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
             {
-                Trace.TraceError("@CatchAcquireTokenForClient @ScopeProvidedNotSupported");
+                Trace.TraceError("@ScopeProvidedNotSupported");
             }
 
             Trace.WriteLine("@PostClientAuthentication");
 
-            //Trace.TraceWarning("@TODO @RefactorServerCall");
+            // TODO @RefactorServerCall
 
             if (result != null)
             {
@@ -364,8 +364,8 @@ namespace TestProject1
                     BaseAddress = baseAddress
                 });
 
-                //using var response = client.GetAsync(unauthenticatedEndpoint);
                 var apiCaller = new PrivateEndpointCallHelper(client);
+
                 await apiCaller.CallWebApiAndProcessResultASync(authenticatedEndpoint, result.AccessToken, TraceJObject);
 
                 Trace.WriteLine("@PostServerCall");
@@ -378,7 +378,7 @@ namespace TestProject1
         /// <param name="result">Object to trace</param>
         private static void TraceJObject(IEnumerable<JObject> result)
         {
-            Trace.WriteLine("@TraceJObject()");
+            //Trace.WriteLine("@TraceJObject()");
 
             foreach (var item in result)
             {
@@ -523,14 +523,12 @@ namespace TestProject1
                 }
                 defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                Trace.WriteLine("@PreGetAsync() @ExternalDependency");
+                Trace.WriteLine("@PreGetAsync()");
                 HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                Trace.WriteLine("@PostGetAsync() @ExternalDependency");
+                Trace.WriteLine("@PostGetAsync()");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Trace.WriteLine("@Response @IsSuccessStatusCode @True");
-
                     string json = await response.Content.ReadAsStringAsync();
 
                     var result = JsonConvert.DeserializeObject<List<JObject>>(json);
@@ -542,14 +540,8 @@ namespace TestProject1
                     // Note that if you got reponse.Code == 403 and reponse.content.code == "Authorization_RequestDenied"
                     // this is because the tenant admin as not granted consent for the application to call the Web API
 
-                    Trace.TraceError("@Response @IsSuccessStatusCode @False");
-
                     string content = await response.Content.ReadAsStringAsync();
-
-                    Trace.WriteLine($"@Content {content}");
                 }
-
-                Trace.WriteLine($"@Response @StatusCode @{response.StatusCode}");
             }
         }
     }
