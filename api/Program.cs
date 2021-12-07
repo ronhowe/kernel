@@ -69,6 +69,8 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
 
     app.Logger.LogWarning("@TODO @RefactorAuditLogic");
 
+    app.Logger.LogInformation($"@Identity.Name={httpContext.User.Identity.Name}");
+
     app.Logger.LogWarning("@TODO @AuditIdentity");
 
     app.Logger.LogWarning("@TODO @AuditClientIp");
