@@ -3,47 +3,104 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using System.Diagnostics;
 
-const string message = "@Program.cs";
+const string authenticatedEndpoint = "/authenticatedEndpoint";
+const string unauthenticatedEndpoint = "/unauthenticatedEndpoint";
 
-Trace.WriteLine(message);
+Trace.TraceInformation("@Program.cs");
 
+Trace.TraceInformation("@CreateBuilder()");
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Trace.TraceInformation("@AddAuthentication");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+Trace.TraceInformation("@AddAuthorization");
 builder.Services.AddAuthorization();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+Trace.TraceInformation("@AddEndpointsApiExplorer");
 builder.Services.AddEndpointsApiExplorer();
+
+Trace.TraceInformation("@AddSwaggerGen");
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    Trace.TraceInformation("@IsDevelopmentEnvironment");
+
+    Trace.TraceInformation("@UseSwagger");
     app.UseSwagger();
+
+    Trace.TraceInformation("@UseSwaggerUI");
     app.UseSwaggerUI();
 }
 
+Trace.TraceInformation("@UseHttpsRedirection");
 app.UseHttpsRedirection();
 
+Trace.TraceInformation("@UseAuthentication");
 app.UseAuthentication();
+
+Trace.TraceInformation("@UseAuthorization");
 app.UseAuthorization();
 
-var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", (HttpContext httpContext) =>
+app.MapGet(unauthenticatedEndpoint, (HttpContext httpContext) =>
 {
-    const string source = "@MapGet";
-    app.Logger.LogTrace(source);
-    httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+    app.Logger.LogInformation("@MapGet()");
 
+    app.Logger.LogInformation("@UnauthenticatedEndpoint");
+})
+.WithName("UnauthenticatedEndpoint");
+
+app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
+{
+    app.Logger.LogInformation("@MapGet()");
+
+    app.Logger.LogInformation("@AuthenticatedEndpoint");
+
+    #region Audit Logic
+
+    app.Logger.LogWarning("@TODO @RefactorAuditLogic");
+
+    app.Logger.LogWarning("@TODO @AuditIdentity");
+
+    #endregion Audit Logic
+
+    #region Authorization Logic
+
+    app.Logger.LogInformation("@PreAuthorizationLogic @DaemonAppRole");
+
+    app.Logger.LogWarning("@TODO @RefactorAuthorizationLogic");
+
+    app.Logger.LogInformation("@AuthorizationLogic");
+
+    foreach (var claim in httpContext.User.Claims)
+    {
+        app.Logger.LogInformation($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
+    }
+
+    httpContext.ValidateAppRole("DaemonAppRole");
+    httpContext.ValidateAppRole("DataWriterRole");
+
+    app.Logger.LogInformation("@PostAuthorizationLogic");
+
+    app.Logger.LogInformation("@AuthorizedEndpoint");
+
+    #endregion Authorization Logic
+
+    #region Application Logic
+
+    app.Logger.LogInformation("@PreApplicationLogic @ExternalDependency");
+
+    app.Logger.LogWarning("@TODO @RefactorApplicationLogic");
+    app.Logger.LogInformation("@ApplicationLogic");
     var forecast = Enumerable.Range(1, 5).Select(index =>
        new WeatherForecast
        (
@@ -52,9 +109,14 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
            summaries[Random.Shared.Next(summaries.Length)]
        ))
         .ToArray();
+
+    app.Logger.LogInformation("@PostApplicationLogic @ExternalDependency");
+
     return forecast;
+
+    #endregion Application Logic
 })
-.WithName("GetWeatherForecast")
+.WithName("AuthenticatedEndpoint")
 .RequireAuthorization();
 
 app.Run();
@@ -64,6 +126,4 @@ internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
-#pragma warning restore CA1050 // Declare types in namespaces
