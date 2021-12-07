@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{FA5DF027-B02A-4741-8828-B4F92A417D6E}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResourceGroup1", "AzureResourceGroup1\AzureResourceGroup1.deployproj", "{41061B91-4207-4A1A-88EC-6059DEF12963}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{FA5DF027-B02A-4741-8828-B4F92A417D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA5DF027-B02A-4741-8828-B4F92A417D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA5DF027-B02A-4741-8828-B4F92A417D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41061B91-4207-4A1A-88EC-6059DEF12963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41061B91-4207-4A1A-88EC-6059DEF12963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41061B91-4207-4A1A-88EC-6059DEF12963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41061B91-4207-4A1A-88EC-6059DEF12963}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
