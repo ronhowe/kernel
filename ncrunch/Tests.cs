@@ -98,8 +98,8 @@ namespace ncrunch
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            Trace.WriteLine($"@ResponseHeaderCount={response.Headers.Count()}");
-            Trace.WriteLine(await response.Content.ReadAsStringAsync());
+            Trace.TraceInformation($"@response.Headers.Count={response.Headers.Count()}");
+            Trace.TraceInformation($"@response.Content=\n{await response.Content.ReadAsStringAsync()}");
         }
 
         [TestMethod]
@@ -452,7 +452,7 @@ namespace ncrunch
         {
             Trace.TraceInformation("@HandleAuthenticateAsync()");
 
-            var claims = new[] { new Claim(ClaimTypes.Name, "MockName"), new Claim("roles", "DaemonAppRole"), new Claim("roles", "DataWriterRole") };
+            var claims = new[] { new Claim("roles", "DaemonAppRole"), new Claim("roles", "DataWriterRole") };
 
             var identity = new ClaimsIdentity(claims, "MockIdentity");
 
