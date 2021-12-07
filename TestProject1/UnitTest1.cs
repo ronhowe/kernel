@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,10 +31,10 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ncrunch
+namespace TestProject1
 {
     [TestClass]
-    public class Tests
+    public class UnitTest1
     {
         private readonly Uri baseAddress = new("https://localhost:9999");
         private readonly string authenticatedEndpoint = "/authenticatedEndpoint";
@@ -48,17 +49,17 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public async Task Debug()
+        public async Task Atheist()
         {
-            Trace.TraceInformation("@Debug()");
+            Trace.TraceInformation("@Atheist()");
 
             await Task.Run(() => Trace.WriteLine("@TODO @Debug"));
         }
 
         [TestMethod]
-        public async Task Demo()
+        public async Task Agnostic()
         {
-            Trace.TraceInformation("@Demo()");
+            Trace.TraceInformation("@Agnostic()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
@@ -103,9 +104,9 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public async Task GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()
+        public async Task Authenticated()
         {
-            Trace.TraceInformation("@GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()");
+            Trace.TraceInformation("@Authenticated()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
@@ -130,9 +131,9 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public async Task GetPrivateEndpointWhileNotAuthorizedReturnsException()
+        public async Task Authorized()
         {
-            Trace.TraceInformation("@GetPrivateEndpointWhileNotAuthorizedReturnsException()");
+            Trace.TraceInformation("@Authorized()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
@@ -147,9 +148,9 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public async Task GetPublicEndpointWhileAnonymousReturnsOK()
+        public async Task Anonymous()
         {
-            Trace.TraceInformation("@GetPublicEndpointWhileAnonymousReturnsOK()");
+            Trace.TraceInformation("@Anonymous()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
