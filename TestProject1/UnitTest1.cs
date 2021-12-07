@@ -43,26 +43,23 @@ namespace TestProject1
         [TestInitialize()]
         public void TestInitialize()
         {
-            Trace.TraceInformation("@TestInitialize()");
-
-            Trace.TraceInformation("@Test.cs");
+            Trace.WriteLine("@TestInitialize()");
         }
 
         [TestMethod]
-        public async Task Atheist()
+        public async Task Debug()
         {
-            Trace.TraceInformation("@Atheist()");
-
-            await Task.Run(() => Trace.WriteLine("@TODO @Debug"));
+            await Task.Run(() => Trace.WriteLine("@Debug()"));
         }
 
         [TestMethod]
-        public async Task Agnostic()
+        [Ignore]
+        public async Task Application()
         {
-            Trace.TraceInformation("@Agnostic()");
+            Trace.WriteLine("@Application()");
 
             // Arrange
-            Trace.TraceInformation("@Arrange");
+            Trace.WriteLine("@Arrange");
 
             using var server = new Server();
 
@@ -72,7 +69,7 @@ namespace TestProject1
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    Trace.TraceInformation("@AddAuthentication @Mock");
+                    Trace.WriteLine("@AddAuthentication @Mock");
 
                     services.AddAuthentication("MockScheme")
                         .AddScheme<AuthenticationSchemeOptions, MockAuthenticationHandler>(
@@ -90,26 +87,26 @@ namespace TestProject1
             #endregion Mock Authorization
 
             // Act
-            Trace.TraceInformation("@Act");
+            Trace.WriteLine("@Act");
 
             var response = await client.GetAsync(authenticatedEndpoint);
 
             // Assert
-            Trace.TraceInformation("@Assert");
+            Trace.WriteLine("@Assert");
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            Trace.TraceInformation($"@response.Headers.Count={response.Headers.Count()}");
-            Trace.TraceInformation($"@response.Content=\n{await response.Content.ReadAsStringAsync()}");
+            //Trace.WriteLine($"@response.Headers.Count={response.Headers.Count()}");
+            //Trace.WriteLine($"@response.Content=\n{await response.Content.ReadAsStringAsync()}");
         }
 
         [TestMethod]
         public async Task Authenticated()
         {
-            Trace.TraceInformation("@Authenticated()");
+            Trace.WriteLine("@Authenticated()");
 
             // Arrange
-            Trace.TraceInformation("@Arrange");
+            Trace.WriteLine("@Arrange");
 
             using var server = new Server();
 
@@ -120,12 +117,12 @@ namespace TestProject1
             });
 
             // Act
-            Trace.TraceInformation("@Act");
+            Trace.WriteLine("@Act");
 
             using var response = await client.GetAsync(authenticatedEndpoint);
 
             // Assert
-            Trace.TraceInformation("@Assert");
+            Trace.WriteLine("@Assert");
 
             Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
         }
@@ -133,27 +130,28 @@ namespace TestProject1
         [TestMethod]
         public async Task Authorized()
         {
-            Trace.TraceInformation("@Authorized()");
+            Trace.WriteLine("@Authorized()");
 
             // Arrange
-            Trace.TraceInformation("@Arrange");
+            Trace.WriteLine("@Arrange");
 
             // Act
-            Trace.TraceInformation("@Act");
+            Trace.WriteLine("@Act");
 
             // Assert
-            Trace.TraceInformation("@Assert");
+            Trace.WriteLine("@Assert");
 
-            await Assert.ThrowsExceptionAsync<HttpRequestException>(async () => await RunAsync());
+            //await Assert.ThrowsExceptionAsync<HttpRequestException>(async () => await RunAsync());
+            await RunAsync();
         }
 
         [TestMethod]
         public async Task Anonymous()
         {
-            Trace.TraceInformation("@Anonymous()");
+            Trace.WriteLine("@Anonymous()");
 
             // Arrange
-            Trace.TraceInformation("@Arrange");
+            Trace.WriteLine("@Arrange");
 
             using var server = new Server();
 
@@ -164,12 +162,12 @@ namespace TestProject1
             });
 
             // Act
-            Trace.TraceInformation("@Act");
+            Trace.WriteLine("@Act");
 
             using var response = await client.GetAsync(unauthenticatedEndpoint);
 
             // Assert
-            Trace.TraceInformation("@Assert");
+            Trace.WriteLine("@Assert");
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
@@ -178,7 +176,7 @@ namespace TestProject1
         [Ignore]
         public async Task PrototypeGetAzureAppConfigurationWithVisualStudioCredential()
         {
-            Trace.TraceInformation("@PrototypeGetAzureAppConfigurationWithVisualStudioCredential()");
+            Trace.WriteLine("@PrototypeGetAzureAppConfigurationWithVisualStudioCredential()");
 
             try
             {
@@ -199,14 +197,14 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.TraceInformation("@PreGetConfigurationSetting @ExternalDependency");
+                    Trace.WriteLine("@PreGetConfigurationSetting @ExternalDependency");
                     ConfigurationSetting setting = await client.GetConfigurationSettingAsync("configuration");
-                    Trace.TraceInformation("@PostGetConfigurationSetting @ExternalDependency");
+                    Trace.WriteLine("@PostGetConfigurationSetting @ExternalDependency");
 
                     Assert.IsNotNull(setting);
                     Assert.IsFalse(String.IsNullOrEmpty(setting.Value));
 
-                    Trace.TraceInformation($"@setting.Value={setting.Value}");
+                    Trace.WriteLine($"@setting.Value={setting.Value}");
                 }
                 catch (Exception ex)
                 {
@@ -258,14 +256,14 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.TraceInformation("@PreGetSecretAsync @ExternalDependency");
+                    Trace.WriteLine("@PreGetSecretAsync @ExternalDependency");
                     secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
-                    Trace.TraceInformation("@PostGetSecretAsync @ExternalDependency");
+                    Trace.WriteLine("@PostGetSecretAsync @ExternalDependency");
 
                     Assert.IsNotNull(secret);
                     Assert.IsFalse(String.IsNullOrEmpty(secret.Value));
 
-                    Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
+                    Trace.WriteLine($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
                 }
                 catch (Exception ex)
                 {
@@ -292,15 +290,15 @@ namespace TestProject1
 
         private static async Task RunAsync()
         {
-            Trace.TraceInformation("@RunAsync()");
+            Trace.WriteLine("@RunAsync()");
 
-            Trace.TraceWarning("@TODO @RefactorClientAuthentication");
+            //Trace.TraceWarning("@TODO @RefactorClientAuthentication");
 
-            Trace.TraceInformation("@PreClientAuthentication");
+            Trace.WriteLine("@PreClientAuthentication");
 
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("secrets.json");
 
-            Trace.TraceInformation($"@AuthenticationConfig=\n{config}");
+            Trace.WriteLine($"@AuthenticationConfig=\n{config}");
 
             // You can run this sample using ClientSecret or Certificate. The code will differ only when instantiating the IConfidentialClientApplication
             bool isUsingClientSecret = AppUsesClientSecret(config);
@@ -334,25 +332,25 @@ namespace TestProject1
             AuthenticationResult result = null;
             try
             {
-                Trace.TraceInformation("@PreAcquireTokenForClient @ExternalDependency");
+                Trace.WriteLine("@PreAcquireTokenForClient @ExternalDependency");
 
                 result = await app.AcquireTokenForClient(scopes)
                     .ExecuteAsync();
 
-                Trace.TraceInformation("@PostAcquireTokenForClient @ExternalDependency");
+                Trace.WriteLine("@PostAcquireTokenForClient @ExternalDependency");
             }
             catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
             {
                 Trace.TraceError("@CatchAcquireTokenForClient @ScopeProvidedNotSupported");
             }
 
-            Trace.TraceInformation("@PostClientAuthentication");
+            Trace.WriteLine("@PostClientAuthentication");
 
-            Trace.TraceWarning("@TODO @RefactorServerCall");
+            //Trace.TraceWarning("@TODO @RefactorServerCall");
 
             if (result != null)
             {
-                Trace.TraceInformation("@PreServerCall");
+                Trace.WriteLine("@PreServerCall");
 
                 Uri baseAddress = new("https://localhost:9999");
                 string authenticatedEndpoint = "/authenticatedEndpoint";
@@ -370,7 +368,7 @@ namespace TestProject1
                 var apiCaller = new PrivateEndpointCallHelper(client);
                 await apiCaller.CallWebApiAndProcessResultASync(authenticatedEndpoint, result.AccessToken, TraceJObject);
 
-                Trace.TraceInformation("@PostServerCall");
+                Trace.WriteLine("@PostServerCall");
             }
         }
 
@@ -380,13 +378,13 @@ namespace TestProject1
         /// <param name="result">Object to trace</param>
         private static void TraceJObject(IEnumerable<JObject> result)
         {
-            Trace.TraceInformation("@TraceJObject()");
+            Trace.WriteLine("@TraceJObject()");
 
             foreach (var item in result)
             {
                 foreach (JProperty child in item.Properties().Where(p => !p.Name.StartsWith("@")))
                 {
-                    Trace.TraceInformation($"\n@child.Name={child.Name}\n@child.Value={child.Value}\n");
+                    Trace.WriteLine($"@child.Name={child.Name}\n@child.Value={child.Value}");
                 }
             }
         }
@@ -399,7 +397,7 @@ namespace TestProject1
         /// <returns></returns>
         private static bool AppUsesClientSecret(AuthenticationConfig config)
         {
-            Trace.TraceInformation("@AppUsesClientSecret()");
+            Trace.WriteLine("@AppUsesClientSecret()");
 
             string clientSecretPlaceholderValue = "[Enter here a client secret for your application]";
             string certificatePlaceholderValue = "[Or instead of client secret: Enter here the name of a certificate (from the user cert store) as registered with your application]";
@@ -423,7 +421,7 @@ namespace TestProject1
 
         private static X509Certificate2 ReadCertificate(string certificateName)
         {
-            Trace.TraceInformation("@ReadCertificate()");
+            Trace.WriteLine("@ReadCertificate()");
 
             if (string.IsNullOrWhiteSpace(certificateName))
             {
@@ -451,7 +449,7 @@ namespace TestProject1
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            Trace.TraceInformation("@HandleAuthenticateAsync()");
+            Trace.WriteLine("@HandleAuthenticateAsync()");
 
             var claims = new[] { new Claim("roles", "DaemonAppRole"), new Claim("roles", "DataWriterRole") };
 
@@ -463,7 +461,7 @@ namespace TestProject1
 
             var result = AuthenticateResult.Success(ticket);
 
-            Trace.TraceInformation("@Authenticated @Mock");
+            Trace.WriteLine("@Authenticated @Mock");
 
             return Task.FromResult(result);
         }
@@ -475,14 +473,14 @@ namespace TestProject1
 
         public Server(string environment = "Development")
         {
-            Trace.TraceInformation("@Server()");
+            Trace.WriteLine("@Server()");
 
             _environment = environment;
         }
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            Trace.TraceInformation("@CreateHost()");
+            Trace.WriteLine("@CreateHost()");
 
             builder.UseEnvironment(_environment);
 
@@ -514,7 +512,7 @@ namespace TestProject1
         /// <param name="processResult">Callback used to process the result of the call to the web API</param>
         public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<IEnumerable<JObject>> processResult)
         {
-            Trace.TraceInformation("@CallWebApiAndProcessResultASync()");
+            Trace.WriteLine("@CallWebApiAndProcessResultASync()");
 
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -525,13 +523,13 @@ namespace TestProject1
                 }
                 defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                Trace.TraceInformation("@PreGetAsync() @ExternalDependency");
+                Trace.WriteLine("@PreGetAsync() @ExternalDependency");
                 HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                Trace.TraceInformation("@PostGetAsync() @ExternalDependency");
+                Trace.WriteLine("@PostGetAsync() @ExternalDependency");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Trace.TraceInformation("@Response @IsSuccessStatusCode @True");
+                    Trace.WriteLine("@Response @IsSuccessStatusCode @True");
 
                     string json = await response.Content.ReadAsStringAsync();
 
@@ -551,7 +549,7 @@ namespace TestProject1
                     Trace.WriteLine($"@Content {content}");
                 }
 
-                Trace.TraceInformation($"@Response @StatusCode @{response.StatusCode}");
+                Trace.WriteLine($"@Response @StatusCode @{response.StatusCode}");
             }
         }
     }
@@ -640,7 +638,7 @@ namespace TestProject1
 
         public override string ToString()
         {
-            return $"\n@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}\n";
+            return $"@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}";
         }
     }
 }
