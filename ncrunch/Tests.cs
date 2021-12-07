@@ -105,7 +105,7 @@ namespace ncrunch
         [TestMethod]
         public async Task GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()
         {
-            Trace.TraceInformation("@Unauthorized()");
+            Trace.TraceInformation("@GetPrivateEndpointWhileNotAuthorizedReturnsUnauthorized()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
@@ -130,28 +130,26 @@ namespace ncrunch
         }
 
         [TestMethod]
-        public async Task GetPrivateEndpointWhileAuthorizedReturnsOK()
+        public async Task GetPrivateEndpointWhileNotAuthorizedReturnsException()
         {
-            Trace.TraceInformation("@Authorized()");
+            Trace.TraceInformation("@GetPrivateEndpointWhileNotAuthorizedReturnsException()");
 
             // Arrange
-            Trace.TraceWarning("@TODO @Arrange");
+            Trace.TraceInformation("@Arrange");
 
             // Act
-            Trace.TraceWarning("@TODO @Act");
-
-            await RunAsync();
+            Trace.TraceInformation("@Act");
 
             // Assert
-            Trace.TraceWarning("@TODO @Assert");
+            Trace.TraceInformation("@Assert");
 
-            // Assert.AreEqual(HttpStatusCode.OK, HttpStatusCode.OK);
+            await Assert.ThrowsExceptionAsync<HttpRequestException>(async () => await RunAsync());
         }
 
         [TestMethod]
         public async Task GetPublicEndpointWhileAnonymousReturnsOK()
         {
-            Trace.TraceInformation("@Unauthenticated()");
+            Trace.TraceInformation("@GetPublicEndpointWhileAnonymousReturnsOK()");
 
             // Arrange
             Trace.TraceInformation("@Arrange");
@@ -301,7 +299,7 @@ namespace ncrunch
 
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("secrets.json");
 
-            Trace.TraceInformation($"@AuthenticationConfig {config}");
+            Trace.TraceInformation($"@AuthenticationConfig=\n{config}");
 
             // You can run this sample using ClientSecret or Certificate. The code will differ only when instantiating the IConfidentialClientApplication
             bool isUsingClientSecret = AppUsesClientSecret(config);
@@ -387,7 +385,7 @@ namespace ncrunch
             {
                 foreach (JProperty child in item.Properties().Where(p => !p.Name.StartsWith("@")))
                 {
-                    Trace.WriteLine($"{child.Name} = {child.Value}");
+                    Trace.TraceInformation($"\n@child.Name={child.Name}\n@child.Value={child.Value}\n");
                 }
             }
         }
@@ -454,7 +452,7 @@ namespace ncrunch
         {
             Trace.TraceInformation("@HandleAuthenticateAsync()");
 
-            var claims = new[] { new Claim(ClaimTypes.Name, "MockName"), new Claim("roles", "DaemonAppRole") };
+            var claims = new[] { new Claim(ClaimTypes.Name, "MockName"), new Claim("roles", "DaemonAppRole"), new Claim("roles", "DataWriterRole") };
 
             var identity = new ClaimsIdentity(claims, "MockIdentity");
 
@@ -556,6 +554,7 @@ namespace ncrunch
             }
         }
     }
+
     /// <summary>
     /// Description of the configuration of an AzureAD public client application (desktop/mobile application). This should
     /// match the application registration done in the Azure portal
@@ -640,7 +639,7 @@ namespace ncrunch
 
         public override string ToString()
         {
-            return $"\n@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}";
+            return $"\n@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}\n";
         }
     }
 }

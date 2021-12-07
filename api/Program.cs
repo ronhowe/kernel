@@ -69,11 +69,7 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
 
     app.Logger.LogWarning("@TODO @RefactorAuditLogic");
 
-    app.Logger.LogInformation($"@Identity.Name={httpContext.User.Identity.Name}");
-
     app.Logger.LogWarning("@TODO @AuditIdentity");
-
-    app.Logger.LogWarning("@TODO @AuditClientIp");
 
     #endregion Audit Logic
 
@@ -82,8 +78,16 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
     app.Logger.LogInformation("@PreAuthorizationLogic @DaemonAppRole");
 
     app.Logger.LogWarning("@TODO @RefactorAuthorizationLogic");
+
     app.Logger.LogInformation("@AuthorizationLogic");
+
+    foreach (var claim in httpContext.User.Claims)
+    {
+        app.Logger.LogInformation($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
+    }
+
     httpContext.ValidateAppRole("DaemonAppRole");
+    httpContext.ValidateAppRole("DataWriterRole");
 
     app.Logger.LogInformation("@PostAuthorizationLogic");
 
