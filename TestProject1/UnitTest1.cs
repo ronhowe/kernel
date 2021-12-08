@@ -26,9 +26,6 @@ namespace TestProject1
         public async Task Debug()
         {
             await Task.Run(() => Trace.WriteLine("@Debug()"));
-
-            var service = new ReadPacketService();
-            Trace.WriteLine(service.Read());
         }
 
         [TestMethod]
