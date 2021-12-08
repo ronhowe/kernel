@@ -1,4 +1,4 @@
-﻿using ClassLibrary1;
+﻿using ClassLibrary1.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -17,12 +17,12 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public async Task HealthCheck()
+        public async Task Post()
         {
-            Trace.WriteLine("@HealthCheck()");
+            Trace.WriteLine("@Post()");
 
             // @TODO @RefactorRunAsync
-            await EndpointCallHelper.RunAsync(EndpointMap.HealthCheckEndpoint, false);
+            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
 
             // @TODO @Assert
         }
@@ -32,7 +32,7 @@ namespace TestProject1
         {
             Trace.WriteLine("@Read()");
 
-            await EndpointCallHelper.RunAsync(EndpointMap.IoEndpoint, true);
+            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
 
             // @TODO @Assert
         }
@@ -42,7 +42,7 @@ namespace TestProject1
         {
             Trace.WriteLine("@Write()");
 
-            await EndpointCallHelper.RunAsync(EndpointMap.IoEndpoint, true);
+            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
 
             // @TODO @Assert
         }

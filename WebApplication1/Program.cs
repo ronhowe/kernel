@@ -1,4 +1,5 @@
-using ClassLibrary1;
+using ClassLibrary1.Infrastructure;
+using ClassLibrary1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
@@ -34,13 +35,13 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet(EndpointMap.HealthCheckEndpoint, (HttpContext httpContext) =>
+app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 })
-.WithName("HealthCheckEndpoint");
+.WithName("PowerOnSelfTest");
 
-app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
+app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 
@@ -91,7 +92,7 @@ app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
 
     #endregion Application Logic
 })
-.WithName("IoEndpoint")
+.WithName("BasicInputOutputSystem")
 .RequireAuthorization();
 
 app.Run();
