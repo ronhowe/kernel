@@ -1,14 +1,40 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {},
+  "parameters": {
+    "adminPassword": {
+      "type": "string"
+    },
+    "appConfigName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "tenantId": {
+      "type": "string",
+      "defaultValue": "[subscription().tenantId]"
+    },
+    "secretName": {
+      "type": "string",
+      "defaultValue": "vmAdminPassword"
+    },
+    "secretValue": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+  },
   "resources": [
     {
       "type": "Microsoft.AppConfiguration/configurationStores",
       "apiVersion": "2021-03-01-preview",
-      "name": "ronhoweorg",
-      "location": "eastus",
+      "name": "[parameters('appConfigName')]",
+      "location": "[parameters('location')]",
       "sku": {
         "name": "free"
       },
@@ -20,39 +46,40 @@
     {
       "type": "Microsoft.KeyVault/vaults",
       "apiVersion": "2021-06-01-preview",
-      "name": "ronhoweorg",
-      "location": "eastus",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
       "properties": {
         "sku": {
           "family": "A",
           "name": "Standard"
         },
-        "tenantId": "e70383c6-f597-488d-9796-9c2cb3788d7c",
+        "tenantId": "[parameters('tenantId')]",
         "accessPolicies": [],
         "enabledForDeployment": false,
         "enabledForDiskEncryption": false,
-        "enabledForTemplateDeployment": false,
+        "enabledForTemplateDeployment": true,
         "enableSoftDelete": true,
         "softDeleteRetentionInDays": 90,
         "enableRbacAuthorization": true,
-        "vaultUri": "https://ronhoweorg.vault.azure.net/",
-        "provisioningState": "Succeeded",
         "publicNetworkAccess": "Enabled"
       }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('secretName'))]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "contentType": "securestring",
+        "value": "[parameters('secretValue')]",
+        "attributes": {
+          "enabled": true
+        }
+      }
     }
-    //{
-    //  "type": "Microsoft.KeyVault/vaults/secrets",
-    //  "apiVersion": "2021-06-01-preview",
-    //  "name": "ronhoweorg/secret",
-    //  "location": "eastus",
-    //  "dependsOn": [
-    //    "[resourceId('Microsoft.KeyVault/vaults', 'ronhoweorg')]"
-    //  ],
-    //  "properties": {
-    //    "attributes": {
-    //      "enabled": true
-    //    }
-    //  }
-    //}
   ]
 }

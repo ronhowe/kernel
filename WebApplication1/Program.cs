@@ -1,4 +1,5 @@
-using ClassLibrary1;
+using ClassLibrary1.Infrastructure;
+using ClassLibrary1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
@@ -34,13 +35,13 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet(EndpointMap.HealthCheckEndpoint, (HttpContext httpContext) =>
+app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 })
-.WithName("HealthCheckEndpoint");
+.WithName("PowerOnSelfTest");
 
-app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
+app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 
@@ -58,16 +59,11 @@ app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
 
     // @TODO @RefactorAuthorizationLogic
 
-    //foreach (var claim in httpContext.User.Claims)
-    //{
-    //    app.Logger.LogTrace($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
-    //}
+    app.Logger.LogTrace("@AuthorizationLogic");
 
-    // e.g. Can Read
-    httpContext.ValidateAppRole("DaemonAppRole");
+    httpContext.ValidateAppRole(AppRole.CanRead);
 
-    // e.g. Can Write
-    httpContext.ValidateAppRole("DataWriterRole");
+    httpContext.ValidateAppRole(AppRole.CanWrite);
 
     app.Logger.LogTrace("@PostAuthorizationLogic");
 
@@ -77,34 +73,22 @@ app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
 
     app.Logger.LogTrace("@PreApplicationLogic");
 
-    // @TODO @RefactorApplicationLogic
+    var service = new ReadPacketService();
 
-    app.Logger.LogTrace("@ApplicationLogic");
+    var packets = Enumerable.Range(1, 1).Select(index => service.Read()).ToArray();
 
-    var forecast = Enumerable.Range(1, 1).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
+    Trace.WriteLine($"@{packets.Length}");
 
-    app.Logger.LogTrace("@PostApplicationLogic");
+    app.Logger.LogTrace($"@{packets.Length}");
 
-    return forecast;
+    return packets;
 
     #endregion Application Logic
 })
-.WithName("IoEndpoint")
+.WithName("BasicInputOutputSystem")
 .RequireAuthorization();
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
 
 #pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }

@@ -3,6 +3,7 @@ using Azure.Data.AppConfiguration;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ClassLibrary1.Services;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -16,14 +17,18 @@ namespace TestProject1
         [TestInitialize()]
         public void TestInitialize()
         {
-            Trace.WriteLine("@TestInitialize()");
+            Trace.WriteLine("@UnitTest.cs1");
 
+            Trace.WriteLine("@TestInitialize()");
         }
 
         [TestMethod]
         public async Task Debug()
         {
             await Task.Run(() => Trace.WriteLine("@Debug()"));
+
+            var service = new ReadPacketService();
+            Trace.WriteLine(service.Read());
         }
 
         [TestMethod]

@@ -96,7 +96,7 @@ namespace TestProject1
 
         public override string ToString()
         {
-            return $"@Instance={this.Instance}\n@Tenant={this.Tenant}\n@ClientId={this.ClientId}\n@ClientSecret={this.ClientSecret}\n@CertificateName={this.CertificateName}\n@TodoListBaseAddress={this.TodoListBaseAddress}\n@TodoListScope={this.TodoListScope}";
+            return $"{this.ClientId}";
         }
     }
 }
