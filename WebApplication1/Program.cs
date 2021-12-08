@@ -30,11 +30,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
 app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
