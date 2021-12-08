@@ -100,8 +100,7 @@ namespace TestProject1
             {
                 foreach (JProperty child in item.Properties().Where(p => !p.Name.StartsWith("@")))
                 {
-                    Trace.WriteLine($"@child.Name={child.Name}");
-                    Trace.WriteLine($"@child.Value={child.Value}");
+                    Trace.WriteLine($"@{child.Name}={child.Value}");
                 }
             }
         }

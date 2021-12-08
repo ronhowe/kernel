@@ -11,7 +11,7 @@ namespace ClassLibrary1.Domain.ValueObjects
 
         private Color()
         {
-            Code = Color.White;
+            Code = Color.Black;
         }
 
         private Color(string code)

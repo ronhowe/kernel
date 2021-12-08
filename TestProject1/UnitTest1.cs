@@ -3,6 +3,7 @@ using Azure.Data.AppConfiguration;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ClassLibrary1.Services;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -25,6 +26,9 @@ namespace TestProject1
         public async Task Debug()
         {
             await Task.Run(() => Trace.WriteLine("@Debug()"));
+
+            var service = new ReadPacketService();
+            Trace.WriteLine(service.Read());
         }
 
         [TestMethod]

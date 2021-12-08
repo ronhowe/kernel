@@ -73,22 +73,15 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 
     app.Logger.LogTrace("@PreApplicationLogic");
 
-    // @TODO @RefactorApplicationLogic
+    var service = new ReadPacketService();
 
-    app.Logger.LogTrace("@ApplicationLogic");
+    var packets = Enumerable.Range(1, 1).Select(index => service.Read()).ToArray();
 
-    var forecast = Enumerable.Range(1, 1).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
+    Trace.WriteLine($"@{packets.Length}");
 
-    app.Logger.LogTrace("@PostApplicationLogic");
+    app.Logger.LogTrace($"@{packets.Length}");
 
-    return forecast;
+    return packets;
 
     #endregion Application Logic
 })
@@ -96,11 +89,6 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 .RequireAuthorization();
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
 
 #pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
