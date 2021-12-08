@@ -1,10 +1,8 @@
+using ClassLibrary1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using System.Diagnostics;
-
-const string authenticatedEndpoint = "/authenticatedEndpoint";
-const string unauthenticatedEndpoint = "/unauthenticatedEndpoint";
 
 Trace.WriteLine("@Program.cs");
 
@@ -21,12 +19,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+app.UseSwagger();
 
-    app.UseSwaggerUI();
-}
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -39,13 +34,13 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet(unauthenticatedEndpoint, (HttpContext httpContext) =>
+app.MapGet(EndpointMap.HealthCheckEndpoint, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 })
-.WithName("UnauthenticatedEndpoint");
+.WithName("HealthCheckEndpoint");
 
-app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
+app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
 {
     app.Logger.LogTrace("@MapGet()");
 
@@ -101,7 +96,7 @@ app.MapGet(authenticatedEndpoint, (HttpContext httpContext) =>
 
     #endregion Application Logic
 })
-.WithName("AuthenticatedEndpoint")
+.WithName("IoEndpoint")
 .RequireAuthorization();
 
 app.Run();
@@ -111,4 +106,6 @@ internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
+#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
+#pragma warning restore CA1050 // Declare types in namespaces

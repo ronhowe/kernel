@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="ncrunch.v3.ncrunchproject" />
     <None Remove="secrets.json" />
+    <None Remove="TestProject1.v3.ncrunchproject" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj" />
     <ProjectReference Include="..\WebApplication1\WebApplication1.csproj" />
   </ItemGroup>
 
