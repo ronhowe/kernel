@@ -20,14 +20,15 @@ namespace TestProject1
         [TestInitialize()]
         public void TestInitialize()
         {
-            Trace.WriteLine("@TestInitialize()");
+            Trace.WriteLine("@IntegrationTest.cs1");
 
+            Trace.WriteLine("@TestInitialize()");
         }
 
         [TestMethod]
         public async Task HealthCheck()
         {
-            Trace.WriteLine("@WebApiHealthCheck()");
+            Trace.WriteLine("@HealthCheck()");
 
             // Arrange
             Trace.WriteLine("@Arrange");
@@ -37,7 +38,11 @@ namespace TestProject1
             // Act
             Trace.WriteLine("@Act");
 
+            Trace.WriteLine("@PreGetAsync()");
+
             using var response = await client.GetAsync(EndpointMap.HealthCheckEndpoint);
+
+            Trace.WriteLine("@PostGetAsync()");
 
             // Assert
             Trace.WriteLine("@Assert");
@@ -48,7 +53,7 @@ namespace TestProject1
         [TestMethod]
         public async Task Read()
         {
-            Trace.WriteLine("@WebApiRead()");
+            Trace.WriteLine("@Read()");
 
             // Arrange
             Trace.WriteLine("@Arrange");
@@ -58,18 +63,23 @@ namespace TestProject1
             // Act
             Trace.WriteLine("@Act");
 
-            using var response = await client.GetAsync(EndpointMap.IoEndpoint);
+            Trace.WriteLine("@PreRunAsync()");
+
+            // @TODO @RefactorRunAsync
+            await RunAsync();
+
+            Trace.WriteLine("@PostRunAsync()");
 
             // Assert
             Trace.WriteLine("@Assert");
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+            // @TODO @Assert
         }
 
         [TestMethod]
         public async Task Write()
         {
-            Trace.WriteLine("@WebApiWrite()");
+            Trace.WriteLine("@Write()");
 
             // Arrange
             Trace.WriteLine("@Arrange");
@@ -77,14 +87,17 @@ namespace TestProject1
             // Act
             Trace.WriteLine("@Act");
 
-            Trace.TraceWarning("@TODO @RefactorRunAsync");
+            Trace.WriteLine("@PreRunAsync()");
 
+            // @TODO @RefactorRunAsync
             await RunAsync();
+
+            Trace.WriteLine("@PostRunAsync()");
 
             // Assert
             Trace.WriteLine("@Assert");
 
-            Trace.TraceWarning("@TODO");
+            // @TODO @Assert
         }
 
         private static async Task RunAsync()

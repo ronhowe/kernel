@@ -58,16 +58,11 @@ app.MapGet(EndpointMap.IoEndpoint, (HttpContext httpContext) =>
 
     // @TODO @RefactorAuthorizationLogic
 
-    //foreach (var claim in httpContext.User.Claims)
-    //{
-    //    app.Logger.LogTrace($"\n@claim.Type={claim.Type} \n@claim.Value={claim.Value}\n@claim.ValueType={claim.ValueType}\n@claim.Subject.Name={claim.Subject.Name}\n@claim.Issuer={claim.Issuer}\n");
-    //}
+    app.Logger.LogTrace("@AuthorizationLogic");
 
-    // e.g. Can Read
-    httpContext.ValidateAppRole("DaemonAppRole");
+    httpContext.ValidateAppRole(AppRole.CanRead);
 
-    // e.g. Can Write
-    httpContext.ValidateAppRole("DataWriterRole");
+    httpContext.ValidateAppRole(AppRole.CanWrite);
 
     app.Logger.LogTrace("@PostAuthorizationLogic");
 
