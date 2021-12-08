@@ -5,7 +5,6 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,9 +25,6 @@ namespace TestProject1
         public async Task Debug()
         {
             await Task.Run(() => Trace.WriteLine("@Debug()"));
-
-            // @TODO
-
         }
 
         [TestMethod]
