@@ -74,7 +74,7 @@ namespace TestProject1
                 {
                     Tag.Why("PreGetConfigurationSetting");
 
-                    ConfigurationSetting setting = await client.GetConfigurationSettingAsync("configuration");
+                    ConfigurationSetting setting = await client.GetConfigurationSettingAsync("Enabled");
 
                     Tag.Why("PostGetConfigurationSetting");
 
@@ -131,7 +131,9 @@ namespace TestProject1
                 try
                 {
                     Tag.Why("PreGetSecretAsync");
+
                     secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
+
                     Tag.Why("PostGetSecretAsync");
 
                     Tag.What($"secret.Name={secret.Name}");
