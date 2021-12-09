@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using ClassLibrary1.Common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -34,20 +34,24 @@ namespace TestProject1
         /// <param name="processResult">Callback used to process the result of the call to the web API</param>
         public async Task GetResultAsync(string webApiUrl, string accessToken, Action<IEnumerable<JObject>> processResult)
         {
-            Trace.WriteLine("@GetResultAsync()");
+            Tag.Where("GetResultAsync");
 
             if (!string.IsNullOrEmpty(accessToken))
             {
                 var defaultRequestHeaders = HttpClient.DefaultRequestHeaders;
+
                 if (defaultRequestHeaders.Accept == null || !defaultRequestHeaders.Accept.Any(m => m.MediaType == "application/json"))
                 {
                     HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 }
+
                 defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                Trace.TraceInformation("@PreGetAsync()");
+                Tag.Why("PreGetAsync");
+
                 HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                Trace.TraceInformation("@PostGetAsync()");
+
+                Tag.Why("PostGetAsync");
 
                 if (response.IsSuccessStatusCode)
                 {

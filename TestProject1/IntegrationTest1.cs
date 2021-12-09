@@ -1,6 +1,6 @@
-﻿using ClassLibrary1.Infrastructure;
+﻿using ClassLibrary1.Common;
+using ClassLibrary1.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace TestProject1
@@ -11,15 +11,15 @@ namespace TestProject1
         [TestInitialize()]
         public void TestInitialize()
         {
-            Trace.WriteLine("@IntegrationTest.cs1");
+            Tag.Where("IntegrationTest1.cs1");
 
-            Trace.WriteLine("@TestInitialize()");
+            Tag.Where("TestInitialize");
         }
 
         [TestMethod]
         public async Task Post()
         {
-            Trace.WriteLine("@Post()");
+            Tag.Where("Post");
 
             // @TODO @RefactorRunAsync
             await EndpointCallHelper.RunAsync(Endpoints.POST, false);
@@ -30,7 +30,7 @@ namespace TestProject1
         [TestMethod]
         public async Task Read()
         {
-            Trace.WriteLine("@Read()");
+            Tag.Where("Read");
 
             await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
 
@@ -40,7 +40,7 @@ namespace TestProject1
         [TestMethod]
         public async Task Write()
         {
-            Trace.WriteLine("@Write()");
+            Tag.Where("Write");
 
             await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
 
