@@ -95,12 +95,15 @@ namespace TestProject1
         {
             Tag.Where("TraceJObject");
 
-            foreach (var item in result)
+            if (result != null)
             {
-                foreach (JProperty property in item.Properties().Where(p => !p.Name.StartsWith("@")))
+                foreach (var item in result)
                 {
-                    Tag.What($"property.Name={property.Name}");
-                    Tag.What($"property.Value={property.Value}");
+                    foreach (JProperty property in item.Properties().Where(p => !p.Name.StartsWith("@")))
+                    {
+                        Tag.What($"property.Name={property.Name}");
+                        Tag.What($"property.Value={property.Value}");
+                    }
                 }
             }
         }

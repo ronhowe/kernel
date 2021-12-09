@@ -9,11 +9,10 @@ namespace TestProject1
     public class IntegrationTest1
     {
         [TestInitialize()]
-        public void TestInitialize()
+        public async Task TestInitialize()
         {
-            Tag.Where("IntegrationTest1.cs1");
-
-            Tag.Where("TestInitialize");
+            await Task.Run(() => Tag.How("IntegrationTest1"));
+            await Task.Run(() => Tag.Where("TestInitialize"));
         }
 
         [TestMethod]
@@ -21,10 +20,7 @@ namespace TestProject1
         {
             Tag.Where("Post");
 
-            // @TODO @RefactorRunAsync
-            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
-
-            // @TODO @Assert
+            await EndpointCallHelper.RunAsync(Endpoints.POST, true);
         }
 
         [TestMethod]
@@ -33,8 +29,6 @@ namespace TestProject1
             Tag.Where("Read");
 
             await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
-
-            // @TODO @Assert
         }
 
         [TestMethod]
@@ -43,8 +37,6 @@ namespace TestProject1
             Tag.Where("Write");
 
             await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
-
-            // @TODO @Assert
         }
     }
 }
