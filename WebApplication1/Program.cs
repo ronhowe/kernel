@@ -1,11 +1,11 @@
+using ClassLibrary1.Common;
 using ClassLibrary1.Infrastructure;
 using ClassLibrary1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
-using System.Diagnostics;
 
-Trace.WriteLine("@Program.cs");
+Tag.Where("Program.cs");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,20 +30,15 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
 app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 {
-    app.Logger.LogTrace("@MapGet()");
+    app.Logger.LogInformation("MapGet".TagWhere());
 })
 .WithName("PowerOnSelfTest");
 
 app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 {
-    app.Logger.LogTrace("@MapGet()");
+    app.Logger.LogInformation("MapGet".TagWhere());
 
     #region Audit Logic
 
@@ -55,31 +50,34 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 
     #region Authorization Logic
 
-    app.Logger.LogTrace("@PreAuthorizationLogic");
+    app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
     // @TODO @RefactorAuthorizationLogic
 
-    app.Logger.LogTrace("@AuthorizationLogic");
+    app.Logger.LogInformation("AuthorizationLogic".TagWhy());
 
     httpContext.ValidateAppRole(AppRole.CanRead);
 
     httpContext.ValidateAppRole(AppRole.CanWrite);
 
-    app.Logger.LogTrace("@PostAuthorizationLogic");
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     #endregion Authorization Logic
 
     #region Application Logic
 
-    app.Logger.LogTrace("@PreApplicationLogic");
+    app.Logger.LogInformation("PreApplicationLogic".TagWhy());
 
     var service = new ReadPacketService();
 
     var packets = Enumerable.Range(1, 1).Select(index => service.Read()).ToArray();
 
-    Trace.WriteLine($"@{packets.Length}");
+    // @TODO How To Use \\@# in Tracing, Extension Library
+    // @TODO SeriLog?  ApplicationInsights?
+    // @TODO LoggingBehaviors? e.g. PerformanceAuditBehaviors?
+    app.Logger.LogInformation($"packets.Length={packets.Length}".TagWhat());
 
-    app.Logger.LogTrace($"@{packets.Length}");
+    app.Logger.LogInformation("PostApplicationLogic".TagWhy());
 
     return packets;
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.Identity.Client;
+﻿using ClassLibrary1.Common;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -15,18 +15,18 @@ namespace TestProject1
     {
         public static async Task RunAsync(string requestUri, bool authenticated = false)
         {
-            Trace.WriteLine("@RunAsync()");
+            Tag.Where("RunAsync");
 
             AuthenticationResult? result = null;
 
             if (authenticated)
             {
-                Trace.WriteLine("@PreClientAuthentication");
+                Tag.Why("PreClientAuthentication");
 
                 // @TODO @ReadFromKeyVault
                 AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
 
-                Trace.WriteLine($"@ClientId={config.ClientId}");
+                Tag.What($"config.ClientId={config.ClientId}");
 
                 bool isUsingClientSecret = AppUsesClientSecret(config);
 
@@ -57,26 +57,25 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.WriteLine("@PreAcquireTokenForClient");
+                    Tag.Why("PreAcquireTokenForClient");
 
-                    result = await app.AcquireTokenForClient(scopes)
-                        .ExecuteAsync();
+                    result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
-                    Trace.WriteLine("@PostAcquireTokenForClient");
+                    Tag.Why("PostAcquireTokenForClient");
                 }
                 catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
                 {
-                    Trace.TraceError("@ScopeProvidedNotSupported");
+                    Tag.What("ScopeProvidedNotSupported");
                 }
 
-                Trace.WriteLine("@PostClientAuthentication");
+                Tag.Why("PostClientAuthentication");
             }
 
             // TODO @RefactorServerCall
 
             if (result != null)
             {
-                Trace.WriteLine("@PreEndpointCall");
+                Tag.Why("PreEndpointCall");
 
                 HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
 
@@ -84,7 +83,7 @@ namespace TestProject1
 
                 await apiCaller.GetResultAsync(requestUri, result.AccessToken, TraceJObject);
 
-                Trace.WriteLine("@PostEndpointCall");
+                Tag.Why("PostEndpointCall");
             }
         }
 
@@ -94,13 +93,14 @@ namespace TestProject1
         /// <param name="result">Object to trace</param>
         private static void TraceJObject(IEnumerable<JObject> result)
         {
-            Trace.WriteLine("@TraceJObject()");
+            Tag.Where("TraceJObject");
 
             foreach (var item in result)
             {
-                foreach (JProperty child in item.Properties().Where(p => !p.Name.StartsWith("@")))
+                foreach (JProperty property in item.Properties().Where(p => !p.Name.StartsWith("@")))
                 {
-                    Trace.WriteLine($"@{child.Name}={child.Value}");
+                    Tag.What($"property.Name={property.Name}");
+                    Tag.What($"property.Value={property.Value}");
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace TestProject1
         /// <returns></returns>
         private static bool AppUsesClientSecret(AuthenticationConfig config)
         {
-            Trace.WriteLine("@AppUsesClientSecret()");
+            Tag.Where("AppUsesClientSecret");
 
             const string clientSecretPlaceholderValue = "[Enter here a client secret for your application]";
             const string certificatePlaceholderValue = "[Or instead of client secret: Enter here the name of a certificate (from the user cert store) as registered with your application]";
@@ -130,19 +130,19 @@ namespace TestProject1
 
             else
             {
-                Trace.TraceError("@IsNullOrWhiteSpace");
-                throw new Exception("@IsNullOrWhiteSpace");
+                Tag.What("IsNullOrWhiteSpace");
+                throw new Exception("IsNullOrWhiteSpace".TagError());
             }
         }
 
         private static X509Certificate2 ReadCertificate(string certificateName)
         {
-            Trace.WriteLine("@ReadCertificate()");
+            Tag.Where("ReadCertificate");
 
             if (string.IsNullOrWhiteSpace(certificateName))
             {
-                Trace.TraceError("@IsNullOrWhiteSpace");
-                throw new ArgumentException("@IsNullOrWhiteSpace");
+                Tag.Error("IsNullOrWhiteSpace");
+                throw new ArgumentException("IsNullOrWhiteSpace".TagError());
             }
 
             CertificateDescription certificateDescription = CertificateDescription.FromStoreWithDistinguishedName(certificateName);
@@ -153,8 +153,8 @@ namespace TestProject1
 
             if (certificateDescription.Certificate == null)
             {
-                Trace.TraceError("@null");
-                throw new Exception("@null");
+                Tag.Error("null");
+                throw new Exception("null".TagError());
             }
 
             return certificateDescription.Certificate;

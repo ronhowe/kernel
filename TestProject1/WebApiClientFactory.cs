@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using ClassLibrary1.Common;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Diagnostics;
 using System.Net.Http;
@@ -11,7 +12,7 @@ namespace TestProject1
 
         public static HttpClient CreateClient(InMemoryWebApiHost server)
         {
-            Trace.WriteLine("@CreateClient()");
+            Tag.Where("CreateClient");
 
             return server.CreateClient(new WebApplicationFactoryClientOptions
             {

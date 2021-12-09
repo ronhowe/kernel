@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using ClassLibrary1.Common;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics;
 
 namespace TestProject1
 {
@@ -10,14 +10,14 @@ namespace TestProject1
 
         public InMemoryWebApiHost(string environment = "Development")
         {
-            Trace.WriteLine("@InMemoryWebApiHost()");
+            Tag.Where("InMemoryWebApiHost");
 
             _environment = environment;
         }
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            Trace.WriteLine("@CreateHost()");
+            Tag.Where("CreateHost");
 
             builder.UseEnvironment(_environment);
 

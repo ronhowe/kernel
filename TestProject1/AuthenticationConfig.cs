@@ -96,7 +96,7 @@ namespace TestProject1
 
         public override string ToString()
         {
-            return $"{this.ClientId}";
+            return $"{ClientId}";
         }
     }
 }

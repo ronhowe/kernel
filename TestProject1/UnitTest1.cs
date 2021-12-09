@@ -2,8 +2,8 @@ using Azure;
 using Azure.Data.AppConfiguration;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using ClassLibrary1.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClassLibrary1.Services;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -17,25 +17,32 @@ namespace TestProject1
         [TestInitialize()]
         public void TestInitialize()
         {
-            Trace.WriteLine("@UnitTest.cs1");
+            Tag.How("UnitTest1.cs1");
 
-            Trace.WriteLine("@TestInitialize()");
+            Tag.Where("TestInitialize");
         }
 
         [TestMethod]
         public async Task Debug()
         {
-            await Task.Run(() => Trace.WriteLine("@Debug()"));
+            await Task.Run(() => Tag.Who("Who"));
+            await Task.Run(() => Tag.What("What"));
+            await Task.Run(() => Tag.Where("Where"));
+            await Task.Run(() => Tag.When("When"));
+            await Task.Run(() => Tag.Why("Why"));
+            await Task.Run(() => Tag.How("How"));
 
-            var service = new ReadPacketService();
-            Trace.WriteLine(service.Read());
+            await Task.Run(() => Tag.Warning("Warning"));
+            await Task.Run(() => Tag.Error("Error"));
+
+            await Task.Run(() => Tag.Comment("Comment"));
         }
 
         [TestMethod]
         [Ignore]
         public async Task AppConfiguration()
         {
-            Trace.WriteLine("@AppConfiguration()");
+            Tag.Where("AppConfiguration");
 
             try
             {
@@ -56,18 +63,20 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.WriteLine("@PreGetConfigurationSetting");
+                    Tag.Why("PreGetConfigurationSetting");
+
                     ConfigurationSetting setting = await client.GetConfigurationSettingAsync("configuration");
-                    Trace.WriteLine("@PostGetConfigurationSetting");
+
+                    Tag.Why("PostGetConfigurationSetting");
 
                     Assert.IsNotNull(setting);
                     Assert.IsFalse(String.IsNullOrEmpty(setting.Value));
 
-                    Trace.WriteLine($"@setting.Value={setting.Value}");
+                    Tag.What($"setting.Value={setting.Value}");
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError(ex.Message);
+                    Tag.What($"ex.Message={ex.Message}");
 
                     Assert.Fail(ex.Message);
                 }
@@ -115,14 +124,14 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.WriteLine("@PreGetSecretAsync");
+                    Trace.TraceInformation("@PreGetSecretAsync");
                     secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
-                    Trace.WriteLine("@PostGetSecretAsync");
+                    Trace.TraceInformation("@PostGetSecretAsync");
 
                     Assert.IsNotNull(secret);
                     Assert.IsFalse(String.IsNullOrEmpty(secret.Value));
 
-                    Trace.WriteLine($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
+                    Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
                 }
                 catch (Exception ex)
                 {
