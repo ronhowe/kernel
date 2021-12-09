@@ -5,7 +5,6 @@ using Azure.Security.KeyVault.Secrets;
 using ClassLibrary1.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,12 +23,8 @@ namespace TestProject1
         [TestMethod]
         public async Task Debug()
         {
-            await Task.Run(() => Tag.Where("Debug"));
-        }
+            #region Tag
 
-        [TestMethod]
-        public async Task Log()
-        {
             await Task.Run(() => Tag.Who("Who"));
             await Task.Run(() => Tag.What("What"));
             await Task.Run(() => Tag.Where("Where"));
@@ -40,6 +35,16 @@ namespace TestProject1
             await Task.Run(() => Tag.Error("Error"));
             await Task.Run(() => Tag.Secret("Secret"));
             await Task.Run(() => Tag.Comment("Comment"));
+
+            #endregion Tag
+
+            /////////////////////////////////////////////
+            #region Debug
+
+            // YOUR CODE HERE
+
+            #endregion Debug
+            /////////////////////////////////////////////
         }
 
         [TestMethod]
@@ -73,31 +78,28 @@ namespace TestProject1
 
                     Tag.Why("PostGetConfigurationSetting");
 
-                    Assert.IsNotNull(setting);
-                    Assert.IsFalse(String.IsNullOrEmpty(setting.Value));
-
                     Tag.What($"setting.Value={setting.Value}");
                 }
                 catch (Exception ex)
                 {
-                    Tag.What($"ex.Message={ex.Message}");
-
-                    Assert.Fail(ex.Message);
+                    Tag.Error($"ex.Message={ex.Message}");
                 }
 
             }
-            catch (CredentialUnavailableException)
+            catch (CredentialUnavailableException ex)
             {
                 // Handle errors with loading the Managed Identity
+                Tag.Error(ex.Message);
             }
-            catch (RequestFailedException)
+            catch (RequestFailedException ex)
             {
                 // Handle errors with fetching the secret
+                Tag.Error(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Handle generic errors
-                Assert.Fail();
+                Tag.Error(ex.Message);
             }
         }
 
@@ -105,7 +107,7 @@ namespace TestProject1
         [Ignore]
         public async Task KeyVault()
         {
-            Trace.TraceInformation("@KeyVault()");
+            Tag.Where("KeyVault");
 
             try
             {
@@ -128,35 +130,33 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.TraceInformation("@PreGetSecretAsync");
+                    Tag.Why("PreGetSecretAsync");
                     secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
-                    Trace.TraceInformation("@PostGetSecretAsync");
+                    Tag.Why("PostGetSecretAsync");
 
-                    Assert.IsNotNull(secret);
-                    Assert.IsFalse(String.IsNullOrEmpty(secret.Value));
-
-                    Trace.TraceInformation($"@secret.Name={secret.Name} @secret.Value={secret.Value}");
+                    Tag.What($"secret.Name={secret.Name}");
+                    Tag.Secret($"secret.Value={secret.Value}");
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError(ex.Message);
-
-                    Assert.Fail(ex.Message);
+                    Tag.Error(ex.Message);
                 }
 
             }
-            catch (CredentialUnavailableException)
+            catch (CredentialUnavailableException ex)
             {
                 // Handle errors with loading the Managed Identity
+                Tag.Error(ex.Message);
             }
-            catch (RequestFailedException)
+            catch (RequestFailedException ex)
             {
                 // Handle errors with fetching the secret
+                Tag.Error(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Handle generic errors
-                Assert.Fail();
+                Tag.Error(ex.Message);
             }
         }
     }
