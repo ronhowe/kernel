@@ -4,14 +4,6 @@ namespace ClassLibrary1.Common
 {
     public static class Tag
     {
-        public static int Count(this String str)
-        {
-            if (true)
-            {
-                return str.Split(new char[] { '#', '?', '@' }, StringSplitOptions.RemoveEmptyEntries).Length;
-            }
-        }
-
         public static string Comment(this String str)
         {
             if (true)
