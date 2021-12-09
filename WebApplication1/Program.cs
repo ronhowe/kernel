@@ -33,18 +33,25 @@ app.UseAuthorization();
 app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
+    app.Logger.LogInformation(httpContext.Request.Protocol);
+    app.Logger.LogInformation(httpContext.Request.Path);
 })
 .WithName("PowerOnSelfTest");
 
 app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 {
     #region TODO
+
     // Refactor Sections to ClassLibrary1
     // LoggingBehaviors? (Identity, Performance, Color)
     // SeriLog? ApplicationInsights?
+    // https://docs.microsoft.com/en-us/dotnet/core/extensions/custom-logging-provider    #endregion TODO
+
     #endregion TODO
 
     app.Logger.LogInformation("MapGet".TagWhere());
+    app.Logger.LogInformation(httpContext.Request.Protocol);
+    app.Logger.LogInformation(httpContext.Request.Path);
 
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 

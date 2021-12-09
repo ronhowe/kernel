@@ -20,7 +20,7 @@ namespace TestProject1
         {
             Tag.Where("Post");
 
-            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
+            await EndpointCallHelper.RunAsync(Endpoints.POST, true);
         }
 
         [TestMethod]
