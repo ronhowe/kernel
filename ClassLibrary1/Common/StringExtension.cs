@@ -24,7 +24,8 @@
 
         public static string TagWhen(this String str)
         {
-            return $":{DateTime.UtcNow}.{str}";
+            // https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
+            return $"[{DateTime.UtcNow.ToString("s")}]{str}";
         }
 
         public static string TagWho(this String str)
