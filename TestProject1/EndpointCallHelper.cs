@@ -21,7 +21,7 @@ namespace TestProject1
 
             if (authenticated)
             {
-                Trace.WriteLine("@PreClientAuthentication");
+                Trace.TraceInformation("@PreClientAuthentication");
 
                 // @TODO @ReadFromKeyVault
                 AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
@@ -57,26 +57,26 @@ namespace TestProject1
 
                 try
                 {
-                    Trace.WriteLine("@PreAcquireTokenForClient");
+                    Trace.TraceInformation("@PreAcquireTokenForClient");
 
                     result = await app.AcquireTokenForClient(scopes)
                         .ExecuteAsync();
 
-                    Trace.WriteLine("@PostAcquireTokenForClient");
+                    Trace.TraceInformation("@PostAcquireTokenForClient");
                 }
                 catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
                 {
                     Trace.TraceError("@ScopeProvidedNotSupported");
                 }
 
-                Trace.WriteLine("@PostClientAuthentication");
+                Trace.TraceInformation("@PostClientAuthentication");
             }
 
             // TODO @RefactorServerCall
 
             if (result != null)
             {
-                Trace.WriteLine("@PreEndpointCall");
+                Trace.TraceInformation("@PreEndpointCall");
 
                 HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
 
@@ -84,7 +84,7 @@ namespace TestProject1
 
                 await apiCaller.GetResultAsync(requestUri, result.AccessToken, TraceJObject);
 
-                Trace.WriteLine("@PostEndpointCall");
+                Trace.TraceInformation("@PostEndpointCall");
             }
         }
 

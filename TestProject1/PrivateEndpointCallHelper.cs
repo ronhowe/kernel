@@ -34,7 +34,7 @@ namespace TestProject1
         /// <param name="processResult">Callback used to process the result of the call to the web API</param>
         public async Task GetResultAsync(string webApiUrl, string accessToken, Action<IEnumerable<JObject>> processResult)
         {
-            Trace.WriteLine("@CallPrivateEndpointAndProcessResultAsync()");
+            Trace.WriteLine("@GetResultAsync()");
 
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -45,9 +45,9 @@ namespace TestProject1
                 }
                 defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                Trace.WriteLine("@PreGetAsync()");
+                Trace.TraceInformation("@PreGetAsync()");
                 HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                Trace.WriteLine("@PostGetAsync()");
+                Trace.TraceInformation("@PostGetAsync()");
 
                 if (response.IsSuccessStatusCode)
                 {
