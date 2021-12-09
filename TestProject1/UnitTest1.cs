@@ -15,15 +15,20 @@ namespace TestProject1
     public class UnitTest1
     {
         [TestInitialize()]
-        public void TestInitialize()
+        public async Task TestInitialize()
         {
-            Tag.How("UnitTest1.cs1");
-
-            Tag.Where("TestInitialize");
+            await Task.Run(() => Tag.How("UnitTest1"));
+            await Task.Run(() => Tag.Where("TestInitialize"));
         }
 
         [TestMethod]
         public async Task Debug()
+        {
+            await Task.Run(() => Tag.Where("Debug"));
+        }
+
+        [TestMethod]
+        public async Task Log()
         {
             await Task.Run(() => Tag.Who("Who"));
             await Task.Run(() => Tag.What("What"));
@@ -31,10 +36,9 @@ namespace TestProject1
             await Task.Run(() => Tag.When("When"));
             await Task.Run(() => Tag.Why("Why"));
             await Task.Run(() => Tag.How("How"));
-
             await Task.Run(() => Tag.Warning("Warning"));
             await Task.Run(() => Tag.Error("Error"));
-
+            await Task.Run(() => Tag.Secret("Secret"));
             await Task.Run(() => Tag.Comment("Comment"));
         }
 
