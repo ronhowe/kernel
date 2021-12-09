@@ -48,6 +48,15 @@ namespace ClassLibrary1.Common
             }
         }
 
+        public static string Secret(this String str)
+        {
+            if (true)
+            {
+                Trace.TraceInformation(str.TagSecret());
+                return $"{str.TagSecret()}";
+            }
+        }
+
         public static string Why(this String str)
         {
             if (true)
