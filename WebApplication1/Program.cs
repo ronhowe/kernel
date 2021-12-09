@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 
-Tag.Where("Program.cs");
+Tag.How("Program");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,21 +38,17 @@ app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 
 app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 {
+    #region TODO
+    // Refactor Sections to ClassLibrary1
+    // LoggingBehaviors? (Identity, Performance, Color)
+    // SeriLog? ApplicationInsights?
+    #endregion TODO
+
     app.Logger.LogInformation("MapGet".TagWhere());
-
-    #region Audit Logic
-
-    // @TODO @RefactorAuditLogic
-
-    // @TODO @AuditIdentity
-
-    #endregion Audit Logic
-
-    #region Authorization Logic
 
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-    // @TODO @RefactorAuthorizationLogic
+    #region Authorization Logic
 
     app.Logger.LogInformation("AuthorizationLogic".TagWhy());
 
@@ -60,28 +56,26 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 
     httpContext.ValidateAppRole(AppRole.CanWrite);
 
-    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
-
     #endregion Authorization Logic
 
-    #region Application Logic
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     app.Logger.LogInformation("PreApplicationLogic".TagWhy());
+
+    #region Application Logic
 
     var service = new ReadPacketService();
 
     var packets = Enumerable.Range(1, 1).Select(index => service.Read()).ToArray();
 
-    // @TODO How To Use \\@# in Tracing, Extension Library
-    // @TODO SeriLog?  ApplicationInsights?
-    // @TODO LoggingBehaviors? e.g. PerformanceAuditBehaviors?
     app.Logger.LogInformation($"packets.Length={packets.Length}".TagWhat());
+
+    #endregion Application Logic
 
     app.Logger.LogInformation("PostApplicationLogic".TagWhy());
 
-    return packets;
 
-    #endregion Application Logic
+    return packets;
 })
 .WithName("BasicInputOutputSystem")
 .RequireAuthorization();

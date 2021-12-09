@@ -40,7 +40,7 @@
 
         public static string TagWhat(this String str)
         {
-            return $"{TagPrefix()}{TagSeparator()}..{str}";
+            return $"{TagPrefix()}{TagSeparator()}[]{str}";
         }
 
         public static string TagWhere(this String str)
