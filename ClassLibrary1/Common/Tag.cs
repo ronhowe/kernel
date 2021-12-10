@@ -4,12 +4,39 @@ namespace ClassLibrary1.Common
 {
     public static class Tag
     {
+        public static string Line(this String str)
+        {
+            if (true)
+            {
+                Trace.WriteLine(str);
+                return $"{str}";
+            }
+        }
+
+        public static string ToDo(this String str)
+        {
+            if (true)
+            {
+                Trace.TraceWarning(str.TagToDo());
+                return $"{str.TagToDo()}";
+            }
+        }
+
         public static string Comment(this String str)
         {
             if (true)
             {
                 Trace.WriteLine(str.TagComment());
                 return $"{str.TagComment()}";
+            }
+        }
+
+        public static string Secret(this String str)
+        {
+            if (true)
+            {
+                Trace.TraceInformation(str.TagSecret());
+                return $"{str.TagSecret()}";
             }
         }
 
@@ -37,15 +64,6 @@ namespace ClassLibrary1.Common
             {
                 Trace.TraceInformation(str.TagWhen());
                 return $"{str.TagWhen()}";
-            }
-        }
-
-        public static string Secret(this String str)
-        {
-            if (true)
-            {
-                Trace.TraceInformation(str.TagSecret());
-                return $"{str.TagSecret()}";
             }
         }
 

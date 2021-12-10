@@ -1,7 +1,6 @@
 ﻿using ClassLibrary1.Common;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,38 +72,25 @@ namespace TestProject1
 
             // TODO @RefactorServerCall
 
+            HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
+
             if (result != null)
             {
-                Tag.Why("PreEndpointCall");
-
-                HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
+                Tag.Why("PrePrivateEndpointCall");
 
                 var apiCaller = new PrivateEndpointCallHelper(client);
 
-                await apiCaller.GetResultAsync(requestUri, result.AccessToken, TraceJObject);
+                await apiCaller.GetResultAsync(requestUri, result.AccessToken);
 
-                Tag.Why("PostEndpointCall");
+                Tag.Why("PostPrivateEndpointCall");
             }
-        }
-
-        /// <summary>
-        /// Display the result of the Web API call
-        /// </summary>
-        /// <param name="result">Object to trace</param>
-        private static void TraceJObject(IEnumerable<JObject> result)
-        {
-            Tag.Where("TraceJObject");
-
-            if (result != null)
+            else
             {
-                foreach (var item in result)
-                {
-                    foreach (JProperty property in item.Properties().Where(p => !p.Name.StartsWith("@")))
-                    {
-                        Tag.What($"property.Name={property.Name}");
-                        Tag.What($"property.Value={property.Value}");
-                    }
-                }
+                Tag.Why("PrePublicEndpointCall");
+
+                await client.GetStringAsync(requestUri);
+
+                Tag.Why("PrePublicEndpointCall");
             }
         }
 

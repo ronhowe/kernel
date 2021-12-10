@@ -1,11 +1,9 @@
 ﻿using ClassLibrary1.Common;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+using ClassLibrary1.Domain.Entities;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TestProject1
@@ -32,9 +30,11 @@ namespace TestProject1
         /// <param name="webApiUrl">URL of the web API to call (supposed to return Json)</param>
         /// <param name="accessToken">Access token used as a bearer security token to call the web API</param>
         /// <param name="processResult">Callback used to process the result of the call to the web API</param>
-        public async Task GetResultAsync(string webApiUrl, string accessToken, Action<IEnumerable<JObject>> processResult)
+        public async Task<Packet> GetResultAsync(string webApiUrl, string accessToken)
         {
             Tag.Where("GetResultAsync");
+
+            Packet result = new();
 
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -57,18 +57,17 @@ namespace TestProject1
                 {
                     string json = await response.Content.ReadAsStringAsync();
 
-                    var result = JsonConvert.DeserializeObject<List<JObject>>(json);
+                    result = JsonSerializer.Deserialize<Packet>(json);
 
-                    processResult(result);
+                    Tag.What($"result={result}");
                 }
                 else
                 {
-                    // Note that if you got reponse.Code == 403 and reponse.content.code == "Authorization_RequestDenied"
-                    // this is because the tenant admin as not granted consent for the application to call the Web API
-
                     string content = await response.Content.ReadAsStringAsync();
                 }
             }
+
+            return result;
         }
     }
 }
