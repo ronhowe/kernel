@@ -145,8 +145,8 @@ namespace TestProject1
 
             await createStream.DisposeAsync();
 
-            //Tag.ToDo("RemovePostSerializeAsync");
-            //await ReadTextAsync(fileName);
+            Tag.ToDo("RemovePostSerializeAsync");
+            await ReadTextAsync(fileName);
 
             Tag.Why("InputComplete");
         }
@@ -163,8 +163,8 @@ namespace TestProject1
 
             Tag.What($"fileName={fileName}");
 
-            //Tag.ToDo("RemovePreDeserializeAsyncRead");
-            //await ReadTextAsync(fileName);
+            Tag.ToDo("RemovePreDeserializeAsyncRead");
+            await ReadTextAsync(fileName);
 
             using FileStream openStream = File.OpenRead(fileName);
 
@@ -218,7 +218,7 @@ namespace TestProject1
 
                     Tag.ToDo("RefactorTagBlockFunctionalityFeature12345");
 
-                    if (false)
+                    if (true)
                     {
                         Tag.Line($"{sb}");
                     }
