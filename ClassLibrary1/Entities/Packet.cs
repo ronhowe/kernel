@@ -1,16 +1,25 @@
 ﻿using ClassLibrary1.Domain.Common;
 using ClassLibrary1.Domain.Events;
 using ClassLibrary1.Domain.ValueObjects;
+using System.Text.Json.Serialization;
 
 namespace ClassLibrary1.Domain.Entities
 {
     public class Packet : AuditableEntity, IHasDomainEvent
     {
-        public Guid Id { get; set; } = Guid.Empty;
+        [JsonConstructor]
+        public Packet()
+        {
+            Id = Guid.Empty;
+            ReferenceId = Guid.Empty;
+            Color = PacketColor.Black;
+        }
 
-        public Guid ReferenceId { get; set; } = Guid.Empty;
+        public Guid Id { get; set; }
 
-        public Color Color { get; set; } = Color.Black;
+        public Guid ReferenceId { get; set; }
+
+        public PacketColor Color { get; set; }
 
         private bool _received;
 

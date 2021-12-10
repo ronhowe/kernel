@@ -2,8 +2,8 @@
 
 namespace ClassLibrary1.Services
 {
-    internal interface IReadPacketService
+    internal interface IWritePacketService
     {
-        public Packet Read(Guid id);
+        public void Write(Packet p);
     }
 }

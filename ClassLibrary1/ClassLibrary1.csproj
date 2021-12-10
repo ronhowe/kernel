@@ -10,4 +10,8 @@
     <None Remove="ClassLibrary1.v3.ncrunchproject" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.3.0" />
+  </ItemGroup>
+
 </Project>

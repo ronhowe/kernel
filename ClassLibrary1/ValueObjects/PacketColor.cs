@@ -1,27 +1,25 @@
 ﻿using ClassLibrary1.Domain.Common;
 using ClassLibrary1.Domain.Exceptions;
+using System.Text.Json.Serialization;
 
 namespace ClassLibrary1.Domain.ValueObjects
 {
-    public class Color : ValueObject
+    public class PacketColor : ValueObject
     {
-        static Color()
+        public PacketColor()
         {
+            Code = PacketColor.Black;
         }
 
-        private Color()
-        {
-            Code = Color.Black;
-        }
-
-        private Color(string code)
+        [JsonConstructor]
+        public PacketColor(string code)
         {
             Code = code;
         }
 
-        public static Color From(string code)
+        public static PacketColor From(string code)
         {
-            var color = new Color { Code = code };
+            var color = new PacketColor { Code = code };
 
             if (!SupportedColors.Contains(color))
             {
@@ -31,32 +29,32 @@ namespace ClassLibrary1.Domain.ValueObjects
             return color;
         }
 
-        public static Color White => new("#FFFFFF");
+        public static PacketColor White => new("#FFFFFF");
 
-        public static Color Red => new("#FF5733");
+        public static PacketColor Red => new("#FF5733");
 
-        public static Color Orange => new("#FFC300");
+        public static PacketColor Orange => new("#FFC300");
 
-        public static Color Yellow => new("#FFFF66");
+        public static PacketColor Yellow => new("#FFFF66");
 
-        public static Color Green => new("#CCFF99 ");
+        public static PacketColor Green => new("#CCFF99 ");
 
-        public static Color Blue => new("#6666FF");
+        public static PacketColor Blue => new("#6666FF");
 
-        public static Color Purple => new("#9966CC");
+        public static PacketColor Purple => new("#9966CC");
 
-        public static Color Grey => new("#999999");
+        public static PacketColor Grey => new("#999999");
 
-        public static Color Black => new("#000000");
+        public static PacketColor Black => new("#000000");
 
-        public string Code { get; private set; }
+        public string Code { get; set; }
 
-        public static implicit operator string(Color color)
+        public static implicit operator string(PacketColor color)
         {
             return color.ToString();
         }
 
-        public static explicit operator Color(string code)
+        public static explicit operator PacketColor(string code)
         {
             return From(code);
         }
@@ -66,7 +64,7 @@ namespace ClassLibrary1.Domain.ValueObjects
             return Code;
         }
 
-        protected static IEnumerable<Color> SupportedColors
+        protected static IEnumerable<PacketColor> SupportedColors
         {
             get
             {

@@ -4,7 +4,7 @@ namespace ClassLibrary1.Services
 {
     public class ReadPacketService : IReadPacketService
     {
-        public Packet Read()
+        public Packet Read(Guid id)
         {
             return new Packet();
         }
