@@ -1,6 +1,8 @@
 using ClassLibrary1.Common;
+using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Domain.ValueObjects;
 using ClassLibrary1.Entities;
+using ClassLibrary1.Infrastructure;
 using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -15,29 +17,46 @@ namespace TestProject2_NoAuth
     public class UnitTest1
     {
         [TestMethod]
-        public async Task TestMethod1()
+        public async Task Main()
         {
-            Tag.Where("TestMethod1");
+            Tag.Where("Main");
 
             const string baseAddress = "https://localhost:7087";
 
             Tag.What($"baseAddress={baseAddress}");
 
-            HttpClient client = new() { BaseAddress = new Uri(baseAddress) };
+            HttpClient httpClient = new() { BaseAddress = new Uri(baseAddress) };
+
+            Packet sentPacket = PacketFactory.Create(PacketColor.Green);
 
             try
             {
                 Tag.Why("PrePostAsJsonAsyncCall");
 
-                var response = await client.PostAsJsonAsync("/weatherforecast", PacketFactory.Create(PacketColor.Red));
+                var httpResponse = await httpClient.PostAsJsonAsync(Endpoints.BIOS, sentPacket);
 
                 Tag.Why("PostPostAsJsonAsyncCall");
 
-                Tag.Line(FiggleFonts.Standard.Render(response.StatusCode.ToString()));
+                Tag.Line(FiggleFonts.Standard.Render(httpResponse.StatusCode.ToString()));
+
+                Tag.Why("PreGetFromJsonAsyncCall");
+
+                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{Endpoints.BIOS}?id={sentPacket.Id}");
+
+                Tag.Why("PostGetFromJsonAsyncCall");
+
+                Tag.ToDo("ImplementSentAndReceivedProperties");
+
+                Tag.Line($"sentPacket={sentPacket}");
+                Tag.Line($"receivedPacket={receivedPacket}");
+
+                Assert.AreEqual<Guid>(sentPacket.Id, receivedPacket.Id);
+                Assert.AreEqual<PacketColor>(sentPacket.Color, receivedPacket.Color);
+                Assert.AreEqual<PacketColor>(PacketColor.Green, receivedPacket.Color);
             }
             catch (HttpRequestException ex)
             {
-                Tag.Error("HttpRequestError");
+                Tag.Error("HttpRequestException");
                 Tag.Error(ex.Message);
             }
             catch (NotSupportedException ex)

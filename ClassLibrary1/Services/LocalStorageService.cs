@@ -15,7 +15,7 @@ public class LocalStorageService
 
         Tag.What($"packet={packet}");
 
-        await Input(packet);
+        await Write(packet);
 
         Tag.Why("PostInputCall");
 
@@ -30,7 +30,7 @@ public class LocalStorageService
 
         Tag.Why("PreOuput");
 
-        var receivedPacket = await Output(packet.Id);
+        var receivedPacket = await Read(packet.Id);
 
         Tag.Line($"receivedPacket={receivedPacket}");
 
@@ -45,13 +45,13 @@ public class LocalStorageService
         return packet;
     }
 
-    public static async Task Input(Packet packet)
+    public static async Task Write(Packet packet)
     {
         Tag.Where("Input");
 
         Tag.Why("InputStart");
 
-        string fileName = $"{packet.Id}.json";
+        string fileName = $"{Path.GetTempPath()}\\{packet.Id}.json";
 
         Tag.Why("SerializedJsonFile");
 
@@ -82,7 +82,7 @@ public class LocalStorageService
         Tag.Why("InputComplete");
     }
 
-    public static async Task<Packet> Output(Guid id)
+    public static async Task<Packet> Read(Guid id)
     {
         Tag.Where("Output");
 
@@ -90,7 +90,7 @@ public class LocalStorageService
 
         Tag.What($"id={id}");
 
-        string fileName = $"{id}.json";
+        string fileName = $"{Path.GetTempPath()}\\{id}.json";
 
         Tag.What($"fileName={fileName}");
 
