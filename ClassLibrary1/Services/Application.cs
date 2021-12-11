@@ -23,6 +23,8 @@ namespace ClassLibrary1.Services
 
             Tag.Why("PreClientAuthentication");
 
+            AuthenticationResult? result = null;
+
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
 
             Tag.What($"config.Instance={config.Instance}");
@@ -61,8 +63,6 @@ namespace ClassLibrary1.Services
             // granted b ya tenant administrator.
             string[] scopes = new string[] { config.TodoListScope };
 
-            AuthenticationResult? result = null;
-
             try
             {
                 Tag.Why("PreAcquireTokenForClient");
@@ -84,6 +84,7 @@ namespace ClassLibrary1.Services
             Tag.What($"result.AccessToken={result.AccessToken}");
 
             HttpClient client = new() { BaseAddress = new Uri(config.TodoListBaseAddress) };
+            //HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
 
             if (!string.IsNullOrEmpty(result.AccessToken))
             {

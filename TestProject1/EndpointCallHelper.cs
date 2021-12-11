@@ -2,8 +2,6 @@
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -18,6 +16,9 @@ namespace TestProject1
 
             AuthenticationResult? result = null;
 
+            HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
+            //HttpClient client = new() { BaseAddress = new Uri("https://localhost:7107") };
+
             if (authenticate)
             {
                 Tag.Why("PreClientAuthentication");
@@ -25,7 +26,14 @@ namespace TestProject1
                 // @TODO @ReadFromKeyVault
                 AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
 
+                Tag.What($"config.Instance={config.Instance}");
+                Tag.What($"config.Tenant={config.Tenant}");
                 Tag.What($"config.ClientId={config.ClientId}");
+                Tag.What($"config.Authority={config.Authority}");
+                Tag.Secret($"config.ClientSecret={config.ClientSecret}");
+                Tag.What($"config.CertificateName={config.CertificateName}");
+                Tag.What($"config.TodoListBaseAddress={config.TodoListBaseAddress}");
+                Tag.What($"config.TodoListScope={config.TodoListScope}");
 
                 bool isUsingClientSecret = AppUsesClientSecret(config);
 
@@ -64,25 +72,24 @@ namespace TestProject1
                 }
                 catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
                 {
-                    Tag.What("ScopeProvidedNotSupported");
+                    Tag.Error("ScopeProvidedNotSupported");
                 }
 
                 Tag.Why("PostClientAuthentication");
-            }
 
-            // TODO @RefactorServerCall
+                // TODO @RefactorServerCall
 
-            HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
 
-            if (result != null)
-            {
-                Tag.Why("PrePrivateEndpointCall");
+                if (result != null)
+                {
+                    Tag.Why("PrePrivateEndpointCall");
 
-                var apiCaller = new PrivateEndpointCallHelper(client);
+                    var apiCaller = new PrivateEndpointCallHelper(client);
 
-                await apiCaller.GetResultAsync(requestUri, result.AccessToken);
+                    await apiCaller.GetResultAsync(requestUri, result.AccessToken);
 
-                Tag.Why("PostPrivateEndpointCall");
+                    Tag.Why("PostPrivateEndpointCall");
+                }
             }
             else
             {

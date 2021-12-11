@@ -7,7 +7,7 @@ namespace TestProject1
 {
     public static class WebApiClientFactory
     {
-        private static readonly Uri Address = new("https://localhost:9999");
+        private static readonly Uri Address = new("https://localhost:7107");
 
         public static HttpClient CreateClient(InMemoryWebApiHost server)
         {

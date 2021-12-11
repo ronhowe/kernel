@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="EndpointCallHelper.cs" />
-    <Compile Remove="PrivateEndpointCallHelper.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="appsettings.secrets.json" />
     <None Remove="ncrunch.v3.ncrunchproject" />
@@ -26,11 +21,6 @@
     <Content Include="appsettings.secrets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="EndpointCallHelper.cs" />
-    <None Include="PrivateEndpointCallHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
