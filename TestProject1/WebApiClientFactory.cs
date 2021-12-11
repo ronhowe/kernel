@@ -1,7 +1,6 @@
 ﻿using ClassLibrary1.Common;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 
 namespace TestProject1

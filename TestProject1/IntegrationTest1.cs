@@ -16,7 +16,7 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public async Task Post()
+        public async Task PostEndpoint()
         {
             Tag.Where("Post");
 
@@ -24,19 +24,19 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public async Task Read()
+        public async Task IOEndpoint()
         {
-            Tag.Where("Read");
+            Tag.Where("IOEndpoint");
 
             await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
         }
 
-        [TestMethod]
-        public async Task Write()
-        {
-            Tag.Where("Write");
+        //[TestMethod]
+        //public async Task Write()
+        //{
+        //    Tag.Where("Write");
 
-            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
-        }
+        //    await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
+        //}
     }
 }

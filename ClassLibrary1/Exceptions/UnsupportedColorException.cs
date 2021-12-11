@@ -3,7 +3,7 @@
     public class UnsupportedColorException : Exception
     {
         public UnsupportedColorException(string code)
-            : base($"@UnsupportedColorException={code}")
+            : base($"UnsupportedColorException={code}")
         {
         }
     }

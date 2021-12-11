@@ -1,8 +1,10 @@
 using Azure;
 using Azure.Data.Tables;
+using Azure.Data.Tables.Models;
 using ClassLibrary1;
 using ClassLibrary1.Common;
 using ClassLibrary1.Domain.Entities;
+using ClassLibrary1.Domain.ValueObjects;
 using ClassLibrary1.Infrastructure;
 using ClassLibrary1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,7 +43,7 @@ app.MapGet(Endpoints.POST, (HttpContext httpContext) =>
 })
 .WithName("PowerOnSelfTest");
 
-app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
+app.MapGet(Endpoints.BIOS, async (HttpContext httpContext) =>
 {
     #region TODO
 
@@ -68,40 +70,39 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreApplicationLogic".TagWhy());
 
-    #region Hard-Coded
+    var id = Guid.NewGuid();
 
-    var packet = new Packet
+    var packet = new Packet()
     {
-        Id = Guid.NewGuid(),
-        ReferenceId = Guid.NewGuid(),
-        Color = ClassLibrary1.Domain.ValueObjects.PacketColor.Green
+        Id = id,
+        ReferenceId = id,
+        Sent = false,
+        Received = false,
+        Color = PacketColor.Green
     };
 
-    string jsonString = JsonSerializer.Serialize(packet);
-    
-    //var packetWriter = new WritePacketService();
+    #region Local Storage Service
 
-    //Packet packet = new Packet();
+    bool LocalStorageServiceEnabled = true;
 
-    //packetWriter.Write(packet);
-
-    //var packetReader = new ReadPacketService();
-
-    //var newPacket = packetReader.Read(packet.Id);
-
-    //Assert.AreEqual(packet.Id, newPacket.Id);
-
-    //var packets = Enumerable.Range(1, 1).Select(index => packetReader.Read(packet.Id)).ToArray();
-
-    #endregion Hard-Coded
-
-    #region Storage Account
-    bool storageAccountIo = false;
-    if (storageAccountIo)
+    if (LocalStorageServiceEnabled)
     {
-        string storageUri = "https://{0}.table.core.windows.net";
-        string accountName = "YOUR_ACCOUNT_HERE";
-        string storageAccountKey = "YOUR_ACCOUNT_HERE";
+        var service = new LocalStorageService();
+
+        var result = await LocalStorageService.IO(packet);
+    };
+
+    #endregion Local Storage Service
+
+    #region Azure Storage Service
+
+    bool AzureStorageServiceEnabled = false;
+
+    if (AzureStorageServiceEnabled)
+    {
+        string storageUri = "";
+        string accountName = "";
+        string storageAccountKey = "";
 
         // Construct a new "TableServiceClient using a TableSharedKeyCredential.
         var serviceClient = new TableServiceClient(
@@ -109,8 +110,8 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
             new TableSharedKeyCredential(accountName, storageAccountKey));
 
         // Create a new table. The TableItem class stores properties of the created table.
-        string tableName = "VeryImportantTable";
-        //    TableItem table = serviceClient.CreateTableIfNotExists(tableName);
+        string tableName = "NewVeryImportantTable";
+        //TableItem table = serviceClient.CreateTableIfNotExists(tableName);
         //Tag.What($"table.Name={table.Name}");
 
         // Construct a new <see cref="TableClient" /> using a <see cref="TableSharedKeyCredential" />.
@@ -120,40 +121,48 @@ app.MapGet(Endpoints.BIOS, (HttpContext httpContext) =>
             new TableSharedKeyCredential(accountName, storageAccountKey));
 
         // Create the table in the service.
-        tableClient.Create();
+        //tableClient.Create();
 
         Tag.When("");
         Tag.What(tableName);
 
-        string partitionKey = Guid.NewGuid().ToString();
-        string rowKeyStrong = Guid.NewGuid().ToString();
-
-        // Make a dictionary entity by defining a <see cref="TableEntity">.
-        // Create an instance of the strongly-typed entity and set their properties.
-        var strongEntity = new OfficeSupplyEntity
+        var packetTableEntity = new PacketTableEntity
         {
-            PartitionKey = partitionKey,
-            RowKey = rowKeyStrong,
-            Product = "Notebook",
-            Price = 3.00,
-            Quantity = 50
+            Id = packet.Id.ToString(),
+            ReferenceId = packet.ReferenceId.ToString(),
+            Color = packet.Color.Code,
+            PartitionKey = packet.Id.ToString(),
+            RowKey = packet.Id.ToString(),
         };
 
-        tableClient.AddEntity(strongEntity);
+        //tableClient.AddEntity(strongEntity);
+        tableClient.AddEntity(packetTableEntity);
 
-        Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{partitionKey}'");
+        Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{packet.Id}'");
 
         // Iterate the <see cref="Pageable"> to access all queried entities.
         foreach (TableEntity qEntity in queryResultsFilter)
         {
-            Tag.What($"{qEntity.GetString("Product")}: {qEntity.GetDouble("Price")}");
+            Tag.What($"{qEntity.GetString("Id")}");
+            Tag.What($"{qEntity.GetString("ReferenceId")}");
+            Tag.What($"{qEntity.GetString("Color")}");
+
+            var storedPacket = new Packet()
+            {
+                Id = Guid.Parse(qEntity.GetString("Id")),
+                ReferenceId = Guid.Parse(qEntity.GetString("ReferenceId")),
+                Color = new PacketColor(qEntity.GetString("Color"))
+            };
+
+            Tag.What($"storedPacket={storedPacket}");
         }
 
         Tag.What($"queryResultsFilter.Count={queryResultsFilter.Count()}");
     }
-    #endregion Storage Account
 
-    //app.Logger.LogInformation($"packets.Length={packets.Length}".TagWhat());
+    #endregion Azure Storage Service
+
+    app.Logger.LogInformation($"packet={packet}".TagWhat());
 
     app.Logger.LogInformation("PostApplicationLogic".TagWhy());
 

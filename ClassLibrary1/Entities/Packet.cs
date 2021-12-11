@@ -1,11 +1,13 @@
-﻿using ClassLibrary1.Domain.Common;
+﻿using Azure;
+using Azure.Data.Tables;
+using ClassLibrary1.Domain.Common;
 using ClassLibrary1.Domain.Events;
 using ClassLibrary1.Domain.ValueObjects;
 using System.Text.Json.Serialization;
 
 namespace ClassLibrary1.Domain.Entities
 {
-    public class Packet : AuditableEntity, IHasDomainEvent
+    public class Packet : AuditableEntity, IHasDomainEvent, ITableEntity
     {
         [JsonConstructor]
         public Packet()
@@ -59,5 +61,18 @@ namespace ClassLibrary1.Domain.Entities
         }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+
+        //public string PartitionKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        //public string RowKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        //public DateTimeOffset? Timestamp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        //public ETag ETag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public string PartitionKey { get; set; }
+
+        public string RowKey { get; set; }
+
+        public DateTimeOffset? Timestamp { get; set; }
+
+        public ETag ETag { get; set; }
     }
 }
