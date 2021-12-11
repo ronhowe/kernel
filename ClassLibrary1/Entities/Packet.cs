@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace ClassLibrary1.Domain.Entities
 {
-    public class Packet : AuditableEntity, IHasDomainEvent, ITableEntity
+    public class Packet : AuditableEntity//, IHasDomainEvent, ITableEntity
     {
         [JsonConstructor]
         public Packet()
@@ -32,7 +32,7 @@ namespace ClassLibrary1.Domain.Entities
             {
                 if (value == true && _received == false)
                 {
-                    DomainEvents.Add(new PacketReceivedEvent(this));
+                    //DomainEvents.Add(new PacketReceivedEvent(this));
                 }
 
                 _received = value;
@@ -48,7 +48,7 @@ namespace ClassLibrary1.Domain.Entities
             {
                 if (value == true && _sent == false)
                 {
-                    DomainEvents.Add(new PacketSentEvent(this));
+                    //DomainEvents.Add(new PacketSentEvent(this));
                 }
 
                 _sent = value;
@@ -61,19 +61,19 @@ namespace ClassLibrary1.Domain.Entities
             return $"{Id}.{Color}.{Sent}.{Received}";
         }
 
-        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+        //public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 
         //public string PartitionKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         //public string RowKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         //public DateTimeOffset? Timestamp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         //public ETag ETag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public string PartitionKey { get; set; }
+        //public string PartitionKey { get; set; }
 
-        public string RowKey { get; set; }
+        //public string RowKey { get; set; }
 
-        public DateTimeOffset? Timestamp { get; set; }
+        //public DateTimeOffset? Timestamp { get; set; }
 
-        public ETag ETag { get; set; }
+        //public ETag ETag { get; set; }
     }
 }
