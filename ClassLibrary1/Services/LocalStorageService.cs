@@ -3,163 +3,160 @@ using ClassLibrary1.Domain.Entities;
 using System.Text;
 using System.Text.Json;
 
-namespace ClassLibrary1.Services
+public class LocalStorageService
 {
-    public class LocalStorageService
+    public static async Task<Packet> IO(Packet packet)
     {
-        public static async Task<Packet> IO(Packet packet)
-        {
-            Tag.Where("IO");
+        Tag.Where("IO");
 
-            Tag.Why("IOStart");
+        Tag.Why("IOStart");
 
-            Tag.Why("PreInput");
+        Tag.Why("PreInput");
 
-            Tag.What($"packet={packet}");
+        Tag.What($"packet={packet}");
 
-            await Input(packet);
+        await Input(packet);
 
-            Tag.Why("PostInput");
+        Tag.Why("PostInput");
 
-            packet.Sent = true;
+        packet.Sent = true;
 
-            Tag.ToDo("FixPreprocessorDirectiveBug12345");
+        Tag.ToDo("FixPreprocessorDirectiveBug12345");
 
 #if false
             // Only Shows In Debug
             await ReadTextAsync($"{packet.Id}.json");
 #endif
 
-            Tag.Why("PreOuput");
+        Tag.Why("PreOuput");
 
-            var receivedPacket = await Output(packet.Id);
+        var receivedPacket = await Output(packet.Id);
 
-            Tag.Line($"receivedPacket={receivedPacket}");
+        Tag.Line($"receivedPacket={receivedPacket}");
 
-            Tag.Why("PostOuput");
+        Tag.Why("PostOuput");
 
-            packet.Received = true;
+        packet.Received = true;
 
-            packet.Color = receivedPacket.Color;
+        packet.Color = receivedPacket.Color;
 
-            Tag.Why("IOComplete");
+        Tag.Why("IOComplete");
 
-            return packet;
+        return packet;
+    }
+
+    public static async Task Input(Packet packet)
+    {
+        Tag.Where("Input");
+
+        Tag.Why("InputStart");
+
+        string fileName = $"{packet.Id}.json";
+
+        Tag.What($"fileName={fileName}");
+
+        using FileStream createStream = File.Create(fileName);
+
+        Tag.What($"createStream.Name={createStream.Name}");
+
+        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+        {
+            WriteIndented = true
+        };
+
+        JsonSerializerOptions optionsCopy = new(options);
+
+        Tag.Why("PreSerializeAsync");
+
+        await JsonSerializer.SerializeAsync(createStream, packet, optionsCopy);
+
+        Tag.Why("PostSerializeAsync");
+
+        await createStream.DisposeAsync();
+
+        Tag.ToDo("RemovePostSerializeAsync");
+        await ReadTextAsync(fileName);
+
+        Tag.Why("InputComplete");
+    }
+
+    public static async Task<Packet> Output(Guid id)
+    {
+        Tag.Where("Output");
+
+        Tag.Why("OutputStart");
+
+        Tag.What($"id={id}");
+
+        string fileName = $"{id}.json";
+
+        Tag.What($"fileName={fileName}");
+
+        Tag.ToDo("RemovePreDeserializeAsyncRead");
+        await ReadTextAsync(fileName);
+
+        using FileStream openStream = File.OpenRead(fileName);
+
+        Tag.What($"openStream.Name={openStream.Name}");
+
+        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+        {
+            WriteIndented = true
+        };
+
+        JsonSerializerOptions optionsCopy = new(options);
+
+        Tag.Why("PreDeserializeAsync");
+
+        Packet deserializedPacket = await JsonSerializer.DeserializeAsync<Packet>(openStream, options);
+
+        Tag.Why("PostDeserializeAsync");
+
+        Tag.ToDo("SimulateReadCorruptionFeature12345");
+
+        if (false)
+        {
+            deserializedPacket.Id = Guid.NewGuid();
         }
 
-        public static async Task Input(Packet packet)
+        Tag.What($"deserializedPacket={deserializedPacket}");
+
+        Tag.Why("OutputComplete");
+
+        return deserializedPacket;
+    }
+
+    private static Task<string> ReadTextAsync(string filePath)
+    {
+        var task = new Task<string>(() =>
         {
-            Tag.Where("Input");
+            using FileStream sourceStream = new(filePath,
+                FileMode.Open, FileAccess.Read, FileShare.Read,
+                bufferSize: 4096, useAsync: true);
 
-            Tag.Why("InputStart");
+            StringBuilder sb = new();
 
-            string fileName = $"{packet.Id}.json";
+            byte[] buffer = new byte[0x1000];
+            int numRead;
 
-            Tag.What($"fileName={fileName}");
-
-            using FileStream createStream = File.Create(fileName);
-
-            Tag.What($"createStream.Name={createStream.Name}");
-
-            JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+            while ((numRead = sourceStream.Read(buffer, 0, buffer.Length)) != 0)
             {
-                WriteIndented = true
-            };
-
-            JsonSerializerOptions optionsCopy = new(options);
-
-            Tag.Why("PreSerializeAsync");
-
-            await JsonSerializer.SerializeAsync(createStream, packet, optionsCopy);
-
-            Tag.Why("PostSerializeAsync");
-
-            await createStream.DisposeAsync();
-
-            Tag.ToDo("RemovePostSerializeAsync");
-            await ReadTextAsync(fileName);
-
-            Tag.Why("InputComplete");
-        }
-
-        public static async Task<Packet> Output(Guid id)
-        {
-            Tag.Where("Output");
-
-            Tag.Why("OutputStart");
-
-            Tag.What($"id={id}");
-
-            string fileName = $"{id}.json";
-
-            Tag.What($"fileName={fileName}");
-
-            Tag.ToDo("RemovePreDeserializeAsyncRead");
-            await ReadTextAsync(fileName);
-
-            using FileStream openStream = File.OpenRead(fileName);
-
-            Tag.What($"openStream.Name={openStream.Name}");
-
-            JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
-            {
-                WriteIndented = true
-            };
-
-            JsonSerializerOptions optionsCopy = new(options);
-
-            Tag.Why("PreDeserializeAsync");
-
-            Packet deserializedPacket = await JsonSerializer.DeserializeAsync<Packet>(openStream, options);
-
-            Tag.Why("PostDeserializeAsync");
-
-            Tag.ToDo("SimulateReadCorruptionFeature12345");
-
-            if (false)
-            {
-                deserializedPacket.Id = Guid.NewGuid();
+                string text = Encoding.ASCII.GetString(buffer, 0, numRead);
+                sb.Append(text);
             }
 
-            Tag.What($"deserializedPacket={deserializedPacket}");
+            Tag.ToDo("RefactorTagBlockFunctionalityFeature12345");
 
-            Tag.Why("OutputComplete");
-
-            return deserializedPacket;
-        }
-
-        private static Task<string> ReadTextAsync(string filePath)
-        {
-            var task = new Task<string>(() =>
+            if (true)
             {
-                using FileStream sourceStream = new(filePath,
-                    FileMode.Open, FileAccess.Read, FileShare.Read,
-                    bufferSize: 4096, useAsync: true);
+                Tag.Line($"{sb}");
+            }
 
-                StringBuilder sb = new();
+            return sb.ToString();
+        });
 
-                byte[] buffer = new byte[0x1000];
-                int numRead;
+        task.Start();
 
-                while ((numRead = sourceStream.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    string text = Encoding.ASCII.GetString(buffer, 0, numRead);
-                    sb.Append(text);
-                }
-
-                Tag.ToDo("RefactorTagBlockFunctionalityFeature12345");
-
-                if (true)
-                {
-                    Tag.Line($"{sb}");
-                }
-
-                return sb.ToString();
-            });
-
-            task.Start();
-
-            return task;
-        }
+        return task;
     }
 }
