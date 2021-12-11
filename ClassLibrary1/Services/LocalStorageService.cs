@@ -11,13 +11,13 @@ public class LocalStorageService
 
         Tag.Why("IOStart");
 
-        Tag.Why("PreInput");
+        Tag.Why("PreInputCall");
 
         Tag.What($"packet={packet}");
 
         await Input(packet);
 
-        Tag.Why("PostInput");
+        Tag.Why("PostInputCall");
 
         packet.Sent = true;
 
@@ -53,6 +53,8 @@ public class LocalStorageService
 
         string fileName = $"{packet.Id}.json";
 
+        Tag.Why("SerializedJsonFile");
+
         Tag.What($"fileName={fileName}");
 
         using FileStream createStream = File.Create(fileName);
@@ -66,11 +68,11 @@ public class LocalStorageService
 
         JsonSerializerOptions optionsCopy = new(options);
 
-        Tag.Why("PreSerializeAsync");
+        Tag.Why("PreSerializeAsyncCall");
 
         await JsonSerializer.SerializeAsync(createStream, packet, optionsCopy);
 
-        Tag.Why("PostSerializeAsync");
+        Tag.Why("PostSerializeAsyncCall");
 
         await createStream.DisposeAsync();
 
@@ -147,7 +149,7 @@ public class LocalStorageService
 
             Tag.ToDo("RefactorTagBlockFunctionalityFeature12345");
 
-            if (true)
+            if (false)
             {
                 Tag.Line($"{sb}");
             }

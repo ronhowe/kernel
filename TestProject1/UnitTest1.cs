@@ -3,9 +3,6 @@ using Azure.Data.AppConfiguration;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
@@ -16,41 +13,18 @@ namespace TestProject1
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public async Task Debug()
-        {
-            //////////////////////////////////////////////////////////////////////////////////////////
-            #region Debug
-
-            // ARRANGE
-            var packet = new Packet()
-            {
-                Id = Guid.NewGuid(),
-                ReferenceId = Guid.NewGuid(),
-                Sent = false,
-                Received = false,
-                Color = PacketColor.Green
-            };
-
-            var service = new LocalStorageService();
-
-            // ACT
-            var result = await LocalStorageService.IO(packet);
-
-            Tag.What($"result={result}");
-            Assert.IsTrue(result.Sent);
-            Assert.IsTrue(result.Received);
-            Assert.AreEqual(PacketColor.Green, result.Color);
-
-            #endregion Debug
-            //////////////////////////////////////////////////////////////////////////////////////////
-        }
-
         [TestInitialize()]
         public async Task TestInitialize()
         {
             await Task.Run(() => Tag.How("UnitTest1"));
+
             await Task.Run(() => Tag.Where("TestInitialize"));
+        }
+
+        [TestMethod]
+        public async Task Debug()
+        {
+            await Task.Run(() => Tag.Where("Debug"));
         }
 
         [TestMethod]

@@ -2,5 +2,5 @@
 
 internal interface IPacketService
 {
-    public void IO(Packet packet);
+    public Task IO(Packet packet);
 }

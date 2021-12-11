@@ -1,14 +1,27 @@
-﻿using ClassLibrary1.Domain.Entities;
+﻿using ClassLibrary1.Common;
 using ClassLibrary1.Domain.ValueObjects;
+using ClassLibrary1.Services;
+using Figgle;
 
-Console.Clear();
+Tag.How("Program");
 
-Packet packet = new() { Id = Guid.NewGuid(), Color = PacketColor.Green };
+Tag.Where("Main");
 
-PacketService service = new();
+while (true)
+{
+    Console.ResetColor();
 
-service.IO(packet);
+    var application = new Application();
 
-Console.ForegroundColor = ConsoleColor.Green;
+    Tag.Why("PreRunCall");
 
-Console.WriteLine(packet);
+    await application.Run(PacketColor.Blue);
+
+    Tag.Why("PostRunCall");
+
+    Console.ForegroundColor = ConsoleColor.Blue;
+
+    Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(PacketColor.Blue)));
+
+    await Task.Delay(1000);
+}

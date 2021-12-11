@@ -1,9 +1,8 @@
 ﻿using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Infrastructure;
+using ClassLibrary1.Services;
+using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Threading.Tasks;
 
 namespace TestProject1
@@ -15,51 +14,38 @@ namespace TestProject1
         public async Task TestInitialize()
         {
             await Task.Run(() => Tag.How("IntegrationTest1"));
+
             await Task.Run(() => Tag.Where("TestInitialize"));
         }
 
         [TestMethod]
-        public async Task Run()
+        public async Task Main()
         {
-            Tag.Where("Run");
+            Tag.Why("Main");
 
-            Tag.Why("RunStart");
+            var application = new Application();
 
-            Packet packet = new() { Id = Guid.NewGuid(), Color = PacketColor.Blue };
+            Tag.Why("PreRunCall");
 
-            PacketService service = new();
+            await application.Run(PacketColor.Green);
 
-            Tag.Why("PreIO");
+            Tag.Why("PostRunCall");
 
-            service.IO(packet);
-
-            Tag.Why("PostIO");
-
-            Tag.What(packet.ToString());
-
-            Tag.Why("RunComplete");
-        }
-
-        [TestMethod]
-        public async Task PostEndpoint()
-        {
-            Tag.Where("Post");
-
-            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
-        }
-
-        [TestMethod]
-        public async Task IOEndpoint()
-        {
-            Tag.Where("IOEndpoint");
-
-            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
+            Tag.Line(FiggleFonts.Standard.Render(PacketColor.Green));
         }
 
         //[TestMethod]
-        //public async Task Write()
+        //public async Task PostEndpoint()
         //{
-        //    Tag.Where("Write");
+        //    Tag.Where("Post");
+
+        //    await EndpointCallHelper.RunAsync(Endpoints.POST, false);
+        //}
+
+        //[TestMethod]
+        //public async Task IOEndpoint()
+        //{
+        //    Tag.Where("IOEndpoint");
 
         //    await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
         //}

@@ -1,10 +1,14 @@
-﻿using ClassLibrary1.Domain.Entities;
+﻿using ClassLibrary1.Common;
+using ClassLibrary1.Domain.Entities;
 
 public class PacketService : IPacketService
 {
-    public void IO(Packet packet)
+    public async Task IO(Packet packet)
     {
-        packet.Sent = true;
-        packet.Received = true;
+        Tag.Why("PreLocalStorageService");
+
+        await LocalStorageService.IO(packet);
+
+        Tag.Why("PostLocalStorageService");
     }
 }

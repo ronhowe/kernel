@@ -57,7 +57,8 @@ namespace ClassLibrary1.Domain.Entities
 
         public override string ToString()
         {
-            return $"{Id}.{ReferenceId}.{Color}.{Sent}.{Received}";
+            //return $"{Id}.{ReferenceId}.{Color}.{Sent}.{Received}";
+            return $"{Id}.{Color}.{Sent}.{Received}";
         }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
