@@ -12,13 +12,13 @@ namespace TestProject1
 {
     public static class EndpointCallHelper
     {
-        public static async Task RunAsync(string requestUri, bool authenticated = false)
+        public static async Task RunAsync(string requestUri, bool authenticate = false)
         {
             Tag.Where("RunAsync");
 
             AuthenticationResult? result = null;
 
-            if (authenticated)
+            if (authenticate)
             {
                 Tag.Why("PreClientAuthentication");
 
