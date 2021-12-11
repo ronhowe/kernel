@@ -22,9 +22,9 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public async Task Debug()
+        public async Task Main()
         {
-            await Task.Run(() => Tag.Where("Debug"));
+            await Task.Run(() => Tag.Where("Main"));
         }
 
         [TestMethod]
@@ -42,119 +42,5 @@ namespace TestProject1
             await Task.Run(() => Tag.Comment("Comment"));
         }
 
-        [TestMethod]
-        [Ignore]
-        public async Task AppConfiguration()
-        {
-            Tag.Where("AppConfiguration");
-
-            try
-            {
-                var options = new DefaultAzureCredentialOptions
-                {
-                    ExcludeAzureCliCredential = true,
-                    ExcludeEnvironmentCredential = true,
-                    ExcludeInteractiveBrowserCredential = true,
-                    ExcludeManagedIdentityCredential = true,
-                    ExcludeSharedTokenCacheCredential = true,
-                    ExcludeVisualStudioCodeCredential = true,
-                    ExcludeVisualStudioCredential = false
-                };
-
-                var credential = new DefaultAzureCredential(options);
-
-                ConfigurationClient client = new(new Uri("https://ronhoweorg.azconfig.io"), credential);
-
-                try
-                {
-                    Tag.Why("PreGetConfigurationSetting");
-
-                    ConfigurationSetting setting = await client.GetConfigurationSettingAsync("Enabled");
-
-                    Tag.Why("PostGetConfigurationSetting");
-
-                    Tag.What($"setting.Value={setting.Value}");
-                }
-                catch (Exception ex)
-                {
-                    Tag.Error($"ex.Message={ex.Message}");
-                }
-
-            }
-            catch (CredentialUnavailableException ex)
-            {
-                // Handle errors with loading the Managed Identity
-                Tag.Error(ex.Message);
-            }
-            catch (RequestFailedException ex)
-            {
-                // Handle errors with fetching the secret
-                Tag.Error(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                // Handle generic errors
-                Tag.Error(ex.Message);
-            }
-        }
-
-        [TestMethod]
-        [Ignore]
-        public async Task KeyVault()
-        {
-            Tag.Where("KeyVault");
-
-            try
-            {
-                var options = new DefaultAzureCredentialOptions
-                {
-                    ExcludeAzureCliCredential = true,
-                    ExcludeEnvironmentCredential = true,
-                    ExcludeInteractiveBrowserCredential = true,
-                    ExcludeManagedIdentityCredential = true,
-                    ExcludeSharedTokenCacheCredential = true,
-                    ExcludeVisualStudioCodeCredential = true,
-                    ExcludeVisualStudioCredential = false
-                };
-
-                var credential = new DefaultAzureCredential(options);
-
-                SecretClient client = new(new Uri("https://ronhoweorg.vault.azure.net/"), credential);
-
-                KeyVaultSecret secret;
-
-                try
-                {
-                    Tag.Why("PreGetSecretAsync");
-
-                    secret = (await client.GetSecretAsync("secret", cancellationToken: new CancellationToken())).Value;
-
-                    Tag.Why("PostGetSecretAsync");
-
-                    Tag.What($"secret.Name={secret.Name}");
-                    Tag.Secret($"secret.Value={secret.Value}");
-                }
-                catch (Exception ex)
-                {
-                    Tag.Error(ex.Message);
-                }
-
-            }
-            catch (CredentialUnavailableException ex)
-            {
-                // Handle errors with loading the Managed Identity
-                Tag.Error(ex.Message);
-            }
-            catch (RequestFailedException ex)
-            {
-                // Handle errors with fetching the secret
-                Tag.Error(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                // Handle generic errors
-                Tag.Error(ex.Message);
-            }
-        }
     }
 }

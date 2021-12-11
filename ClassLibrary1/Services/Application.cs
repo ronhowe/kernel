@@ -83,7 +83,7 @@ namespace ClassLibrary1.Services
 
             Tag.What($"result.AccessToken={result.AccessToken}");
 
-            HttpClient client = new() { BaseAddress = new Uri("https://localhost:9999") };
+            HttpClient client = new() { BaseAddress = new Uri(config.TodoListBaseAddress) };
 
             if (!string.IsNullOrEmpty(result.AccessToken))
             {
