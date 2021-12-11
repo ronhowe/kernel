@@ -1,11 +1,6 @@
-using Azure;
-using Azure.Data.AppConfiguration;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using ClassLibrary1.Common;
+using ClassLibrary1.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace TestProject1
@@ -25,6 +20,22 @@ namespace TestProject1
         public async Task Main()
         {
             await Task.Run(() => Tag.Where("Main"));
+        }
+
+        [TestMethod]
+        public async Task PostEndpoint()
+        {
+            Tag.Where("Post");
+
+            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
+        }
+
+        [TestMethod]
+        public async Task IOEndpoint()
+        {
+            Tag.Where("IOEndpoint");
+
+            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
         }
 
         [TestMethod]

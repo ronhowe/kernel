@@ -4,7 +4,6 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using ClassLibrary1.Common;
 using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Infrastructure;
 using ClassLibrary1.Services;
 using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,23 +40,6 @@ namespace TestProject1
 
             Tag.Line(FiggleFonts.Standard.Render(PacketColor.Green));
         }
-
-        [TestMethod]
-        public async Task PostEndpoint()
-        {
-            Tag.Where("Post");
-
-            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
-        }
-
-        [TestMethod]
-        public async Task IOEndpoint()
-        {
-            Tag.Where("IOEndpoint");
-
-            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
-        }
-
 
         [TestMethod]
         [Ignore]
