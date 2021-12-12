@@ -4,8 +4,6 @@ using ClassLibrary1;
 using ClassLibrary1.Common;
 using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Entities;
-using System.Linq;
 
 public static class AzureTableStorageService
 {
@@ -91,8 +89,8 @@ public static class AzureTableStorageService
     private static void GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey)
     {
         // TODO - Obscure with Azure Traffic Manager
-        accountName = "ronhoweorgefpnt6t32rqum";
-        storageUri = $"https://{accountName}.table.core.windows.net/";
+        storageUri = "";
+        accountName = "";
         storageAccountKey = "";
     }
 

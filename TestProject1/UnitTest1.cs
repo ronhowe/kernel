@@ -1,6 +1,11 @@
 using ClassLibrary1.Common;
-using ClassLibrary1.Infrastructure;
+using ClassLibrary1.Contants;
+using ClassLibrary1.Domain.ValueObjects;
+using ClassLibrary1.Entities;
+using ClassLibrary1.Services;
+using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace TestProject1
@@ -11,32 +16,63 @@ namespace TestProject1
         [TestInitialize()]
         public async Task TestInitialize()
         {
+            var stackTrace = new StackTrace(true);
+            var fileName = stackTrace.GetFrame(0).GetFileName();
+            Tag.How(fileName);
+
             await Task.Run(() => Tag.Where("TestInitialize"));
         }
 
         [TestMethod]
-        [Ignore]
-        public async Task Debug()
+        public async Task Development()
         {
-            await Task.Run(() => Tag.Where("Debug"));
+            await Task.Run(() => Tag.Where("Development"));
+
+            var packet = PacketFactory.Create(PacketColor.Red);
+
+            // Run Service Tests Even if Site Isn't Up
+            // Great Way to Bypass Client Authentication
+            // By Default, Consistently Test In Memory Storage Service
+            await InMemoryStorageService.IO(packet);
+            //await LocalStorageService.IO(packet);
+            //await AzureTableStorageService.IO(packet);
+
+            Assert.IsTrue(packet.Sent);
+            Assert.IsTrue(packet.Received);
+            Assert.AreEqual<PacketColor>(PacketColor.Red, packet.Color);
         }
 
         [TestMethod]
-        [Ignore]
-        public async Task PostEndpoint()
+        public async Task Production()
         {
-            Tag.Where("Post");
+            Tag.Where("Production");
 
-            await EndpointCallHelper.RunAsync(Endpoints.POST, false);
+            var application = new Application();
+
+            var color = PacketColor.Green;
+
+            Tag.Why("PreRunCall");
+
+            await application.Run(Constant.ApiEndpoint, color);
+
+            Tag.Why("PostRunCall");
+
+            Tag.Line(FiggleFonts.Standard.Render(color));
         }
 
         [TestMethod]
-        [Ignore]
-        public async Task IOEndpoint()
+        public async Task Tags()
         {
-            Tag.Where("IOEndpoint");
-
-            await EndpointCallHelper.RunAsync(Endpoints.BIOS, true);
+            await Task.Run(() => Tag.Who("Who"));
+            await Task.Run(() => Tag.What("What"));
+            await Task.Run(() => Tag.Where("Where"));
+            await Task.Run(() => Tag.When("When"));
+            await Task.Run(() => Tag.Why("Why"));
+            await Task.Run(() => Tag.How("How"));
+            await Task.Run(() => Tag.Warning("Warning"));
+            await Task.Run(() => Tag.Error("Error"));
+            await Task.Run(() => Tag.Secret("Secret"));
+            await Task.Run(() => Tag.Comment("Comment"));
         }
     }
 }
