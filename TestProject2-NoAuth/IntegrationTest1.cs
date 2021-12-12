@@ -14,7 +14,7 @@ namespace TestProject2_NoAuth
         [TestMethod]
         public async Task Production()
         {
-            Tag.Where("Live");
+            Tag.Where("Production");
 
             var application = new Application();
 
