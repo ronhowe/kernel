@@ -16,7 +16,12 @@ namespace TestProject2_NoAuth
 
             var packet = PacketFactory.Create(PacketColor.Red);
 
-            await LocalStorageService.IO(packet);
+            // Run Service Tests Even if Site Isn't Up
+            // Great Way to Bypass Client Authentication
+            // By Default, Consistently Test In Memory Storage Service
+            await InMemoryStorageService.IO(packet);
+            //await LocalStorageService.IO(packet);
+            //await AzureTableStorageService.IO(packet);
 
             Assert.IsTrue(packet.Sent);
             Assert.IsTrue(packet.Received);

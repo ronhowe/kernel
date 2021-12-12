@@ -48,9 +48,9 @@ public static class AzureTableStorageService
 
         Tag.Why("WriteStart");
 
-        string storageUri = "https://ronhoweorgefpnt6t32rqum.table.core.windows.net/";
-        string accountName = "ronhoweorgefpnt6t32rqum";
-        string storageAccountKey = "dMGheA2/oF9jLw70fkV9zB2dBJ45I42IFS8Owxqla+T+1tzEoK+BdczvEt0Hy7bBDIumXAC3L4KzgYVPwz5pbQ==";
+        Tag.ToDo("ReadFromSecrets");
+        string storageUri, accountName, storageAccountKey;
+        GetAzureStorageAccountCredential(out storageUri, out accountName, out storageAccountKey);
 
         var serviceClient = new TableServiceClient(
             new Uri(storageUri),
@@ -88,6 +88,14 @@ public static class AzureTableStorageService
         Tag.Why("WriteComplete");
     }
 
+    private static void GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey)
+    {
+        // TODO - Obscure with Azure Traffic Manager
+        accountName = "ronhoweorgefpnt6t32rqum";
+        storageUri = $"https://{accountName}.table.core.windows.net/";
+        storageAccountKey = "";
+    }
+
     public static async Task<Packet> Read(Guid id)
     {
         Tag.Where("Read");
@@ -97,9 +105,8 @@ public static class AzureTableStorageService
         Tag.What($"id={id}");
 
         Tag.ToDo("ReadFromSecrets");
-        string storageUri = "";
-        string accountName = "";
-        string storageAccountKey = "";
+        string storageUri, accountName, storageAccountKey;
+        GetAzureStorageAccountCredential(out storageUri, out accountName, out storageAccountKey);
 
         var serviceClient = new TableServiceClient(
             new Uri(storageUri),

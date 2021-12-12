@@ -21,7 +21,7 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
     {
-        httpContext.ValidateAppRole(AppRole.CanRead);
+        httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
         app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
@@ -57,11 +57,11 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
     {
         app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-        httpContext.ValidateAppRole(AppRole.CanRead);
+        httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
         app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-        httpContext.ValidateAppRole(AppRole.CanWrite);
+        httpContext.ValidateAppRole(ApplicationRole.CanWrite);
 
         app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
 

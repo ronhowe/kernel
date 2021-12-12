@@ -58,11 +58,11 @@ app.MapGet(Endpoints.BIOS, async (HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-    httpContext.ValidateAppRole(AppRole.CanRead);
+    httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
     app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-    httpContext.ValidateAppRole(AppRole.CanWrite);
+    httpContext.ValidateAppRole(ApplicationRole.CanWrite);
 
     app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
 
