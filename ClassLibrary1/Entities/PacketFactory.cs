@@ -9,5 +9,10 @@ namespace ClassLibrary1.Entities
         {
             return new() { Id = Guid.NewGuid(), Color = color };
         }
+
+        public static Packet Empty()
+        {
+            return new() { Id = Guid.Empty, Color = PacketColor.Black};
+        }
     }
 }
