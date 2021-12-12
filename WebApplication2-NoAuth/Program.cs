@@ -2,15 +2,26 @@ using ClassLibrary1.Common;
 using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Services;
 using Figgle;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 
 Tag.How("Program");
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
 {
@@ -19,7 +30,7 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
-    if (false)
+    if (true)
     {
         httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
@@ -41,7 +52,8 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
     app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(packet.Color)));
 
     return packet;
-});
+})
+.RequireAuthorization();
 
 app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
 {
@@ -77,6 +89,7 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
     return packet;
-});
+})
+.RequireAuthorization();
 
 app.Run();
