@@ -14,11 +14,11 @@ while (true)
 
     var color = PacketColor.Blue;
 
-    Tag.Why("PostRunCall");
+    Tag.Why("PreRunCall");
 
     await application.Run(Constant.ApiEndpoint, color);
 
-    Tag.Why("PreRunCall");
+    Tag.Why("PostRunCall");
 
     Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(color)));
 
