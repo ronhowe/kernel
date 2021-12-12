@@ -1,11 +1,6 @@
-﻿using Azure;
-using Azure.Data.Tables;
-using ClassLibrary1.Domain.Common;
-using ClassLibrary1.Domain.Events;
-using ClassLibrary1.Domain.ValueObjects;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace ClassLibrary1.Domain.Entities
+namespace ClassLibrary1
 {
     public class Packet : AuditableEntity//, IHasDomainEvent, ITableEntity
     {

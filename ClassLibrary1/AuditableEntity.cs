@@ -1,6 +1,4 @@
-﻿using ClassLibrary1.Contants;
-
-namespace ClassLibrary1.Domain.Common
+﻿namespace ClassLibrary1
 {
     public abstract class AuditableEntity
     {

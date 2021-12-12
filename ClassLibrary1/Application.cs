@@ -1,9 +1,4 @@
-﻿using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Entities;
-using ClassLibrary1.Infrastructure;
-using Figgle;
+﻿using Figgle;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
@@ -11,7 +6,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
-namespace ClassLibrary1.Services
+namespace ClassLibrary1
 {
     public class Application
     {
@@ -101,7 +96,7 @@ namespace ClassLibrary1.Services
             {
                 Tag.Why("PrePostAsJsonAsyncCall");
 
-                var httpResponse = await httpClient.PostAsJsonAsync(Endpoints.BIOS, sentPacket);
+                var httpResponse = await httpClient.PostAsJsonAsync(ApplicationEndpoint.BasicInputOutputService, sentPacket);
 
                 Tag.Why("PostPostAsJsonAsyncCall");
 
@@ -109,7 +104,7 @@ namespace ClassLibrary1.Services
 
                 Tag.Why("PreGetFromJsonAsyncCall");
 
-                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{Endpoints.BIOS}?id={sentPacket.Id}");
+                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPacket.Id}");
 
                 Tag.Why("PostGetFromJsonAsyncCall");
 

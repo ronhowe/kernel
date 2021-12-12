@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
-namespace ClassLibrary1.Services
+namespace ClassLibrary1
 {
     /// <summary>
     /// Description of the configuration of an AzureAD public client application (desktop/mobile application). This should

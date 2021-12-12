@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Domain.Exceptions
+﻿namespace ClassLibrary1
 {
     public class UnsupportedColorException : Exception
     {
