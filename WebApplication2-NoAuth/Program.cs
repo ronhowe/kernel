@@ -32,9 +32,12 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    var packet = LocalStorageService.Read(id);
+    app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
+    var packet = LocalStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
+
+    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(packet.Color)));
 
     return packet;
 });
@@ -44,6 +47,8 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
     app.Logger.LogInformation("MapGet".TagWhere());
 
     app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render("POST")));
+
+    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(packet.Color)));
 
     //app.Logger.LogInformation(packet.ToString());
 
