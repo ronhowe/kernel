@@ -16,11 +16,21 @@ namespace TestProject1
         [TestInitialize()]
         public async Task TestInitialize()
         {
-            var stackTrace = new StackTrace(true);
-            var fileName = stackTrace.GetFrame(0).GetFileName();
-            Tag.How(fileName);
+            StackTrace? stackTrace = new StackTrace(true);
+            if (stackTrace is not null)
+            {
+                var frame = stackTrace.GetFrame(0);
+                if (frame is not null)
+                {
+                    var fileName = frame.GetFileName();
+                    if (fileName is not null)
+                    {
+                        Tag.How(fileName);
+                    }
+                }
 
-            await Task.Run(() => Tag.Where("TestInitialize"));
+                await Task.Run(() => Tag.Where("TestInitialize"));
+            }
         }
 
         [TestMethod]
