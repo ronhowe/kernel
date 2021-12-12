@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		dotnet.v3.ncrunchsolution = dotnet.v3.ncrunchsolution
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{F57E0F67-3568-42ED-9889-087C1AAC2F14}"
@@ -17,19 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebAppli
 EndProject
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResourceGroup1", "AzureResourceGroup1\AzureResourceGroup1.deployproj", "{41061B91-4207-4A1A-88EC-6059DEF12963}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3D75FAB1-001D-4D29-B22A-6620BF112FD1}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99D9B7D5-5F40-4AD2-A994-9C151343E8BA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6D13D516-20B0-4E27-B386-97E7446CFC9F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{6D6708C8-E353-4D92-97E2-C87A83A0BFD7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{11551384-18B3-4B5D-8665-F830B930B3C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{11551384-18B3-4B5D-8665-F830B930B3C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,13 +50,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F57E0F67-3568-42ED-9889-087C1AAC2F14} = {99D9B7D5-5F40-4AD2-A994-9C151343E8BA}
-		{DEBBEEE5-F031-4079-B435-379317B9CF3A} = {6D13D516-20B0-4E27-B386-97E7446CFC9F}
-		{FA5DF027-B02A-4741-8828-B4F92A417D6E} = {99D9B7D5-5F40-4AD2-A994-9C151343E8BA}
-		{41061B91-4207-4A1A-88EC-6059DEF12963} = {6D6708C8-E353-4D92-97E2-C87A83A0BFD7}
-		{11551384-18B3-4B5D-8665-F830B930B3C4} = {6D13D516-20B0-4E27-B386-97E7446CFC9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2487D13B-C39D-4AE0-8783-B11164505C55}

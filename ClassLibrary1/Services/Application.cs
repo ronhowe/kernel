@@ -1,32 +1,45 @@
 ﻿using ClassLibrary1.Common;
+using ClassLibrary1.Domain.Entities;
+using ClassLibrary1.Domain.ValueObjects;
+using ClassLibrary1.Entities;
+using ClassLibrary1.Infrastructure;
+using Figgle;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
+using System.Text.Json;
 
-namespace TestProject1
+namespace ClassLibrary1.Services
 {
-    public static class EndpointCallHelper
+    public class Application
     {
-        public static async Task RunAsync(string requestUri, bool authenticate = false)
+        public async Task Run(string uriString, PacketColor color)
         {
-            Tag.Where("RunAsync");
+            Tag.Where("Run");
 
-            AuthenticationResult? result = null;
+            Tag.What($"uriString={uriString}");
+            Tag.What($"color={color}");
 
-            if (authenticate)
+            HttpClient httpClient = new() { BaseAddress = new Uri(uriString) };
+
+            if (true)
             {
                 Tag.Why("PreClientAuthentication");
 
                 // @TODO @ReadFromKeyVault
                 AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
 
-                Tag.What($"config.ClientId={config.ClientId}");
-
+                // Useful, but spammy.
+                //Tag.What($"config.Instance={config.Instance}");
+                //Tag.What($"config.Tenant={config.Tenant}");
+                //Tag.What($"config.ClientId={config.ClientId}");
+                //Tag.What($"config.Authority={config.Authority}");
+                //Tag.Secret($"config.ClientSecret={config.ClientSecret}");
+                //Tag.What($"config.CertificateName={config.CertificateName}");
+                //Tag.What($"config.TodoListBaseAddress={config.TodoListBaseAddress}");
+                //Tag.What($"config.TodoListScope={config.TodoListScope}");
                 bool isUsingClientSecret = AppUsesClientSecret(config);
 
                 IConfidentialClientApplication app;
@@ -46,51 +59,89 @@ namespace TestProject1
                         .WithAuthority(new Uri(config.Authority))
                         .Build();
                 }
-
                 app.AddInMemoryTokenCache();
 
                 // With client credentials flows the scopes is ALWAYS of the shape "resource/.default", as the
                 // application permissions need to be set statically (in the portal or by PowerShell), and then
                 // granted b ya tenant administrator.
                 string[] scopes = new string[] { config.TodoListScope };
-
                 try
                 {
                     Tag.Why("PreAcquireTokenForClient");
 
-                    result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
+                    var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
                     Tag.Why("PostAcquireTokenForClient");
+                    if (result != null)
+                    {
+                        if (!string.IsNullOrEmpty(result.AccessToken))
+                        {
+                            var defaultRequestHeaders = httpClient.DefaultRequestHeaders;
+
+                            if (defaultRequestHeaders.Accept == null || !defaultRequestHeaders.Accept.Any(m => m.MediaType == "application/json"))
+                            {
+                                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            }
+
+                            defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                        }
+                    }
                 }
                 catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
                 {
-                    Tag.What("ScopeProvidedNotSupported");
+                    Tag.Error("ScopeProvidedNotSupported");
                 }
 
                 Tag.Why("PostClientAuthentication");
             }
 
-            // TODO @RefactorServerCall
+            Packet sentPacket = PacketFactory.Create(color);
 
-            HttpClient client = WebApiClientFactory.CreateClient(new InMemoryWebApiHost());
-
-            if (result != null)
+            try
             {
-                Tag.Why("PrePrivateEndpointCall");
+                Tag.Why("PrePostAsJsonAsyncCall");
 
-                var apiCaller = new PrivateEndpointCallHelper(client);
+                var httpResponse = await httpClient.PostAsJsonAsync(Endpoints.BIOS, sentPacket);
 
-                await apiCaller.GetResultAsync(requestUri, result.AccessToken);
+                Tag.Why("PostPostAsJsonAsyncCall");
 
-                Tag.Why("PostPrivateEndpointCall");
+                Tag.Line(FiggleFonts.Standard.Render(httpResponse.StatusCode.ToString()));
+
+                Tag.Why("PreGetFromJsonAsyncCall");
+
+                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{Endpoints.BIOS}?id={sentPacket.Id}");
+
+                Tag.Why("PostGetFromJsonAsyncCall");
+
+                Tag.ToDo("ImplementSentAndReceivedProperties");
+
+                Tag.What($"sentPacket={sentPacket}");
+                Tag.What($"receivedPacket={receivedPacket}");
             }
-            else
+            catch (HttpRequestException ex)
             {
-                Tag.Why("PrePublicEndpointCall");
-
-                await client.GetStringAsync(requestUri);
-
-                Tag.Why("PrePublicEndpointCall");
+                Tag.Error("HttpRequestException");
+                Tag.Error(ex.Message);
+                Tag.Comment("Runbook12345"); // Runbook stating to turn on website.
+                throw ex;
+            }
+            catch (NotSupportedException ex)
+            {
+                Tag.Error("ContentTypeNotSupported");
+                Tag.Error(ex.Message);
+                throw ex;
+            }
+            catch (JsonException ex)
+            {
+                Tag.Error("InvalidJson");
+                Tag.Error(ex.Message);
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                Tag.Error("UnknownException");
+                Tag.Error(ex.Message);
+                throw;
             }
         }
 

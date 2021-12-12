@@ -1,14 +1,28 @@
-﻿using ClassLibrary1.Domain.Entities;
+﻿using ClassLibrary1.Common;
+using ClassLibrary1.Contants;
 using ClassLibrary1.Domain.ValueObjects;
+using ClassLibrary1.Services;
+using Figgle;
 
-Console.Clear();
+Tag.How("Program");
 
-Packet packet = new() { Id = Guid.NewGuid(), Color = PacketColor.Green };
+Tag.Where("Main");
 
-PacketService service = new();
+while (true)
+{
+    var application = new Application();
 
-service.IO(packet);
+    var color = PacketColor.Blue;
 
-Console.ForegroundColor = ConsoleColor.Green;
+    Tag.Why("PreRunCall");
 
-Console.WriteLine(packet);
+    await application.Run(Constant.ApiEndpoint, color);
+
+    Tag.Why("PostRunCall");
+
+    Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(color)));
+
+    await Task.Delay(1000);
+
+    Console.ResetColor();
+}

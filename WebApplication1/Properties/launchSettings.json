@@ -4,27 +4,25 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:24099",
-      "sslPort": 44335
+      "applicationUrl": "http://localhost:19901",
+      "sslPort": 44328
     }
   },
   "profiles": {
     "WebApplication1": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
-        //"ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7107",
+      "applicationUrl": "https://localhost:7087",
       "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
-        //"ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Docker": {
@@ -36,11 +34,10 @@
     },
     "WSL": {
       "commandName": "WSL2",
-      "launchBrowser": false,
-      "launchUrl": "https://localhost:7107/swagger",
+      "launchUrl": "https://localhost:7087/swagger",
       "environmentVariables": {
-        //"ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "https://localhost:7107"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:7087"
       },
       "distributionName": ""
     }

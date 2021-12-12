@@ -6,12 +6,12 @@ namespace ClassLibrary1.Domain.ValueObjects
 {
     public class PacketColor : ValueObject
     {
+        [JsonConstructor]
         public PacketColor()
         {
             Code = PacketColor.Black;
         }
 
-        [JsonConstructor]
         public PacketColor(string code)
         {
             Code = code;
