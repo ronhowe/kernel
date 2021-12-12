@@ -2,66 +2,69 @@
 using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Entities;
 
-public static class InMemoryStorageService
+namespace ClassLibrary1.Services
 {
-    private static Packet EmptyPacket = PacketFactory.Empty();
-
-    public static async Task<Packet> IO(Packet packet)
+    public static class InMemoryStorageService
     {
-        Tag.Where("IO");
+        private static Packet EmptyPacket = PacketFactory.Empty();
 
-        Tag.Why("IOStart");
+        public static async Task<Packet> IO(Packet packet)
+        {
+            Tag.Where("IO");
 
-        Tag.Why("PreInputCall");
+            Tag.Why("IOStart");
 
-        Tag.What($"packet={packet}");
+            Tag.Why("PreInputCall");
 
-        await Write(packet);
+            Tag.What($"packet={packet}");
 
-        Tag.Why("PostInputCall");
+            await Write(packet);
 
-        packet.Sent = true;
+            Tag.Why("PostInputCall");
 
-        Tag.Why("PreOuput");
+            packet.Sent = true;
 
-        var receivedPacket = await Read(packet.Id);
+            Tag.Why("PreOuput");
 
-        Tag.Line($"receivedPacket={receivedPacket}");
+            var receivedPacket = await Read(packet.Id);
 
-        Tag.Why("PostOuput");
+            Tag.Line($"receivedPacket={receivedPacket}");
 
-        packet.Received = true;
+            Tag.Why("PostOuput");
 
-        packet.Color = receivedPacket.Color;
+            packet.Received = true;
 
-        Tag.Why("IOComplete");
+            packet.Color = receivedPacket.Color;
 
-        return packet;
-    }
+            Tag.Why("IOComplete");
 
-    public static async Task Write(Packet packet)
-    {
-        Tag.Where("Input");
+            return packet;
+        }
 
-        Tag.Why("InputStart");
+        public static async Task Write(Packet packet)
+        {
+            Tag.Where("Input");
 
-        EmptyPacket = packet;
+            Tag.Why("InputStart");
 
-        Tag.Why("InputComplete");
-    }
+            EmptyPacket = packet;
 
-    public static async Task<Packet> Read(Guid id)
-    {
-        Tag.Where("Output");
+            Tag.Why("InputComplete");
+        }
 
-        Tag.Why("OutputStart");
+        public static async Task<Packet> Read(Guid id)
+        {
+            Tag.Where("Output");
 
-        Tag.What($"id={id}");
+            Tag.Why("OutputStart");
 
-        var emptyPacket = EmptyPacket;
+            Tag.What($"id={id}");
 
-        Tag.Why("OutputComplete");
+            var emptyPacket = EmptyPacket;
 
-        return emptyPacket;
+            Tag.Why("OutputComplete");
+
+            return emptyPacket;
+        }
     }
 }

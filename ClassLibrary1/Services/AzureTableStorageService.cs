@@ -5,140 +5,139 @@ using ClassLibrary1.Common;
 using ClassLibrary1.Domain.Entities;
 using ClassLibrary1.Domain.ValueObjects;
 
-public static class AzureTableStorageService
+namespace ClassLibrary1.Services
 {
-    public static async Task<Packet> IO(Packet packet)
+    public static class AzureTableStorageService
     {
-        Tag.Where("IO");
-
-        Tag.Why("IOStart");
-
-        Tag.Why("PreInputCall");
-
-        Tag.What($"packet={packet}");
-
-        await Write(packet);
-
-        Tag.Why("PostInputCall");
-
-        packet.Sent = true;
-
-        Tag.Why("PreOuput");
-
-        var receivedPacket = await Read(packet.Id);
-
-        Tag.Line($"receivedPacket={receivedPacket}");
-
-        Tag.Why("PostOuput");
-
-        packet.Received = true;
-
-        packet.Color = receivedPacket.Color;
-
-        Tag.Why("IOComplete");
-
-        return packet;
-    }
-
-    public static async Task Write(Packet packet)
-    {
-        Tag.Where("Write");
-
-        Tag.Why("WriteStart");
-
-        Tag.ToDo("ReadFromSecrets");
-        string storageUri, accountName, storageAccountKey;
-        GetAzureStorageAccountCredential(out storageUri, out accountName, out storageAccountKey);
-
-        var serviceClient = new TableServiceClient(
-            new Uri(storageUri),
-            new TableSharedKeyCredential(accountName, storageAccountKey));
-
-        // Create a new table. The TableItem class stores properties of the created table.
-        string tableName = "NewVeryImportantTable";
-        //TableItem table = serviceClient.CreateTableIfNotExists(tableName);
-        //Tag.What($"table.Name={table.Name}");
-
-        // Construct a new <see cref="TableClient" /> using a <see cref="TableSharedKeyCredential" />.
-        var tableClient = new TableClient(
-            new Uri(storageUri),
-            tableName,
-            new TableSharedKeyCredential(accountName, storageAccountKey));
-
-        // Create the table in the service.
-        //tableClient.Create();
-
-        Tag.When("");
-        Tag.What(tableName);
-
-        var packetTableEntity = new PacketTableEntity
+        public static async Task<Packet> IO(Packet packet)
         {
-            Id = packet.Id.ToString(),
-            ReferenceId = packet.ReferenceId.ToString(),
-            Color = packet.Color.Code,
-            PartitionKey = packet.Id.ToString(),
-            RowKey = packet.Id.ToString(),
-        };
+            Tag.Where("IO");
 
-        //tableClient.AddEntity(strongEntity);
-        tableClient.AddEntity(packetTableEntity);
+            Tag.Why("IOStart");
 
-        Tag.Why("WriteComplete");
-    }
+            Tag.Why("PreInputCall");
 
-    private static void GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey)
-    {
-        // TODO - Obscure with Azure Traffic Manager
-        storageUri = "";
-        accountName = "";
-        storageAccountKey = "";
-    }
+            Tag.What($"packet={packet}");
 
-    public static async Task<Packet> Read(Guid id)
-    {
-        Tag.Where("Read");
+            await Write(packet);
 
-        Tag.Why("ReadStart");
+            Tag.Why("PostInputCall");
 
-        Tag.What($"id={id}");
+            packet.Sent = true;
 
-        Tag.ToDo("ReadFromSecrets");
-        string storageUri, accountName, storageAccountKey;
-        GetAzureStorageAccountCredential(out storageUri, out accountName, out storageAccountKey);
+            Tag.Why("PreOuput");
 
-        var serviceClient = new TableServiceClient(
-            new Uri(storageUri),
-            new TableSharedKeyCredential(accountName, storageAccountKey));
+            var receivedPacket = await Read(packet.Id);
 
-        // Create a new table. The TableItem class stores properties of the created table.
-        string tableName = "NewVeryImportantTable";
-        //TableItem table = serviceClient.CreateTableIfNotExists(tableName);
-        //Tag.What($"table.Name={table.Name}");
+            Tag.Line($"receivedPacket={receivedPacket}");
 
-        // Construct a new <see cref="TableClient" /> using a <see cref="TableSharedKeyCredential" />.
-        var tableClient = new TableClient(
-            new Uri(storageUri),
-            tableName,
-            new TableSharedKeyCredential(accountName, storageAccountKey));
+            Tag.Why("PostOuput");
 
-        // Create the table in the service.
-        //tableClient.Create();
+            packet.Received = true;
 
-        Tag.When("");
-        Tag.What(tableName);
+            packet.Color = receivedPacket.Color;
 
-        Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{id}'");
+            Tag.Why("IOComplete");
 
-        var entity = await tableClient.GetEntityAsync<PacketTableEntity>(id.ToString(), id.ToString());
+            return packet;
+        }
 
-        Packet packet = new()
+        public static async Task Write(Packet packet)
         {
-            Id = Guid.Parse(entity.Value.Id),
-            Color = PacketColor.From(entity.Value.Color)
-        };
+            Tag.Where("Write");
 
-        Tag.Why("ReadComplete");
+            Tag.Why("WriteStart");
 
-        return packet;
+            Tag.ToDo("ReadFromSecrets");
+            GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey);
+
+            //var serviceClient = new TableServiceClient(
+            //    new Uri(storageUri),
+            //    new TableSharedKeyCredential(accountName, storageAccountKey));
+
+            // Create a new table. The TableItem class stores properties of the created table.
+            string tableName = "NewVeryImportantTable";
+            //TableItem table = serviceClient.CreateTableIfNotExists(tableName);
+            //Tag.What($"table.Name={table.Name}");
+
+            // Construct a new <see cref="TableClient" /> using a <see cref="TableSharedKeyCredential" />.
+            var tableClient = new TableClient(
+                new Uri(storageUri),
+                tableName,
+                new TableSharedKeyCredential(accountName, storageAccountKey));
+
+            // Create the table in the service.
+            //tableClient.Create();
+
+            Tag.When("");
+            Tag.What(tableName);
+
+            var packetTableEntity = new PacketTableEntity
+            {
+                Id = packet.Id.ToString(),
+                ReferenceId = packet.ReferenceId.ToString(),
+                Color = packet.Color.Code,
+                PartitionKey = packet.Id.ToString(),
+                RowKey = packet.Id.ToString(),
+            };
+
+            //tableClient.AddEntity(strongEntity);
+            await tableClient.AddEntityAsync<PacketTableEntity>(packetTableEntity);
+
+            Tag.Why("WriteComplete");
+        }
+
+        private static void GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey)
+        {
+            // TODO - Obscure with Azure Traffic Manager
+            storageUri = "";
+            accountName = "";
+            storageAccountKey = "";
+        }
+
+        public static async Task<Packet> Read(Guid id)
+        {
+            Tag.Where("Read");
+
+            Tag.Why("ReadStart");
+
+            Tag.What($"id={id}");
+
+            Tag.ToDo("ReadFromSecrets");
+            GetAzureStorageAccountCredential(out string storageUri, out string accountName, out string storageAccountKey);
+
+            //var serviceClient = new TableServiceClient(
+            //    new Uri(storageUri),
+            //    new TableSharedKeyCredential(accountName, storageAccountKey));
+
+            // Create a new table. The TableItem class stores properties of the created table.
+            string tableName = "NewVeryImportantTable";
+            //TableItem table = serviceClient.CreateTableIfNotExists(tableName);
+            //Tag.What($"table.Name={table.Name}");
+
+            // Construct a new <see cref="TableClient" /> using a <see cref="TableSharedKeyCredential" />.
+            var tableClient = new TableClient(
+                new Uri(storageUri),
+                tableName,
+                new TableSharedKeyCredential(accountName, storageAccountKey));
+
+            // Create the table in the service.
+            //tableClient.Create();
+
+            Tag.When("");
+            Tag.What(tableName);
+
+            var entity = await tableClient.GetEntityAsync<PacketTableEntity>(id.ToString(), id.ToString());
+
+            Packet packet = new()
+            {
+                Id = Guid.Parse(entity.Value.Id),
+                Color = PacketColor.From(entity.Value.Color)
+            };
+
+            Tag.Why("ReadComplete");
+
+            return packet;
+        }
     }
 }

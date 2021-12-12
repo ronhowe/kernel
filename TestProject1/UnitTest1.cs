@@ -16,7 +16,7 @@ namespace TestProject1
         [TestInitialize()]
         public async Task TestInitialize()
         {
-            StackTrace? stackTrace = new StackTrace(true);
+            StackTrace? stackTrace = new(true);
             if (stackTrace is not null)
             {
                 var frame = stackTrace.GetFrame(0);
