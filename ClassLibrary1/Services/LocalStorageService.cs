@@ -3,7 +3,7 @@ using ClassLibrary1.Domain.Entities;
 using System.Text;
 using System.Text.Json;
 
-public class LocalStorageService
+public static class LocalStorageService
 {
     public static async Task<Packet> IO(Packet packet)
     {

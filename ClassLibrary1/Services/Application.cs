@@ -40,8 +40,8 @@ namespace ClassLibrary1.Services
 
                 Tag.ToDo("ImplementSentAndReceivedProperties");
 
-                Tag.Line($"sentPacket={sentPacket}");
-                Tag.Line($"receivedPacket={receivedPacket}");
+                Tag.What($"sentPacket={sentPacket}");
+                Tag.What($"receivedPacket={receivedPacket}");
             }
             catch (HttpRequestException ex)
             {

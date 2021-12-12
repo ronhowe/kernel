@@ -17,7 +17,7 @@ namespace ClassLibrary1.Common
         {
             if (true)
             {
-                Trace.TraceWarning(str.TagToDo());
+                Trace.TraceInformation(str.TagToDo());
                 return $"{str.TagToDo()}";
             }
         }
@@ -26,7 +26,7 @@ namespace ClassLibrary1.Common
         {
             if (true)
             {
-                Trace.WriteLine(str.TagComment());
+                Trace.TraceInformation(str.TagComment());
                 return $"{str.TagComment()}";
             }
         }

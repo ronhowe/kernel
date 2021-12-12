@@ -87,8 +87,6 @@ app.MapGet(Endpoints.BIOS, async (HttpContext httpContext) =>
 
     if (LocalStorageServiceEnabled)
     {
-        var service = new LocalStorageService();
-
         var result = await LocalStorageService.IO(packet);
     };
 
