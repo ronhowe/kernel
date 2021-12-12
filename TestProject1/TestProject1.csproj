@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IntegrationTest1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="appsettings.secrets.json" />
     <None Remove="ncrunch.v3.ncrunchproject" />
@@ -21,6 +25,10 @@
     <Content Include="appsettings.secrets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="IntegrationTest1.cs" />
   </ItemGroup>
 
   <ItemGroup>

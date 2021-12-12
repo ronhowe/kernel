@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\DEAD_CODE_Application.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClassLibrary1.v3.ncrunchproject" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Services\DEAD_CODE_Application.cs" />
   </ItemGroup>
 
   <ItemGroup>

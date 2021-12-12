@@ -1,4 +1,5 @@
 ﻿using ClassLibrary1.Common;
+using ClassLibrary1.Contants;
 using ClassLibrary1.Domain.ValueObjects;
 using ClassLibrary1.Services;
 using Figgle;
@@ -9,15 +10,19 @@ Tag.Where("Main");
 
 while (true)
 {
-    Console.ResetColor();
-
-    var application = new NewApplication();
+    var application = new Application();
 
     var color = PacketColor.Blue;
 
-    await application.Run(color);
+    Tag.Why("PostRunCall");
+
+    await application.Run(Constant.ApiEndpoint, color);
+
+    Tag.Why("PreRunCall");
 
     Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(color)));
 
     await Task.Delay(1000);
+
+    Console.ResetColor();
 }

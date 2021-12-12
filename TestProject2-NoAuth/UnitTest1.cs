@@ -1,4 +1,5 @@
 using ClassLibrary1.Common;
+using ClassLibrary1.Contants;
 using ClassLibrary1.Domain.ValueObjects;
 using ClassLibrary1.Services;
 using Figgle;
@@ -15,11 +16,15 @@ namespace TestProject2_NoAuth
         {
             Tag.Where("Main");
 
-            var application = new NewApplication();
+            var application = new Application();
 
             var color = PacketColor.Green;
 
-            await application.Run(color);
+            Tag.Why("PreRunCall");
+
+            await application.Run(Constant.ApiEndpoint, color);
+
+            Tag.Why("PostRunCall");
 
             Tag.Line(FiggleFonts.Standard.Render(color));
         }

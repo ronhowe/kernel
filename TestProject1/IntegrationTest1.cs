@@ -30,7 +30,7 @@ namespace TestProject1
         {
             Tag.Why("Main");
 
-            var application = new Application();
+            var application = new DEAD_CODE_Application();
 
             Tag.Why("PreRunCall");
 
