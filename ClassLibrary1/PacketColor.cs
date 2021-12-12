@@ -1,8 +1,6 @@
-﻿using ClassLibrary1.Domain.Common;
-using ClassLibrary1.Domain.Exceptions;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace ClassLibrary1.Domain.ValueObjects
+namespace ClassLibrary1
 {
     public class PacketColor : ValueObject
     {

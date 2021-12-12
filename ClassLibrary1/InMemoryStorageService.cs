@@ -1,8 +1,4 @@
-﻿using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Entities;
-
-namespace ClassLibrary1.Services
+﻿namespace ClassLibrary1
 {
     public static class InMemoryStorageService
     {

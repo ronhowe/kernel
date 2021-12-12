@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Services
+﻿namespace ClassLibrary1
 {
     public static class ApplicationRole
     {

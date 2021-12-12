@@ -1,8 +1,4 @@
-using ClassLibrary1.Common;
-using ClassLibrary1.Contants;
-using ClassLibrary1.Domain.ValueObjects;
-using ClassLibrary1.Entities;
-using ClassLibrary1.Services;
+using ClassLibrary1;
 using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
@@ -70,7 +66,7 @@ namespace TestProject1
             Tag.Line(FiggleFonts.Standard.Render(color));
         }
 
-        [TestMethod]
+        //[TestMethod]
         public async Task Tags()
         {
             await Task.Run(() => Tag.Who("Who"));

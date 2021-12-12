@@ -1,11 +1,6 @@
-﻿using Azure;
-using Azure.Data.Tables;
-using ClassLibrary1;
-using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Domain.ValueObjects;
+﻿using Azure.Data.Tables;
 
-namespace ClassLibrary1.Services
+namespace ClassLibrary1
 {
     public static class AzureTableStorageService
     {

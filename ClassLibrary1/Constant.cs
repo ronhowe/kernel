@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Contants
+﻿namespace ClassLibrary1
 {
     public static class Constant
     {

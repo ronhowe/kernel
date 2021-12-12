@@ -9,15 +9,6 @@
     }
   },
   "profiles": {
-    "WebApplication1": {
-      "commandName": "Project",
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:9999",
-      "dotnetRunMessages": true
-    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchUrl": "swagger",
@@ -27,7 +18,6 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
       "useSSL": true
@@ -40,6 +30,15 @@
         "ASPNETCORE_URLS": "https://localhost:9999"
       },
       "distributionName": ""
+    },
+    "Kestrel": {
+      "commandName": "Project",
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:9999",
+      "dotnetRunMessages": true
     }
   }
 }

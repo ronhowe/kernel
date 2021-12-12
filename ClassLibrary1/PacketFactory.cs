@@ -1,7 +1,4 @@
-﻿using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Domain.ValueObjects;
-
-namespace ClassLibrary1.Entities
+﻿namespace ClassLibrary1
 {
     public static class PacketFactory
     {

@@ -1,9 +1,7 @@
-﻿using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
-namespace ClassLibrary1.Services
+namespace ClassLibrary1
 {
     public static class LocalStorageService
     {

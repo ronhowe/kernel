@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Domain.Common
+﻿namespace ClassLibrary1
 {
     public interface IHasDomainEvent
     {

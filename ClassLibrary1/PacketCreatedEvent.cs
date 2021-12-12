@@ -1,7 +1,4 @@
-﻿using ClassLibrary1.Domain.Common;
-using ClassLibrary1.Domain.Entities;
-
-namespace ClassLibrary1.Domain.Events
+﻿namespace ClassLibrary1
 {
     public class PacketCreatedEvent : DomainEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Common
+﻿namespace ClassLibrary1
 {
     public static class StringExtension
     {

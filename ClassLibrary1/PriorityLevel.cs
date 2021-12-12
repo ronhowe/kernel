@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1.Domain.Enums
+﻿namespace ClassLibrary1
 {
     public enum PriorityLevel
     {

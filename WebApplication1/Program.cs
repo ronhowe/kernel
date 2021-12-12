@@ -1,6 +1,4 @@
-using ClassLibrary1.Common;
-using ClassLibrary1.Domain.Entities;
-using ClassLibrary1.Services;
+using ClassLibrary1;
 using Figgle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
