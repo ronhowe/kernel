@@ -49,10 +49,6 @@ namespace TestProject2_NoAuth
 
                 Tag.Line($"sentPacket={sentPacket}");
                 Tag.Line($"receivedPacket={receivedPacket}");
-
-                Assert.AreEqual<Guid>(sentPacket.Id, receivedPacket.Id);
-                Assert.AreEqual<PacketColor>(sentPacket.Color, receivedPacket.Color);
-                Assert.AreEqual<PacketColor>(PacketColor.Green, receivedPacket.Color);
             }
             catch (HttpRequestException ex)
             {
