@@ -31,8 +31,9 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
-    //var packet = LocalStorageService.Read(id).Result;
     var packet = InMemoryStorageService.Read(id).Result;
+    //var packet = LocalStorageService.Read(id).Result;
+    //var packet = AzureTableStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
@@ -69,8 +70,9 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    //var result = LocalStorageService.Write(packet);
     var result = InMemoryStorageService.Write(packet);
+    //var result = LocalStorageService.Write(packet);
+    //var result = AzureTableStorageService.Write(packet);
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
