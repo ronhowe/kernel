@@ -43,7 +43,9 @@ namespace TestProject1
 
         [TestMethod]
         [DataRow("https://localhost:9999")]
-        //[DataRow("https://api.ronhowe.org")]
+#if !(DEBUG) // Case Sensitive
+        [DataRow("https://api.ronhowe.org")]
+#endif
         public async Task WebApplication1(string host)
         {
             Tag.Where("WebApplication1");
