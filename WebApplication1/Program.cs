@@ -45,7 +45,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogInformation(Tag.Shout($"GET {photon.Color}"));
+    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
 
     return photon;
 })
@@ -54,8 +54,6 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
-
-    app.Logger.LogInformation(Tag.Shout($"POST {photon.Color}"));
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
@@ -82,6 +80,8 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
     //var result = AzureTableStorageService.Write(photon);
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
+
+    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
 
     return photon;
 })
