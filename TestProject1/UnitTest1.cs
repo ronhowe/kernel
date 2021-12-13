@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace TestProject1
 {
     [TestClass]
-    public class UnitTest1 : TestBase
+    public class UnitTest1
     {
         [TestMethod]
         public async Task Development()
@@ -39,6 +39,49 @@ namespace TestProject1
             await Task.Run(() => Tag.Who("Who"));
             await Task.Run(() => Tag.Why("Why"));
             await Task.Run(() => Tag.Shout($"Shout"));
+        }
+
+        [TestMethod]
+        [DataRow("https://localhost:9999")]
+        //[DataRow("https://api.ronhowe.org")]
+        public async Task WebApplication1(string host)
+        {
+            Tag.Where("WebApplication1");
+
+            Tag.What($"host={host}");
+            //Tag.Shout(host);
+
+            var color = Color.Green;
+
+            Tag.Why("PreRunCall");
+
+            await Application.Run(host, color);
+
+            Tag.Why("PostRunCall");
+
+            Tag.Shout($"OK {color}");
+        }
+
+        [TestInitialize()]
+        public async Task TestInitialize()
+        {
+            StackTrace? stackTrace = new(true);
+            if (stackTrace is not null)
+            {
+                var frame = stackTrace.GetFrame(0);
+                if (frame is not null)
+                {
+                    var fileName = frame.GetFileName();
+                    if (fileName is not null)
+                    {
+                        Tag.How(fileName);
+                    }
+                }
+
+                Tag.What($"BuildConfiguration={Constant.BuildConfiguration}");
+
+                await Task.Run(() => Tag.Where("TestInitialize"));
+            }
         }
     }
 }

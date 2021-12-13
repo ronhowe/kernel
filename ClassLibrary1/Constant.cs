@@ -9,7 +9,5 @@
 #else
         public const string BuildConfiguration = "Release";
 #endif
-        public const string LocalApiEndpoint = "https://localhost:9999";
-        public const string RemoteApiEndpoint = "https://api.ronhowe.org";
     }
 }

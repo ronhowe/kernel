@@ -47,7 +47,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogInformation("GET".TagShout());
+    app.Logger.LogTrace("GET".TagShout());
 
     return photon;
 })
@@ -85,7 +85,7 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogInformation($"POST {photon.Color}".TagShout());
+    app.Logger.LogTrace($"POST {photon.Color}".TagShout());
 
     return photon;
 })
