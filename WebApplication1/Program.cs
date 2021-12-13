@@ -24,6 +24,8 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
+    app.Logger.LogInformation($"id={id}".TagWhat());
+
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
@@ -45,7 +47,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
+    app.Logger.LogInformation("GET".TagShout());
 
     return photon;
 })
@@ -53,7 +55,9 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
 app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
 {
-    app.Logger.LogInformation("MapGet".TagWhere());
+    app.Logger.LogInformation("MapPost".TagWhere());
+
+    app.Logger.LogInformation($"photon={photon}".TagWhat());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
@@ -81,7 +85,7 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
+    app.Logger.LogInformation($"POST {photon.Color}".TagShout());
 
     return photon;
 })
