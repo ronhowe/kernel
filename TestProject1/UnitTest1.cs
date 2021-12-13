@@ -1,41 +1,17 @@
 using ClassLibrary1;
-using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace TestProject1
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTest1 : TestBase
     {
-        [TestInitialize()]
-        public async Task TestInitialize()
-        {
-            StackTrace? stackTrace = new(true);
-            if (stackTrace is not null)
-            {
-                var frame = stackTrace.GetFrame(0);
-                if (frame is not null)
-                {
-                    var fileName = frame.GetFileName();
-                    if (fileName is not null)
-                    {
-                        Tag.How(fileName);
-                    }
-                }
-
-                await Task.Run(() => Tag.Where("TestInitialize"));
-            }
-        }
-
         [TestMethod]
         public async Task Development()
         {
             await Task.Run(() => Tag.Where("Development"));
-
-            Tag.Shout($"UNIT TEST");
 
             var photon = PhotonFactory.Create(Color.Red);
 
@@ -47,24 +23,6 @@ namespace TestProject1
             Assert.IsTrue(photon.Sent);
             Assert.IsTrue(photon.Received);
             Assert.AreEqual<Color>(Color.Red, photon.Color);
-        }
-
-        [TestMethod]
-        public async Task Production()
-        {
-            Tag.Where("Production");
-
-            Tag.Shout($"INTEGRATION TEST");
-
-            var color = Color.Green;
-
-            Tag.Why("PreRunCall");
-
-            await Application.Run(Constant.ApiEndpoint, color);
-
-            Tag.Why("PostRunCall");
-
-            Tag.Shout($"IO {color}");
         }
 
         [TestMethod]

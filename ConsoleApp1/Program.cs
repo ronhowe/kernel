@@ -11,7 +11,7 @@ while (true)
 
     Tag.Why("PreRunCall");
 
-    await global::ClassLibrary1.Application.Run(Constant.ApiEndpoint, color);
+    await Application.Run(Constant.LocalApiEndpoint, color);
 
     Tag.Why("PostRunCall");
 
