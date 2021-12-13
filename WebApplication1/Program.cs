@@ -26,17 +26,15 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation($"id={id}".TagWhat());
 
+    Tag.ToDo("@MakeAuthorizationConfigurable");
+
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-    Tag.ToDo("@MakeAuthorizationConfigurable");
-    if (true)
-    {
-        httpContext.ValidateAppRole(ApplicationRole.CanRead);
+    httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+    app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
-    }
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
@@ -60,22 +58,18 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
     app.Logger.LogInformation($"photon={photon}".TagWhat());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
-    if (false)
-    {
-#pragma warning disable CS0162 // Unreachable code detected
-        app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
-#pragma warning restore CS0162 // Unreachable code detected
 
-        httpContext.ValidateAppRole(ApplicationRole.CanRead);
+    app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+    httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        httpContext.ValidateAppRole(ApplicationRole.CanWrite);
+    app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-        app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
+    httpContext.ValidateAppRole(ApplicationRole.CanWrite);
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
-    }
+    app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
+
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 

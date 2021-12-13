@@ -42,16 +42,17 @@ namespace TestProject1
         }
 
         [TestMethod]
+        #region [DataRow("https://localhost:9999")]
         [DataRow("https://localhost:9999")]
 #if !(DEBUG) // Case Sensitive
         [DataRow("https://api.ronhowe.org")]
 #endif
+        #endregion
         public async Task WebApplication1(string host)
         {
             Tag.Where("WebApplication1");
 
             Tag.What($"host={host}");
-            //Tag.Shout(host);
 
             var color = Color.Green;
 
