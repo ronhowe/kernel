@@ -126,8 +126,10 @@ namespace ClassLibrary1
 
             Photon photon = new()
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 Id = Guid.Parse(entity.Value.Id),
                 Color = Color.From(entity.Value.Color)
+#pragma warning restore CS8604 // Possible null reference argument.
             };
 
             Tag.Why("ReadComplete");

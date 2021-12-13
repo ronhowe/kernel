@@ -110,7 +110,15 @@ namespace ClassLibrary1
 
             Tag.Why("PreDeserializeAsync");
 
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Photon deserializedPhoton = await JsonSerializer.DeserializeAsync<Photon>(openStream, options);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
+            if (deserializedPhoton == null)
+            {
+                Tag.Error("DeserializationException");
+                throw new Exception("DeserializationException");
+            }
 
             Tag.Why("PostDeserializeAsync");
 
