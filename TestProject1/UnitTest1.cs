@@ -1,7 +1,5 @@
 using ClassLibrary1;
-using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -10,56 +8,16 @@ namespace TestProject1
     [TestClass]
     public class UnitTest1
     {
-        [TestInitialize()]
-        public async Task TestInitialize()
-        {
-            StackTrace? stackTrace = new(true);
-            if (stackTrace is not null)
-            {
-                var frame = stackTrace.GetFrame(0);
-                if (frame is not null)
-                {
-                    var fileName = frame.GetFileName();
-                    if (fileName is not null)
-                    {
-                        Tag.How(fileName);
-                    }
-                }
-
-                await Task.Run(() => Tag.Where("TestInitialize"));
-            }
-        }
-
         [TestMethod]
         public async Task Development()
         {
             await Task.Run(() => Tag.Where("Development"));
 
             var photon = PhotonFactory.Create(Color.Red);
-
-            await VirtualStorageService.IO(photon);
-            //await FileStorageService.IO(photon);
-            //await TableStorageService.IO(photon);
-
+            await NullStorageService.IO(photon);
             Assert.IsTrue(photon.Sent);
             Assert.IsTrue(photon.Received);
             Assert.AreEqual<Color>(Color.Red, photon.Color);
-        }
-
-        [TestMethod]
-        public async Task Production()
-        {
-            Tag.Where("Production");
-
-            var color = Color.Green;
-
-            Tag.Why("PreRunCall");
-
-            await Application.Run(Constant.ApiEndpoint, color);
-
-            Tag.Why("PostRunCall");
-
-            Tag.Shout($"IO {color}");
         }
 
         [TestMethod]
@@ -76,6 +34,52 @@ namespace TestProject1
             await Task.Run(() => Tag.Who("Who"));
             await Task.Run(() => Tag.Why("Why"));
             await Task.Run(() => Tag.Shout($"Shout"));
+        }
+
+        [TestMethod]
+        #region [DataRow("https://localhost:9999")]
+        [DataRow("https://localhost:9999")]
+#if !(DEBUG) // Case Sensitive
+        [DataRow("https://api.ronhowe.org")]
+#endif
+        #endregion
+        public async Task WebApplication1(string host)
+        {
+            Tag.Where("WebApplication1");
+
+            Tag.What($"host={host}");
+
+            var color = Color.Green;
+
+            Tag.Why("PreRunCall");
+
+            await Application.Run(host, color);
+
+            Tag.Why("PostRunCall");
+
+            Tag.Shout($"OK {color}");
+        }
+
+        [TestInitialize()]
+        public async Task TestInitialize()
+        {
+            StackTrace? stackTrace = new(true);
+            if (stackTrace is not null)
+            {
+                var frame = stackTrace.GetFrame(0);
+                if (frame is not null)
+                {
+                    var fileName = frame.GetFileName();
+                    if (fileName is not null)
+                    {
+                        Tag.How(fileName);
+                    }
+                }
+
+                Tag.What($"BuildConfiguration={Constant.BuildConfiguration}");
+
+                await Task.Run(() => Tag.Where("TestInitialize"));
+            }
         }
     }
 }

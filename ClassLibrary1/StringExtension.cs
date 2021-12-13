@@ -23,7 +23,8 @@ namespace ClassLibrary1
         private static string TagPrefix()
         {
             // https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
-            return $"{DateTime.UtcNow:s}";
+            //return $"{DateTime.UtcNow:s}";
+            return $"{DateTime.Now:s}";
         }
 
         public static string TagComment(this String str)

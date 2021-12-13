@@ -5,19 +5,31 @@ Tag.How("Program");
 
 Tag.Where("Main");
 
+string host;
+
+if (args.Length == 0)
+{
+    host = "https://localhost:9999";
+} else
+{
+    host = args[0];
+}
+
+var color = Color.Blue;
+
 while (true)
 {
-    var color = Color.Blue;
+    Console.ResetColor();
 
     Tag.Why("PreRunCall");
 
-    await global::ClassLibrary1.Application.Run(Constant.ApiEndpoint, color);
+    await Application.Run(host, color);
 
     Tag.Why("PostRunCall");
 
-    Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(color)));
+    Console.WriteLine(Tag.Shout(color));
+
+    Console.ForegroundColor = ConsoleColor.Blue;
 
     await Task.Delay(1000);
-
-    Console.ResetColor();
 }

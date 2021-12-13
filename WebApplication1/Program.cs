@@ -24,28 +24,28 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
-    app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
+    app.Logger.LogInformation($"id={id}".TagWhat());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
-    if (true)
-    {
-        httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+    app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
-    }
+    httpContext.ValidateAppRole(ApplicationRole.CanRead);
+
+    app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
-    var photon = VirtualStorageService.Read(id).Result;
+    var photon = NullStorageService.Read(id).Result;
     //var photon = LocalStorageService.Read(id).Result;
     //var photon = AzureTableStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
+    app.Logger.LogTrace("GET".TagShout());
 
     return photon;
 })
@@ -53,35 +53,33 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
 app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
 {
-    app.Logger.LogInformation("MapGet".TagWhere());
+    app.Logger.LogInformation("MapPost".TagWhere());
+
+    app.Logger.LogInformation($"photon={photon}".TagWhat());
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
-    if (false)
-    {
-#pragma warning disable CS0162 // Unreachable code detected
-        app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
-#pragma warning restore CS0162 // Unreachable code detected
 
-        httpContext.ValidateAppRole(ApplicationRole.CanRead);
+    app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+    httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        httpContext.ValidateAppRole(ApplicationRole.CanWrite);
+    app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-        app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
+    httpContext.ValidateAppRole(ApplicationRole.CanWrite);
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
-    }
+    app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
+
+    app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    var result = VirtualStorageService.Write(photon);
+    var result = NullStorageService.Write(photon);
     //var result = LocalStorageService.Write(photon);
     //var result = AzureTableStorageService.Write(photon);
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
+    app.Logger.LogTrace($"POST {photon.Color}".TagShout());
 
     return photon;
 })
