@@ -45,7 +45,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
+    app.Logger.LogInformation(Tag.Shout($"GET {photon.Color}"));
 
     return photon;
 })
@@ -55,7 +55,7 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
-    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
+    app.Logger.LogInformation(Tag.Shout($"POST {photon.Color}"));
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
