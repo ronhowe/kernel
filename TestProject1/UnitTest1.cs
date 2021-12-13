@@ -59,7 +59,7 @@ namespace TestProject1
 
             Tag.Why("PostRunCall");
 
-            Tag.Shout($"{color}");
+            Tag.Shout($"IO {color}");
         }
 
         [TestMethod]
