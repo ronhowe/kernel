@@ -2,9 +2,9 @@
 
 namespace ClassLibrary1
 {
-    public static class AzureTableStorageService
+    public static class TableStorageService
     {
-        public static async Task<Packet> IO(Packet packet)
+        public static async Task<Photon> IO(Photon photon)
         {
             Tag.Where("IO");
 
@@ -12,32 +12,32 @@ namespace ClassLibrary1
 
             Tag.Why("PreInputCall");
 
-            Tag.What($"packet={packet}");
+            Tag.What($"photon={photon}");
 
-            await Write(packet);
+            await Write(photon);
 
             Tag.Why("PostInputCall");
 
-            packet.Sent = true;
+            photon.Sent = true;
 
             Tag.Why("PreOuput");
 
-            var receivedPacket = await Read(packet.Id);
+            var receivedPhoton = await Read(photon.Id);
 
-            Tag.What($"receivedPacket={receivedPacket}");
+            Tag.What($"receivedPhoton={receivedPhoton}");
 
             Tag.Why("PostOuput");
 
-            packet.Received = true;
+            photon.Received = true;
 
-            packet.Color = receivedPacket.Color;
+            photon.Color = receivedPhoton.Color;
 
             Tag.Why("IOComplete");
 
-            return packet;
+            return photon;
         }
 
-        public static async Task Write(Packet packet)
+        public static async Task Write(Photon photon)
         {
             Tag.Where("Write");
 
@@ -67,17 +67,17 @@ namespace ClassLibrary1
             Tag.When("");
             Tag.What(tableName);
 
-            var packetTableEntity = new PacketTableEntity
+            var photonTableEntity = new PhotonTableEntity
             {
-                Id = packet.Id.ToString(),
-                ReferenceId = packet.ReferenceId.ToString(),
-                Color = packet.Color.Code,
-                PartitionKey = packet.Id.ToString(),
-                RowKey = packet.Id.ToString(),
+                Id = photon.Id.ToString(),
+                ReferenceId = photon.ReferenceId.ToString(),
+                Color = photon.Color.Code,
+                PartitionKey = photon.Id.ToString(),
+                RowKey = photon.Id.ToString(),
             };
 
             //tableClient.AddEntity(strongEntity);
-            await tableClient.AddEntityAsync<PacketTableEntity>(packetTableEntity);
+            await tableClient.AddEntityAsync<PhotonTableEntity>(photonTableEntity);
 
             Tag.Why("WriteComplete");
         }
@@ -90,7 +90,7 @@ namespace ClassLibrary1
             storageAccountKey = "";
         }
 
-        public static async Task<Packet> Read(Guid id)
+        public static async Task<Photon> Read(Guid id)
         {
             Tag.Where("Read");
 
@@ -122,17 +122,19 @@ namespace ClassLibrary1
             Tag.When("");
             Tag.What(tableName);
 
-            var entity = await tableClient.GetEntityAsync<PacketTableEntity>(id.ToString(), id.ToString());
+            var entity = await tableClient.GetEntityAsync<PhotonTableEntity>(id.ToString(), id.ToString());
 
-            Packet packet = new()
+            Photon photon = new()
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 Id = Guid.Parse(entity.Value.Id),
-                Color = PacketColor.From(entity.Value.Color)
+                Color = Color.From(entity.Value.Color)
+#pragma warning restore CS8604 // Possible null reference argument.
             };
 
             Tag.Why("ReadComplete");
 
-            return packet;
+            return photon;
         }
     }
 }

@@ -2,22 +2,22 @@
 
 namespace ClassLibrary1
 {
-    public class PacketColor : ValueObject
+    public class Color : ValueObject
     {
         [JsonConstructor]
-        public PacketColor()
+        public Color()
         {
-            Code = PacketColor.Black;
+            Code = Color.Black;
         }
 
-        public PacketColor(string code)
+        public Color(string code)
         {
             Code = code;
         }
 
-        public static PacketColor From(string code)
+        public static Color From(string code)
         {
-            var color = new PacketColor { Code = code };
+            var color = new Color { Code = code };
 
             if (!SupportedColors.Contains(color))
             {
@@ -27,32 +27,32 @@ namespace ClassLibrary1
             return color;
         }
 
-        public static PacketColor White => new("#FFFFFF");
+        public static Color White => new("#FFFFFF");
 
-        public static PacketColor Red => new("#FF5733");
+        public static Color Red => new("#FF5733");
 
-        public static PacketColor Orange => new("#FFC300");
+        public static Color Orange => new("#FFC300");
 
-        public static PacketColor Yellow => new("#FFFF66");
+        public static Color Yellow => new("#FFFF66");
 
-        public static PacketColor Green => new("#CCFF99 ");
+        public static Color Green => new("#CCFF99 ");
 
-        public static PacketColor Blue => new("#6666FF");
+        public static Color Blue => new("#6666FF");
 
-        public static PacketColor Purple => new("#9966CC");
+        public static Color Purple => new("#9966CC");
 
-        public static PacketColor Grey => new("#999999");
+        public static Color Grey => new("#999999");
 
-        public static PacketColor Black => new("#000000");
+        public static Color Black => new("#000000");
 
         public string Code { get; set; }
 
-        public static implicit operator string(PacketColor color)
+        public static implicit operator string(Color color)
         {
             return color.ToString();
         }
 
-        public static explicit operator PacketColor(string code)
+        public static explicit operator Color(string code)
         {
             return From(code);
         }
@@ -62,7 +62,7 @@ namespace ClassLibrary1
             return Code;
         }
 
-        protected static IEnumerable<PacketColor> SupportedColors
+        protected static IEnumerable<Color> SupportedColors
         {
             get
             {

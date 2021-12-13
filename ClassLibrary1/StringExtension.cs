@@ -1,4 +1,6 @@
-﻿namespace ClassLibrary1
+﻿using Figgle;
+
+namespace ClassLibrary1
 {
     public static class StringExtension
     {
@@ -9,14 +11,14 @@
         private const string ToDoPrefix = "&&";
 
         private const string WarningPrefix = "**";
-        private const string ErrorPrefix   = "!!";
+        private const string ErrorPrefix = "!!";
 
         private const string WhoPrefix = "@@";
         private const string WhatPrefix = "[]";
         private const string WherePrefix = "()";
         private const string WhenPrefix = "||";
         private const string WhyPrefix = "??";
-        private const string HowPrefix     = "{}";
+        private const string HowPrefix = "{}";
 
         private static string TagPrefix()
         {
@@ -28,10 +30,20 @@
         {
             return $"{TagPrefix()}{TagSeparator}{CommentPrefix}{str}";
         }
+        public static string TagShout(this String str)
+        {
+            return FiggleFonts.Standard.Render(str);
+        }
 
         public static string TagSecret(this String str)
         {
-            return $"{TagPrefix()}{TagSeparator}{SecretPrefix}SECRET";
+            if (str.Length > 0) {
+                return $"{TagPrefix()}{TagSeparator}{SecretPrefix}REDACTED-SECRET";
+            }
+            else
+            {
+                return $"{TagPrefix()}{TagSeparator}{SecretPrefix}EMPTY-SECRET";
+            }
         }
 
         public static string TagToDo(this String str)

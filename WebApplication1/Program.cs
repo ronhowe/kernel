@@ -1,5 +1,4 @@
 using ClassLibrary1;
-using Figgle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
@@ -21,7 +20,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
+app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
@@ -40,32 +39,30 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
-    var packet = InMemoryStorageService.Read(id).Result;
-    //var packet = LocalStorageService.Read(id).Result;
-    //var packet = AzureTableStorageService.Read(id).Result;
+    var photon = VirtualStorageService.Read(id).Result;
+    //var photon = LocalStorageService.Read(id).Result;
+    //var photon = AzureTableStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render("GET")));
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(packet.Color)));
+    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
 
-    return packet;
+    return photon;
 })
 .RequireAuthorization();
 
-app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
+app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render("POST")));
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(packet.Color)));
-
-    //app.Logger.LogInformation(packet.ToString());
+    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
     {
+#pragma warning disable CS0162 // Unreachable code detected
         app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
+#pragma warning restore CS0162 // Unreachable code detected
 
         httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
@@ -80,13 +77,13 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    var result = InMemoryStorageService.Write(packet);
-    //var result = LocalStorageService.Write(packet);
-    //var result = AzureTableStorageService.Write(packet);
+    var result = VirtualStorageService.Write(photon);
+    //var result = LocalStorageService.Write(photon);
+    //var result = AzureTableStorageService.Write(photon);
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    return packet;
+    return photon;
 })
 .RequireAuthorization();
 

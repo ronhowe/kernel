@@ -2,21 +2,21 @@
 
 namespace ClassLibrary1
 {
-    public class Packet : AuditableEntity//, IHasDomainEvent, ITableEntity
+    public class Photon : AuditableEntity//, IHasDomainEvent, ITableEntity
     {
         [JsonConstructor]
-        public Packet()
+        public Photon()
         {
             Id = Guid.Empty;
             ReferenceId = Guid.Empty;
-            Color = PacketColor.Black;
+            Color = Color.Black;
         }
 
         public Guid Id { get; set; }
 
         public Guid ReferenceId { get; set; }
 
-        public PacketColor Color { get; set; }
+        public Color Color { get; set; }
 
         private bool _received;
 
@@ -27,7 +27,7 @@ namespace ClassLibrary1
             {
                 if (value == true && _received == false)
                 {
-                    //DomainEvents.Add(new PacketReceivedEvent(this));
+                    //DomainEvents.Add(new PhotonReceivedEvent(this));
                 }
 
                 _received = value;
@@ -43,7 +43,7 @@ namespace ClassLibrary1
             {
                 if (value == true && _sent == false)
                 {
-                    //DomainEvents.Add(new PacketSentEvent(this));
+                    //DomainEvents.Add(new PhotonSentEvent(this));
                 }
 
                 _sent = value;

@@ -10,7 +10,7 @@ namespace ClassLibrary1
 {
     public class Application
     {
-        public async Task Run(string uriString, PacketColor color)
+        public static async Task Run(string uriString, Color color)
         {
             Tag.Where("Run");
 
@@ -19,6 +19,7 @@ namespace ClassLibrary1
 
             HttpClient httpClient = new() { BaseAddress = new Uri(uriString) };
 
+            Tag.ToDo("RefactorClientAuthentication");
             if (true)
             {
                 Tag.Why("PreClientAuthentication");
@@ -90,28 +91,31 @@ namespace ClassLibrary1
                 Tag.Why("PostClientAuthentication");
             }
 
-            Packet sentPacket = PacketFactory.Create(color);
+            Photon sentPhoton = PhotonFactory.Create(color);
 
             try
             {
                 Tag.Why("PrePostAsJsonAsyncCall");
 
-                var httpResponse = await httpClient.PostAsJsonAsync(ApplicationEndpoint.BasicInputOutputService, sentPacket);
+                var httpResponse = await httpClient.PostAsJsonAsync(
+                    ApplicationEndpoint.BasicInputOutputService,
+                    sentPhoton
+                );
 
                 Tag.Why("PostPostAsJsonAsyncCall");
 
-                Tag.Line(FiggleFonts.Standard.Render(httpResponse.StatusCode.ToString()));
-
                 Tag.Why("PreGetFromJsonAsyncCall");
 
-                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPacket.Id}");
+                var receivedPhoton = await httpClient.GetFromJsonAsync<Photon>(
+                    $"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}"
+                );
 
                 Tag.Why("PostGetFromJsonAsyncCall");
 
                 Tag.ToDo("ImplementSentAndReceivedProperties");
 
-                Tag.What($"sentPacket={sentPacket}");
-                Tag.What($"receivedPacket={receivedPacket}");
+                Tag.What($"sentPhoton={sentPhoton}");
+                Tag.What($"receivedPhoton={receivedPhoton}");
             }
             catch (HttpRequestException ex)
             {
