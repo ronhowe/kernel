@@ -1,5 +1,4 @@
 using ClassLibrary1;
-using Figgle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
@@ -52,7 +51,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 })
 .RequireAuthorization();
 
-app.MapPost("/bios", (Photon photon, HttpContext httpContext) =>
+app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
