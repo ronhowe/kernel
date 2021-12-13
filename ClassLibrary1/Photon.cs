@@ -27,7 +27,7 @@ namespace ClassLibrary1
             {
                 if (value == true && _received == false)
                 {
-                    //DomainEvents.Add(new PacketReceivedEvent(this));
+                    //DomainEvents.Add(new PhotonReceivedEvent(this));
                 }
 
                 _received = value;
@@ -43,7 +43,7 @@ namespace ClassLibrary1
             {
                 if (value == true && _sent == false)
                 {
-                    //DomainEvents.Add(new PacketSentEvent(this));
+                    //DomainEvents.Add(new PhotonSentEvent(this));
                 }
 
                 _sent = value;

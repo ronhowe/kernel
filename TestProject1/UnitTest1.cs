@@ -34,18 +34,18 @@ namespace TestProject1
         {
             await Task.Run(() => Tag.Where("Development"));
 
-            var packet = PhotonFactory.Create(Color.Red);
+            var photon = PhotonFactory.Create(Color.Red);
 
             // Run Service Tests Even if Site Isn't Up
             // Great Way to Bypass Client Authentication
             // By Default, Consistently Test In Memory Storage Service
-            await InMemoryStorageService.IO(packet);
-            //await LocalStorageService.IO(packet);
-            //await AzureTableStorageService.IO(packet);
+            await InMemoryStorageService.IO(photon);
+            //await LocalStorageService.IO(photon);
+            //await AzureTableStorageService.IO(photon);
 
-            Assert.IsTrue(packet.Sent);
-            Assert.IsTrue(packet.Received);
-            Assert.AreEqual<Color>(Color.Red, packet.Color);
+            Assert.IsTrue(photon.Sent);
+            Assert.IsTrue(photon.Received);
+            Assert.AreEqual<Color>(Color.Red, photon.Color);
         }
 
         [TestMethod]

@@ -2,11 +2,11 @@
 {
     public class PhotonSentEvent : DomainEvent
     {
-        public PhotonSentEvent(Photon packet)
+        public PhotonSentEvent(Photon photon)
         {
-            Packet = packet;
+            Photon = photon;
         }
 
-        public Photon Packet { get; }
+        public Photon Photon { get; }
     }
 }

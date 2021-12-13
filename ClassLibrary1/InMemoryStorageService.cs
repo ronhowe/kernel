@@ -2,9 +2,9 @@
 {
     public static class InMemoryStorageService
     {
-        private static Photon EmptyPacket = PhotonFactory.Empty();
+        private static Photon InMemoryPhoton = PhotonFactory.Empty();
 
-        public static async Task<Photon> IO(Photon packet)
+        public static async Task<Photon> IO(Photon photon)
         {
             Tag.Where("IO");
 
@@ -12,38 +12,38 @@
 
             Tag.Why("PreInputCall");
 
-            Tag.What($"packet={packet}");
+            Tag.What($"photon={photon}");
 
-            await Write(packet);
+            await Write(photon);
 
             Tag.Why("PostInputCall");
 
-            packet.Sent = true;
+            photon.Sent = true;
 
             Tag.Why("PreOuput");
 
-            var receivedPacket = await Read(packet.Id);
+            var receivedPhoton = await Read(photon.Id);
 
-            Tag.What($"receivedPacket={receivedPacket}");
+            Tag.What($"receivedPhoton={receivedPhoton}");
 
             Tag.Why("PostOuput");
 
-            packet.Received = true;
+            photon.Received = true;
 
-            packet.Color = receivedPacket.Color;
+            photon.Color = receivedPhoton.Color;
 
             Tag.Why("IOComplete");
 
-            return packet;
+            return photon;
         }
 
-        public static async Task Write(Photon packet)
+        public static async Task Write(Photon photon)
         {
             Tag.Where("Input");
 
             Tag.Why("InputStart");
 
-            await Task.Run(() => EmptyPacket = packet);
+            await Task.Run(() => InMemoryPhoton = photon);
 
             Tag.Why("InputComplete");
         }
@@ -56,11 +56,11 @@
 
             Tag.What($"id={id}");
 
-            var emptyPacket = await Task.Run(() => EmptyPacket);
+            var photon = await Task.Run(() => InMemoryPhoton);
 
             Tag.Why("OutputComplete");
 
-            return emptyPacket;
+            return photon;
         }
     }
 }

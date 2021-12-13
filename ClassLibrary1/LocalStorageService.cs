@@ -5,7 +5,7 @@ namespace ClassLibrary1
 {
     public static class LocalStorageService
     {
-        public static async Task<Photon> IO(Photon packet)
+        public static async Task<Photon> IO(Photon photon)
         {
             Tag.Where("IO");
 
@@ -13,45 +13,45 @@ namespace ClassLibrary1
 
             Tag.Why("PreInputCall");
 
-            Tag.What($"packet={packet}");
+            Tag.What($"photon={photon}");
 
-            await Write(packet);
+            await Write(photon);
 
             Tag.Why("PostInputCall");
 
-            packet.Sent = true;
+            photon.Sent = true;
 
             Tag.ToDo("FixPreprocessorDirectiveBug12345");
 
 #if false
             // Only Shows In Debug
-            await ReadTextAsync($"{packet.Id}.json");
+            await ReadTextAsync($"{photon.Id}.json");
 #endif
 
             Tag.Why("PreOuput");
 
-            var receivedPacket = await Read(packet.Id);
+            var receivedPhoton = await Read(photon.Id);
 
-            Tag.What($"receivedPacket={receivedPacket}");
+            Tag.What($"receivedPhoton={receivedPhoton}");
 
             Tag.Why("PostOuput");
 
-            packet.Received = true;
+            photon.Received = true;
 
-            packet.Color = receivedPacket.Color;
+            photon.Color = receivedPhoton.Color;
 
             Tag.Why("IOComplete");
 
-            return packet;
+            return photon;
         }
 
-        public static async Task Write(Photon packet)
+        public static async Task Write(Photon photon)
         {
             Tag.Where("Input");
 
             Tag.Why("InputStart");
 
-            string fileName = $"{Path.GetTempPath()}\\{packet.Id}.json";
+            string fileName = $"{Path.GetTempPath()}\\{photon.Id}.json";
 
             Tag.Why("SerializedJsonFile");
 
@@ -70,7 +70,7 @@ namespace ClassLibrary1
 
             Tag.Why("PreSerializeAsyncCall");
 
-            await JsonSerializer.SerializeAsync(createStream, packet, optionsCopy);
+            await JsonSerializer.SerializeAsync(createStream, photon, optionsCopy);
 
             Tag.Why("PostSerializeAsyncCall");
 
@@ -110,7 +110,7 @@ namespace ClassLibrary1
 
             Tag.Why("PreDeserializeAsync");
 
-            Photon deserializedPacket = await JsonSerializer.DeserializeAsync<Photon>(openStream, options);
+            Photon deserializedPhoton = await JsonSerializer.DeserializeAsync<Photon>(openStream, options);
 
             Tag.Why("PostDeserializeAsync");
 
@@ -119,15 +119,15 @@ namespace ClassLibrary1
             if (false)
             {
 #pragma warning disable CS0162 // Unreachable code detected
-                deserializedPacket.Id = Guid.NewGuid();
+                deserializedPhoton.Id = Guid.NewGuid();
 #pragma warning restore CS0162 // Unreachable code detected
             }
 
-            Tag.What($"deserializedPacket={deserializedPacket}");
+            Tag.What($"deserializedPhoton={deserializedPhoton}");
 
             Tag.Why("OutputComplete");
 
-            return deserializedPacket;
+            return deserializedPhoton;
         }
 
         private static Task<string> ReadTextAsync(string filePath)

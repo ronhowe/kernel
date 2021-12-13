@@ -90,13 +90,13 @@ namespace ClassLibrary1
                 Tag.Why("PostClientAuthentication");
             }
 
-            Photon sentPacket = PhotonFactory.Create(color);
+            Photon sentPhoton = PhotonFactory.Create(color);
 
             try
             {
                 Tag.Why("PrePostAsJsonAsyncCall");
 
-                var httpResponse = await httpClient.PostAsJsonAsync(ApplicationEndpoint.BasicInputOutputService, sentPacket);
+                var httpResponse = await httpClient.PostAsJsonAsync(ApplicationEndpoint.BasicInputOutputService, sentPhoton);
 
                 Tag.Why("PostPostAsJsonAsyncCall");
 
@@ -104,14 +104,14 @@ namespace ClassLibrary1
 
                 Tag.Why("PreGetFromJsonAsyncCall");
 
-                var receivedPacket = await httpClient.GetFromJsonAsync<Photon>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPacket.Id}");
+                var receivedPhoton = await httpClient.GetFromJsonAsync<Photon>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}");
 
                 Tag.Why("PostGetFromJsonAsyncCall");
 
                 Tag.ToDo("ImplementSentAndReceivedProperties");
 
-                Tag.What($"sentPacket={sentPacket}");
-                Tag.What($"receivedPacket={receivedPacket}");
+                Tag.What($"sentPhoton={sentPhoton}");
+                Tag.What($"receivedPhoton={receivedPhoton}");
             }
             catch (HttpRequestException ex)
             {
