@@ -39,7 +39,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
-    var photon = VirtualStorageService.Read(id).Result;
+    var photon = NullStorageService.Read(id).Result;
     //var photon = LocalStorageService.Read(id).Result;
     //var photon = AzureTableStorageService.Read(id).Result;
 
@@ -75,7 +75,7 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    var result = VirtualStorageService.Write(photon);
+    var result = NullStorageService.Write(photon);
     //var result = LocalStorageService.Write(photon);
     //var result = AzureTableStorageService.Write(photon);
 

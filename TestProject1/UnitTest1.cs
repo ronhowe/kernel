@@ -35,9 +35,12 @@ namespace TestProject1
         {
             await Task.Run(() => Tag.Where("Development"));
 
+            Tag.Shout($"UNIT TEST");
+
             var photon = PhotonFactory.Create(Color.Red);
 
-            await VirtualStorageService.IO(photon);
+            await NullStorageService.IO(photon);
+            await NullStorageService<Photon>.IO(photon);
             //await FileStorageService.IO(photon);
             //await TableStorageService.IO(photon);
 
@@ -50,6 +53,8 @@ namespace TestProject1
         public async Task Production()
         {
             Tag.Where("Production");
+
+            Tag.Shout($"INTEGRATION TEST");
 
             var color = Color.Green;
 
