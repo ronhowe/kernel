@@ -15,11 +15,11 @@ if (args.Length == 0)
     host = args[0];
 }
 
-Console.ForegroundColor = ConsoleColor.Blue;
+var color = Color.Blue;
 
 while (true)
 {
-    var color = Color.Blue;
+    Console.ResetColor();
 
     Tag.Why("PreRunCall");
 
@@ -27,9 +27,9 @@ while (true)
 
     Tag.Why("PostRunCall");
 
-    Console.WriteLine(Tag.Line(FiggleFonts.Standard.Render(color)));
+    Console.WriteLine(Tag.Shout(color));
+
+    Console.ForegroundColor = ConsoleColor.Blue;
 
     await Task.Delay(1000);
-
-    Console.ResetColor();
 }
