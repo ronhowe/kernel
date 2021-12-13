@@ -4,7 +4,7 @@ namespace ClassLibrary1
 {
     public static class AzureTableStorageService
     {
-        public static async Task<Packet> IO(Packet packet)
+        public static async Task<Photon> IO(Photon packet)
         {
             Tag.Where("IO");
 
@@ -37,7 +37,7 @@ namespace ClassLibrary1
             return packet;
         }
 
-        public static async Task Write(Packet packet)
+        public static async Task Write(Photon packet)
         {
             Tag.Where("Write");
 
@@ -67,7 +67,7 @@ namespace ClassLibrary1
             Tag.When("");
             Tag.What(tableName);
 
-            var packetTableEntity = new PacketTableEntity
+            var packetTableEntity = new PhotonTableEntity
             {
                 Id = packet.Id.ToString(),
                 ReferenceId = packet.ReferenceId.ToString(),
@@ -77,7 +77,7 @@ namespace ClassLibrary1
             };
 
             //tableClient.AddEntity(strongEntity);
-            await tableClient.AddEntityAsync<PacketTableEntity>(packetTableEntity);
+            await tableClient.AddEntityAsync<PhotonTableEntity>(packetTableEntity);
 
             Tag.Why("WriteComplete");
         }
@@ -90,7 +90,7 @@ namespace ClassLibrary1
             storageAccountKey = "";
         }
 
-        public static async Task<Packet> Read(Guid id)
+        public static async Task<Photon> Read(Guid id)
         {
             Tag.Where("Read");
 
@@ -122,12 +122,12 @@ namespace ClassLibrary1
             Tag.When("");
             Tag.What(tableName);
 
-            var entity = await tableClient.GetEntityAsync<PacketTableEntity>(id.ToString(), id.ToString());
+            var entity = await tableClient.GetEntityAsync<PhotonTableEntity>(id.ToString(), id.ToString());
 
-            Packet packet = new()
+            Photon packet = new()
             {
                 Id = Guid.Parse(entity.Value.Id),
-                Color = PacketColor.From(entity.Value.Color)
+                Color = Color.From(entity.Value.Color)
             };
 
             Tag.Why("ReadComplete");

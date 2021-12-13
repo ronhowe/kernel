@@ -5,7 +5,7 @@ namespace ClassLibrary1
 {
     public static class LocalStorageService
     {
-        public static async Task<Packet> IO(Packet packet)
+        public static async Task<Photon> IO(Photon packet)
         {
             Tag.Where("IO");
 
@@ -45,7 +45,7 @@ namespace ClassLibrary1
             return packet;
         }
 
-        public static async Task Write(Packet packet)
+        public static async Task Write(Photon packet)
         {
             Tag.Where("Input");
 
@@ -82,7 +82,7 @@ namespace ClassLibrary1
             Tag.Why("InputComplete");
         }
 
-        public static async Task<Packet> Read(Guid id)
+        public static async Task<Photon> Read(Guid id)
         {
             Tag.Where("Output");
 
@@ -110,7 +110,7 @@ namespace ClassLibrary1
 
             Tag.Why("PreDeserializeAsync");
 
-            Packet deserializedPacket = await JsonSerializer.DeserializeAsync<Packet>(openStream, options);
+            Photon deserializedPacket = await JsonSerializer.DeserializeAsync<Photon>(openStream, options);
 
             Tag.Why("PostDeserializeAsync");
 
@@ -118,7 +118,9 @@ namespace ClassLibrary1
 
             if (false)
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 deserializedPacket.Id = Guid.NewGuid();
+#pragma warning restore CS0162 // Unreachable code detected
             }
 
             Tag.What($"deserializedPacket={deserializedPacket}");
@@ -151,7 +153,9 @@ namespace ClassLibrary1
 
                 if (false)
                 {
+#pragma warning disable CS0162 // Unreachable code detected
                     Tag.Line($"{sb}");
+#pragma warning restore CS0162 // Unreachable code detected
                 }
 
                 return sb.ToString();

@@ -21,7 +21,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
+app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
@@ -53,7 +53,7 @@ app.MapGet("/bios", (Guid id, HttpContext httpContext) =>
 })
 .RequireAuthorization();
 
-app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
+app.MapPost("/bios", (Photon packet, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
@@ -65,7 +65,9 @@ app.MapPost("/bios", (Packet packet, HttpContext httpContext) =>
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
     {
+#pragma warning disable CS0162 // Unreachable code detected
         app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
+#pragma warning restore CS0162 // Unreachable code detected
 
         httpContext.ValidateAppRole(ApplicationRole.CanRead);
 

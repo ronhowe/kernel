@@ -7,13 +7,11 @@ Tag.Where("Main");
 
 while (true)
 {
-    var application = new Application();
-
-    var color = PacketColor.Blue;
+    var color = Color.Blue;
 
     Tag.Why("PreRunCall");
 
-    await application.Run(Constant.ApiEndpoint, color);
+    await global::ClassLibrary1.Application.Run(Constant.ApiEndpoint, color);
 
     Tag.Why("PostRunCall");
 

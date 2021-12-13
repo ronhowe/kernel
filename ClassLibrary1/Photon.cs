@@ -2,21 +2,21 @@
 
 namespace ClassLibrary1
 {
-    public class Packet : AuditableEntity//, IHasDomainEvent, ITableEntity
+    public class Photon : AuditableEntity//, IHasDomainEvent, ITableEntity
     {
         [JsonConstructor]
-        public Packet()
+        public Photon()
         {
             Id = Guid.Empty;
             ReferenceId = Guid.Empty;
-            Color = PacketColor.Black;
+            Color = Color.Black;
         }
 
         public Guid Id { get; set; }
 
         public Guid ReferenceId { get; set; }
 
-        public PacketColor Color { get; set; }
+        public Color Color { get; set; }
 
         private bool _received;
 

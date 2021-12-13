@@ -2,9 +2,9 @@
 {
     public static class InMemoryStorageService
     {
-        private static Packet EmptyPacket = PacketFactory.Empty();
+        private static Photon EmptyPacket = PhotonFactory.Empty();
 
-        public static async Task<Packet> IO(Packet packet)
+        public static async Task<Photon> IO(Photon packet)
         {
             Tag.Where("IO");
 
@@ -37,18 +37,18 @@
             return packet;
         }
 
-        public static async Task Write(Packet packet)
+        public static async Task Write(Photon packet)
         {
             Tag.Where("Input");
 
             Tag.Why("InputStart");
 
-            EmptyPacket = packet;
+            await Task.Run(() => EmptyPacket = packet);
 
             Tag.Why("InputComplete");
         }
 
-        public static async Task<Packet> Read(Guid id)
+        public static async Task<Photon> Read(Guid id)
         {
             Tag.Where("Output");
 
@@ -56,7 +56,7 @@
 
             Tag.What($"id={id}");
 
-            var emptyPacket = EmptyPacket;
+            var emptyPacket = await Task.Run(() => EmptyPacket);
 
             Tag.Why("OutputComplete");
 

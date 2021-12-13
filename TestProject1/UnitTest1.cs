@@ -34,7 +34,7 @@ namespace TestProject1
         {
             await Task.Run(() => Tag.Where("Development"));
 
-            var packet = PacketFactory.Create(PacketColor.Red);
+            var packet = PhotonFactory.Create(Color.Red);
 
             // Run Service Tests Even if Site Isn't Up
             // Great Way to Bypass Client Authentication
@@ -45,7 +45,7 @@ namespace TestProject1
 
             Assert.IsTrue(packet.Sent);
             Assert.IsTrue(packet.Received);
-            Assert.AreEqual<PacketColor>(PacketColor.Red, packet.Color);
+            Assert.AreEqual<Color>(Color.Red, packet.Color);
         }
 
         [TestMethod]
@@ -53,20 +53,18 @@ namespace TestProject1
         {
             Tag.Where("Production");
 
-            var application = new Application();
-
-            var color = PacketColor.Green;
+            var color = Color.Green;
 
             Tag.Why("PreRunCall");
 
-            await application.Run(Constant.ApiEndpoint, color);
+            await Application.Run(Constant.ApiEndpoint, color);
 
             Tag.Why("PostRunCall");
 
             Tag.Line(FiggleFonts.Standard.Render(color));
         }
 
-        //[TestMethod]
+        [TestMethod]
         public async Task Tags()
         {
             await Task.Run(() => Tag.Who("Who"));

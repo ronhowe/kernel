@@ -10,7 +10,7 @@ namespace ClassLibrary1
 {
     public class Application
     {
-        public async Task Run(string uriString, PacketColor color)
+        public static async Task Run(string uriString, Color color)
         {
             Tag.Where("Run");
 
@@ -90,7 +90,7 @@ namespace ClassLibrary1
                 Tag.Why("PostClientAuthentication");
             }
 
-            Packet sentPacket = PacketFactory.Create(color);
+            Photon sentPacket = PhotonFactory.Create(color);
 
             try
             {
@@ -104,7 +104,7 @@ namespace ClassLibrary1
 
                 Tag.Why("PreGetFromJsonAsyncCall");
 
-                var receivedPacket = await httpClient.GetFromJsonAsync<Packet>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPacket.Id}");
+                var receivedPacket = await httpClient.GetFromJsonAsync<Photon>($"{ApplicationEndpoint.BasicInputOutputService}?id={sentPacket.Id}");
 
                 Tag.Why("PostGetFromJsonAsyncCall");
 
