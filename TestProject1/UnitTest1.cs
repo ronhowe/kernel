@@ -14,12 +14,7 @@ namespace TestProject1
             await Task.Run(() => Tag.Where("Development"));
 
             var photon = PhotonFactory.Create(Color.Red);
-
             await NullStorageService.IO(photon);
-            await NullStorageService<Photon>.IO(photon);
-            //await FileStorageService.IO(photon);
-            //await TableStorageService.IO(photon);
-
             Assert.IsTrue(photon.Sent);
             Assert.IsTrue(photon.Received);
             Assert.AreEqual<Color>(Color.Red, photon.Color);
