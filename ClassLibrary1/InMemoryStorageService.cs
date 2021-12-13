@@ -24,7 +24,7 @@
 
             var receivedPacket = await Read(packet.Id);
 
-            Tag.Line($"receivedPacket={receivedPacket}");
+            Tag.What($"receivedPacket={receivedPacket}");
 
             Tag.Why("PostOuput");
 
