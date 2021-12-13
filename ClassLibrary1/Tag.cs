@@ -31,6 +31,15 @@ namespace ClassLibrary1
             }
         }
 
+        public static string Shout(this String str)
+        {
+            if (true)
+            {
+                Trace.WriteLine(str.TagShout());
+                return $"{str.TagShout()}";
+            }
+        }
+
         public static string Secret(this String str)
         {
             if (true)

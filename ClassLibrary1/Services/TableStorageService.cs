@@ -2,7 +2,7 @@
 
 namespace ClassLibrary1
 {
-    public static class AzureTableStorageService
+    public static class TableStorageService
     {
         public static async Task<Photon> IO(Photon photon)
         {

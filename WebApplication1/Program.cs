@@ -40,14 +40,13 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
-    var photon = InMemoryStorageService.Read(id).Result;
+    var photon = VirtualStorageService.Read(id).Result;
     //var photon = LocalStorageService.Read(id).Result;
     //var photon = AzureTableStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render("GET")));
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(photon.Color)));
+    app.Logger.LogTrace(Tag.Shout($"GET {photon.Color}"));
 
     return photon;
 })
@@ -57,10 +56,7 @@ app.MapPost("/bios", (Photon photon, HttpContext httpContext) =>
 {
     app.Logger.LogInformation("MapGet".TagWhere());
 
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render("POST")));
-    app.Logger.LogInformation(Tag.Line(FiggleFonts.Standard.Render(photon.Color)));
-
-    //app.Logger.LogInformation(photon.ToString());
+    app.Logger.LogTrace(Tag.Shout($"POST {photon.Color}"));
 
     Tag.ToDo("@MakeAuthorizationConfigurable");
     if (false)
@@ -82,7 +78,7 @@ app.MapPost("/bios", (Photon photon, HttpContext httpContext) =>
 
     app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
 
-    var result = InMemoryStorageService.Write(photon);
+    var result = VirtualStorageService.Write(photon);
     //var result = LocalStorageService.Write(photon);
     //var result = AzureTableStorageService.Write(photon);
 

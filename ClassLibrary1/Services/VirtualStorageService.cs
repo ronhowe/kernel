@@ -1,6 +1,6 @@
 ﻿namespace ClassLibrary1
 {
-    public static class InMemoryStorageService
+    public static class VirtualStorageService
     {
         private static Photon InMemoryPhoton = PhotonFactory.Empty();
 

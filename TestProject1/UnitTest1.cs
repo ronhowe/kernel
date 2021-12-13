@@ -1,6 +1,7 @@
 using ClassLibrary1;
 using Figgle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -36,12 +37,9 @@ namespace TestProject1
 
             var photon = PhotonFactory.Create(Color.Red);
 
-            // Run Service Tests Even if Site Isn't Up
-            // Great Way to Bypass Client Authentication
-            // By Default, Consistently Test In Memory Storage Service
-            await InMemoryStorageService.IO(photon);
-            //await LocalStorageService.IO(photon);
-            //await AzureTableStorageService.IO(photon);
+            await VirtualStorageService.IO(photon);
+            //await FileStorageService.IO(photon);
+            //await TableStorageService.IO(photon);
 
             Assert.IsTrue(photon.Sent);
             Assert.IsTrue(photon.Received);
@@ -61,22 +59,23 @@ namespace TestProject1
 
             Tag.Why("PostRunCall");
 
-            Tag.Line(FiggleFonts.Standard.Render(color));
+            Tag.Shout($"{color}");
         }
 
         [TestMethod]
         public async Task Tags()
         {
-            await Task.Run(() => Tag.Who("Who"));
-            await Task.Run(() => Tag.What("What"));
-            await Task.Run(() => Tag.Where("Where"));
-            await Task.Run(() => Tag.When("When"));
-            await Task.Run(() => Tag.Why("Why"));
-            await Task.Run(() => Tag.How("How"));
-            await Task.Run(() => Tag.Warning("Warning"));
-            await Task.Run(() => Tag.Error("Error"));
-            await Task.Run(() => Tag.Secret("Secret"));
             await Task.Run(() => Tag.Comment("Comment"));
+            await Task.Run(() => Tag.Error("Error"));
+            await Task.Run(() => Tag.How("How"));
+            await Task.Run(() => Tag.Secret("Secret"));
+            await Task.Run(() => Tag.Warning("Warning"));
+            await Task.Run(() => Tag.What("What"));
+            await Task.Run(() => Tag.When("When"));
+            await Task.Run(() => Tag.Where("Where"));
+            await Task.Run(() => Tag.Who("Who"));
+            await Task.Run(() => Tag.Why("Why"));
+            await Task.Run(() => Tag.Shout($"Shout"));
         }
     }
 }

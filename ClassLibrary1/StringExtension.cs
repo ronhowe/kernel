@@ -1,4 +1,6 @@
-﻿namespace ClassLibrary1
+﻿using Figgle;
+
+namespace ClassLibrary1
 {
     public static class StringExtension
     {
@@ -27,6 +29,10 @@
         public static string TagComment(this String str)
         {
             return $"{TagPrefix()}{TagSeparator}{CommentPrefix}{str}";
+        }
+        public static string TagShout(this String str)
+        {
+            return FiggleFonts.Standard.Render(str);
         }
 
         public static string TagSecret(this String str)

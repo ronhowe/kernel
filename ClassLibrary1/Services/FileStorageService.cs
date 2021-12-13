@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace ClassLibrary1
 {
-    public static class LocalStorageService
+    public static class FileStorageService
     {
         public static async Task<Photon> IO(Photon photon)
         {
