@@ -12,7 +12,7 @@ namespace TestProject1
         {
             Tag.Where("LocalHost");
 
-            Tag.Shout($"{Constant.LocalApiEndpoint}");
+            //Tag.Shout($"{Constant.LocalApiEndpoint}");
 
             var color = Color.Green;
 
@@ -22,7 +22,7 @@ namespace TestProject1
 
             Tag.Why("PostRunCall");
 
-            Tag.Shout($"IO {color}");
+            Tag.Shout($"OK {color}");
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace TestProject1
         {
             Tag.Where("RemoteHost");
 
-            Tag.Shout(Constant.RemoteApiEndpoint);
+            //Tag.Shout(Constant.RemoteApiEndpoint);
 
             var color = Color.Green;
 
@@ -41,7 +41,7 @@ namespace TestProject1
 
             Tag.Why("PostRunCall");
 
-            Tag.Shout($"IO {color}");
+            Tag.Shout($"OK {color}");
         }
     }
 }
