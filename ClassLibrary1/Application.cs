@@ -106,9 +106,27 @@ namespace ClassLibrary1
 
                 Tag.Why("PreGetFromJsonAsyncCall");
 
-                var receivedPhoton = await httpClient.GetFromJsonAsync<Photon>(
-                    $"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}"
-                );
+                Photon? receivedPhoton;
+
+                try
+                {
+                    receivedPhoton = await httpClient.GetFromJsonAsync<Photon>(
+                        $"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}"
+                    );
+                }
+                // TODO This is likely NOT the exception thrown, but shows we can handle different kinds differently.
+                catch (JsonException ex)
+                {
+                    Tag.Error("InvalidJson");
+                    Tag.Error(ex.Message);
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    Tag.Error("UnknownException");
+                    Tag.Error(ex.Message);
+                    throw;
+                }
 
                 Tag.Why("PostGetFromJsonAsyncCall");
 
