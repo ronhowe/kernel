@@ -5,7 +5,7 @@
     "adminPassword": {
       "type": "string"
     },
-    "appConfigName": {
+    "appConfigurationName": {
       "type": "string"
     },
     "keyVaultName": {
@@ -26,7 +26,7 @@
     "secretValue": {
       "type": "securestring"
     },
-    "storageName": {
+    "storageAccountName": {
       "type": "string"
     },
     "storageType": {
@@ -47,7 +47,7 @@
     {
       "type": "Microsoft.AppConfiguration/configurationStores",
       "apiVersion": "2021-03-01-preview",
-      "name": "[parameters('appConfigName')]",
+      "name": "[parameters('appConfigurationName')]",
       "location": "[parameters('location')]",
       "sku": {
         "name": "free"
@@ -96,7 +96,7 @@
       }
     },
     {
-      "name": "[parameters('storageName')]",
+      "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-01-01",
@@ -105,9 +105,27 @@
       },
       "dependsOn": [],
       "tags": {
-        "displayName": "[parameters('storageName')]"
+        "displayName": "[parameters('storageAccountName')]"
       },
-      "kind": "Storage"
+      "kind": "Storage",
+      "resources": [
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2019-06-01",
+          "name": "default/photon",
+          "dependsOn": [
+            "[parameters('storageAccountName')]"
+          ]
+        },
+        {
+          "type": "tableServices/tables",
+          "apiVersion": "2019-06-01",
+          "name": "default/photon",
+          "dependsOn": [
+            "[parameters('storageAccountName')]"
+          ]
+        }
+      ]
     }
   ]
 }
