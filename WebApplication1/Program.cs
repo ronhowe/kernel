@@ -40,8 +40,8 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
     var photon = NullStorageService.Read(id).Result;
-    //var photon = LocalStorageService.Read(id).Result;
-    //var photon = AzureTableStorageService.Read(id).Result;
+    //var photon = FileStorageService.Read(id).Result;
+    //var photon = TableStorageService.Read(id).Result;
 
     app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
 

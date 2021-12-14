@@ -18,6 +18,16 @@ namespace TestProject1
             Assert.IsTrue(photon.Sent);
             Assert.IsTrue(photon.Received);
             Assert.AreEqual<Color>(Color.Red, photon.Color);
+
+            //await FileStorageService.IO(photon);
+            //Assert.IsTrue(photon.Sent);
+            //Assert.IsTrue(photon.Received);
+            //Assert.AreEqual<Color>(Color.Red, photon.Color);
+
+            //await TableStorageService.IO(photon);
+            //Assert.IsTrue(photon.Sent);
+            //Assert.IsTrue(photon.Received);
+            //Assert.AreEqual<Color>(Color.Red, photon.Color);
         }
     }
 
