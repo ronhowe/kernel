@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace TestProject1
 {
     [TestClass]
-    public class UnitTest1
+    public partial class UnitTest1
     {
         [TestMethod]
         public async Task Development()
@@ -19,7 +19,10 @@ namespace TestProject1
             Assert.IsTrue(photon.Received);
             Assert.AreEqual<Color>(Color.Red, photon.Color);
         }
+    }
 
+    public partial class UnitTest1
+    {
         [TestMethod]
         public async Task Tags()
         {
@@ -81,5 +84,6 @@ namespace TestProject1
                 await Task.Run(() => Tag.Where("TestInitialize"));
             }
         }
+
     }
 }
