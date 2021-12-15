@@ -12,22 +12,6 @@ namespace TestProject1
         public async Task Development()
         {
             await Task.Run(() => Tag.Where("Development"));
-
-            var photon = PhotonFactory.Create(Color.Red);
-            await NullStorageService.IO(photon);
-            Assert.IsTrue(photon.Sent);
-            Assert.IsTrue(photon.Received);
-            Assert.AreEqual<Color>(Color.Red, photon.Color);
-
-            //await FileStorageService.IO(photon);
-            //Assert.IsTrue(photon.Sent);
-            //Assert.IsTrue(photon.Received);
-            //Assert.AreEqual<Color>(Color.Red, photon.Color);
-
-            //await TableStorageService.IO(photon);
-            //Assert.IsTrue(photon.Sent);
-            //Assert.IsTrue(photon.Received);
-            //Assert.AreEqual<Color>(Color.Red, photon.Color);
         }
     }
 
@@ -50,13 +34,52 @@ namespace TestProject1
         }
 
         [TestMethod]
+        public async Task ValidateFileStorageService()
+        {
+            await Task.Run(() => Tag.Where("Development"));
+
+            var photon = PhotonFactory.Create(Color.Red);
+            await FileStorageService.IO(photon);
+            Assert.IsTrue(photon.Sent);
+            Assert.IsTrue(photon.Received);
+            Assert.AreEqual<Color>(Color.Red, photon.Color);
+        }
+
+        [TestMethod]
+        public async Task ValidateNullStorageService()
+        {
+            await Task.Run(() => Tag.Where("ValidateNullStorageService"));
+
+            var photon = PhotonFactory.Create(Color.Red);
+            await NullStorageService.IO(photon);
+            Assert.IsTrue(photon.Sent);
+            Assert.IsTrue(photon.Received);
+            Assert.AreEqual<Color>(Color.Red, photon.Color);
+        }
+
+        [TestMethod]
+        public async Task ValidateTableStorageService()
+        {
+            await Task.Run(() => Tag.Where("Development"));
+
+            var photon = PhotonFactory.Create(Color.Red);
+
+            Assert.Inconclusive();
+
+            await TableStorageService.IO(photon);
+            Assert.IsTrue(photon.Sent);
+            Assert.IsTrue(photon.Received);
+            Assert.AreEqual<Color>(Color.Red, photon.Color);
+        }
+
+        [TestMethod]
         #region [DataRow("https://localhost:9999")]
         [DataRow("https://localhost:9999")]
 #if !(DEBUG) // Case Sensitive
         [DataRow("https://api.ronhowe.org")]
 #endif
         #endregion
-        public async Task WebApplication1(string host)
+        public async Task ValidateWebApplication1(string host)
         {
             Tag.Where("WebApplication1");
 
@@ -94,6 +117,5 @@ namespace TestProject1
                 await Task.Run(() => Tag.Where("TestInitialize"));
             }
         }
-
     }
 }
