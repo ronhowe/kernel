@@ -58,6 +58,7 @@ namespace TestProject1
         }
 
         [TestMethod]
+        [Ignore]
         public async Task ValidateTableStorageService()
         {
             await Task.Run(() => Tag.Where("Development"));
@@ -73,6 +74,7 @@ namespace TestProject1
         }
 
         [TestMethod]
+        [Ignore]
         #region [DataRow("https://localhost:9999")]
         [DataRow("https://localhost:9999")]
 #if !(DEBUG) // Case Sensitive
