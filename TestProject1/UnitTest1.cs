@@ -1,62 +1,22 @@
 using ClassLibrary1;
+using Microsoft.Identity.Client;
+using Microsoft.Identity.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TestProject1
 {
     [TestClass]
-    public partial class UnitTest1
+    public class UnitTest1
     {
-        [TestMethod]
-        public async Task Development()
-        {
-            await Task.Run(() => Tag.Where("Development"));
-        }
-    }
-
-    public partial class UnitTest1
-    {
-        [TestMethod]
-        public async Task ClassLibrary1()
-        {
-            await Task.Run(() => Tag.Comment("Comment"));
-            await Task.Run(() => Tag.Error("Error"));
-            await Task.Run(() => Tag.How("How"));
-            await Task.Run(() => Tag.Secret("Secret"));
-            await Task.Run(() => Tag.Warning("Warning"));
-            await Task.Run(() => Tag.What("What"));
-            await Task.Run(() => Tag.When("When"));
-            await Task.Run(() => Tag.Where("Where"));
-            await Task.Run(() => Tag.Who("Who"));
-            await Task.Run(() => Tag.Why("Why"));
-            await Task.Run(() => Tag.Shout($"Shout"));
-        }
-
-        [TestMethod]
-        #region [DataRow("https://localhost:9999")]
-        [DataRow("https://localhost:9999")]
-#if !(DEBUG) // Case Sensitive
-        [DataRow("https://api.ronhowe.org")]
-#endif
-        #endregion
-        public async Task WebApplication1(string host)
-        {
-            Tag.Where("WebApplication1");
-
-            Tag.What($"host={host}");
-
-            var color = Color.Green;
-
-            Tag.Why("PreRunCall");
-
-            await Application.Run(host, color);
-
-            Tag.Why("PostRunCall");
-
-            Tag.Shout($"OK {color}");
-        }
-
         [TestInitialize()]
         public async Task TestInitialize()
         {
@@ -64,6 +24,7 @@ namespace TestProject1
             if (stackTrace is not null)
             {
                 var frame = stackTrace.GetFrame(0);
+
                 if (frame is not null)
                 {
                     var fileName = frame.GetFileName();
@@ -77,6 +38,238 @@ namespace TestProject1
 
                 await Task.Run(() => Tag.Where("TestInitialize"));
             }
+        }
+
+        [TestMethod]
+        public async Task Development()
+        {
+            await Task.Run(() => Tag.Where("Development"));
+        }
+
+        [TestMethod]
+        [DataRow("https://localhost:9999")]
+        public async Task WebApplication1(string host)
+        {
+            Tag.Where("WebApplication1");
+
+            Tag.What($"host={host}");
+
+            var color = Color.Green;
+
+            Tag.Why("PreRunCall");
+
+            await Run(host, color);
+
+            Tag.Why("PostRunCall");
+
+            Tag.Shout($"OK {color}");
+        }
+
+        private static async Task Run(string uriString, Color color)
+        {
+            Tag.Where("Run");
+
+            Tag.What($"uriString={uriString}");
+            Tag.What($"color={color}");
+
+            HttpClient client = new() { BaseAddress = new Uri(uriString) };
+
+            #region Client Authentication
+
+            Tag.ToDo("RefactorClientAuthentication");
+            if (true)
+            {
+                Tag.Why("PreClientAuthentication");
+
+                // @TODO @ReadFromKeyVault
+                AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
+
+                bool isUsingClientSecret = AppUsesClientSecret(config);
+
+                IConfidentialClientApplication app;
+
+                if (isUsingClientSecret)
+                {
+                    app = ConfidentialClientApplicationBuilder.Create(config.ClientId)
+                        .WithClientSecret(config.ClientSecret)
+                        .WithAuthority(new Uri(config.Authority))
+                        .Build();
+                }
+                else
+                {
+                    X509Certificate2 certificate = ReadCertificate(config.CertificateName);
+                    app = ConfidentialClientApplicationBuilder.Create(config.ClientId)
+                        .WithCertificate(certificate)
+                        .WithAuthority(new Uri(config.Authority))
+                        .Build();
+                }
+                app.AddInMemoryTokenCache();
+
+                // With client credentials flows the scopes is ALWAYS of the shape "resource/.default", as the
+                // application permissions need to be set statically (in the portal or by PowerShell), and then
+                // granted b ya tenant administrator.
+                string[] scopes = new string[] { config.TodoListScope };
+                try
+                {
+                    Tag.Why("PreAcquireTokenForClient");
+
+                    var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
+
+                    Tag.Why("PostAcquireTokenForClient");
+                    if (result != null)
+                    {
+                        if (!string.IsNullOrEmpty(result.AccessToken))
+                        {
+                            var defaultRequestHeaders = client.DefaultRequestHeaders;
+
+                            if (defaultRequestHeaders.Accept == null || !defaultRequestHeaders.Accept.Any(m => m.MediaType == "application/json"))
+                            {
+                                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            }
+
+                            defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                        }
+                    }
+                }
+                catch (MsalServiceException ex) when (ex.Message.Contains("AADSTS70011"))
+                {
+                    Tag.Error("ScopeProvidedNotSupported");
+                }
+
+                Tag.Why("PostClientAuthentication");
+            }
+
+            #endregion Client Authentication
+
+            #region Send/Write
+
+            Photon sentPhoton = PhotonFactory.Create(color);
+
+            Tag.Why("PrePostAsJsonAsyncCall");
+
+            try
+            {
+                HttpResponseMessage? response = await client.PostAsJsonAsync(ApplicationEndpoint.BasicInputOutputService, sentPhoton);
+            }
+            catch (HttpRequestException ex)
+            {
+                Tag.Error("HttpRequestException");
+                Tag.Error(ex.Message);
+                // TODO Example how to codify remediations.
+                Tag.ToDo("CreateRunbook12345");
+                Tag.Comment("Runbook12345");
+                throw ex;
+            }
+            catch (NotSupportedException ex)
+            {
+                Tag.Error("ContentTypeNotSupported");
+                Tag.Error(ex.Message);
+                throw new ApplicationException();
+            }
+            catch (JsonException ex)
+            {
+                Tag.Error("InvalidJson");
+                Tag.Error(ex.Message);
+                throw new ApplicationException();
+            }
+            catch (Exception ex)
+            {
+                Tag.Error("UnknownException");
+                Tag.Error(ex.Message);
+                throw new ApplicationException();
+            }
+
+            Tag.Why("PostPostAsJsonAsyncCall");
+
+            #endregion Send/Write
+
+            #region Read/Receive
+
+            Photon? receivedPhoton;
+
+            Tag.Why("PreGetFromJsonAsyncCall");
+
+            string uri = $"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}";
+            Tag.What($"uri={uri}");
+
+            try
+            {
+                receivedPhoton = await client.GetFromJsonAsync<Photon>(uri);
+            }
+            // TODO This is likely NOT the exception thrown, but shows we can handle different kinds differently.
+            catch (JsonException ex)
+            {
+                Tag.Error("InvalidJson");
+                Tag.Error(ex.Message);
+                throw new ApplicationException();
+            }
+            catch (Exception ex)
+            {
+                Tag.Error("UnknownException");
+                Tag.Error(ex.Message);
+                throw new ApplicationException();
+            }
+
+            Tag.Why("PostGetFromJsonAsyncCall");
+
+            #endregion Read/Receive
+
+            Tag.What($"sentPhoton={sentPhoton}");
+            Tag.What($"receivedPhoton={receivedPhoton}");
+
+            Assert.IsNotNull(receivedPhoton);
+            Assert.AreEqual(sentPhoton.Id, receivedPhoton.Id);
+            Assert.AreEqual(sentPhoton.Color, receivedPhoton.Color);
+            Tag.ToDo("ImplementSentAndReceivedProperties");
+        }
+
+        private static bool AppUsesClientSecret(AuthenticationConfig config)
+        {
+            Tag.Where("AppUsesClientSecret");
+
+            const string clientSecretPlaceholderValue = "[Enter here a client secret for your application]";
+            const string certificatePlaceholderValue = "[Or instead of client secret: Enter here the name of a certificate (from the user cert store) as registered with your application]";
+
+            if (!String.IsNullOrWhiteSpace(config.ClientSecret) && config.ClientSecret != clientSecretPlaceholderValue)
+            {
+                return true;
+            }
+
+            else if (!String.IsNullOrWhiteSpace(config.CertificateName) && config.CertificateName != certificatePlaceholderValue)
+            {
+                return false;
+            }
+
+            else
+            {
+                Tag.What("IsNullOrWhiteSpace");
+                throw new Exception("IsNullOrWhiteSpace".TagError());
+            }
+        }
+
+        private static X509Certificate2 ReadCertificate(string certificateName)
+        {
+            Tag.Where("ReadCertificate");
+
+            if (string.IsNullOrWhiteSpace(certificateName))
+            {
+                Tag.Error("IsNullOrWhiteSpace");
+                throw new ArgumentException("IsNullOrWhiteSpace".TagError());
+            }
+
+            CertificateDescription certificateDescription = CertificateDescription.FromStoreWithDistinguishedName(certificateName);
+
+            DefaultCertificateLoader defaultCertificateLoader = new();
+
+            defaultCertificateLoader.LoadIfNeeded(certificateDescription);
+
+            if (certificateDescription.Certificate == null)
+            {
+                Tag.Error("null");
+                throw new Exception("null".TagError());
+            }
+
+            return certificateDescription.Certificate;
         }
     }
 }

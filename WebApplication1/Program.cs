@@ -26,7 +26,7 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation($"id={id}".TagWhat());
 
-    Tag.ToDo("@MakeAuthorizationConfigurable");
+    app.Logger.LogInformation("MakeAuthorizationConfigurable".TagToDo());
 
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
@@ -36,14 +36,13 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
-    app.Logger.LogInformation("Pre<NullStorageService>Call".TagWhy());
+    app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
 
-    app.Logger.LogWarning("ImplementAsyncServiceCall".TagToDo());
+    app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
+    app.Logger.LogWarning("ImplementAsyncServiceRead".TagToDo());
     var photon = NullStorageService.Read(id).Result;
-    //var photon = FileStorageService.Read(id).Result;
-    //var photon = TableStorageService.Read(id).Result;
 
-    app.Logger.LogInformation("Post<NullStorageService>Call".TagWhy());
+    app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
 
     app.Logger.LogTrace("GET".TagShout());
 
@@ -57,7 +56,7 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 
     app.Logger.LogInformation($"photon={photon}".TagWhat());
 
-    Tag.ToDo("@MakeAuthorizationConfigurable");
+    app.Logger.LogInformation("MakeAuthorizationConfigurable".TagToDo());
 
     app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
@@ -71,13 +70,13 @@ app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpCon
 
     app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
-    app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
+    app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
 
+    app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
+    app.Logger.LogWarning("ImplementAsyncServiceWrite".TagToDo());
     var result = NullStorageService.Write(photon);
-    //var result = LocalStorageService.Write(photon);
-    //var result = AzureTableStorageService.Write(photon);
 
-    app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
+    app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
 
     app.Logger.LogTrace($"POST {photon.Color}".TagShout());
 
