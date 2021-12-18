@@ -36,14 +36,14 @@ app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext ht
 
     app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
-    app.Logger.LogInformation("PreLocalStorageServiceCall".TagWhy());
+    app.Logger.LogInformation("Pre<NullStorageService>Call".TagWhy());
 
-    app.Logger.LogWarning("IsThisAsynchronous".TagToDo());
+    app.Logger.LogWarning("ImplementAsyncServiceCall".TagToDo());
     var photon = NullStorageService.Read(id).Result;
     //var photon = FileStorageService.Read(id).Result;
     //var photon = TableStorageService.Read(id).Result;
 
-    app.Logger.LogInformation("PostLocalStorageServiceCall".TagWhy());
+    app.Logger.LogInformation("Post<NullStorageService>Call".TagWhy());
 
     app.Logger.LogTrace("GET".TagShout());
 

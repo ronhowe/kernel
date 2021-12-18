@@ -18,7 +18,7 @@ namespace TestProject1
     public partial class UnitTest1
     {
         [TestMethod]
-        public async Task Tags()
+        public async Task ClassLibrary1()
         {
             await Task.Run(() => Tag.Comment("Comment"));
             await Task.Run(() => Tag.Error("Error"));
@@ -34,54 +34,13 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public async Task ValidateFileStorageService()
-        {
-            await Task.Run(() => Tag.Where("Development"));
-
-            var photon = PhotonFactory.Create(Color.Red);
-            await FileStorageService.IO(photon);
-            Assert.IsTrue(photon.Sent);
-            Assert.IsTrue(photon.Received);
-            Assert.AreEqual<Color>(Color.Red, photon.Color);
-        }
-
-        [TestMethod]
-        public async Task ValidateNullStorageService()
-        {
-            await Task.Run(() => Tag.Where("ValidateNullStorageService"));
-
-            var photon = PhotonFactory.Create(Color.Red);
-            await NullStorageService.IO(photon);
-            Assert.IsTrue(photon.Sent);
-            Assert.IsTrue(photon.Received);
-            Assert.AreEqual<Color>(Color.Red, photon.Color);
-        }
-
-        [TestMethod]
-        [Ignore]
-        public async Task ValidateTableStorageService()
-        {
-            await Task.Run(() => Tag.Where("Development"));
-
-            var photon = PhotonFactory.Create(Color.Red);
-
-            Assert.Inconclusive();
-
-            await TableStorageService.IO(photon);
-            Assert.IsTrue(photon.Sent);
-            Assert.IsTrue(photon.Received);
-            Assert.AreEqual<Color>(Color.Red, photon.Color);
-        }
-
-        [TestMethod]
-        [Ignore]
         #region [DataRow("https://localhost:9999")]
         [DataRow("https://localhost:9999")]
 #if !(DEBUG) // Case Sensitive
         [DataRow("https://api.ronhowe.org")]
 #endif
         #endregion
-        public async Task ValidateWebApplication1(string host)
+        public async Task WebApplication1(string host)
         {
             Tag.Where("WebApplication1");
 
