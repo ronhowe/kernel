@@ -217,10 +217,11 @@ namespace TestProject1
             Tag.What($"sentPhoton={sentPhoton}");
             Tag.What($"receivedPhoton={receivedPhoton}");
 
+            Tag.ToDo("ImplementSentAndReceivedProperties");
+
             Assert.IsNotNull(receivedPhoton);
             Assert.AreEqual(sentPhoton.Id, receivedPhoton.Id);
             Assert.AreEqual(sentPhoton.Color, receivedPhoton.Color);
-            Tag.ToDo("ImplementSentAndReceivedProperties");
         }
 
         private static bool AppUsesClientSecret(AuthenticationConfig config)
