@@ -19,6 +19,8 @@ Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResourceGroup1", "Azur
 EndProject
 Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "PowerShellProject1", "PowerShellProject1\PowerShellProject1.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{BD755E6A-67BE-4E8A-9407-D1A6A4BC1EC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD755E6A-67BE-4E8A-9407-D1A6A4BC1EC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD755E6A-67BE-4E8A-9407-D1A6A4BC1EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD755E6A-67BE-4E8A-9407-D1A6A4BC1EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD755E6A-67BE-4E8A-9407-D1A6A4BC1EC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
