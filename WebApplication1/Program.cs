@@ -24,10 +24,6 @@ try
 
     builder.Services.AddAuthorization();
 
-    Tag.Why("PreAddAzureAppConfiguration");
-
-    Tag.Why("PostAddAzureAppConfiguration");
-
     builder.Services.AddHealthChecks();
 
     builder.Services.AddFeatureManagement();
@@ -35,6 +31,8 @@ try
     builder.Services.AddAzureAppConfiguration();
 
     var connectionString = builder.Configuration.GetConnectionString("AzureAppConfiguration");
+
+    Tag.Why("PreAddAzureAppConfiguration");
 
     builder.Configuration.AddAzureAppConfiguration(options =>
     {
@@ -52,6 +50,8 @@ try
                 featureFlagOptions.CacheExpirationInterval = new TimeSpan(0, 0, 3);
             });
     });
+
+    Tag.Why("PostAddAzureAppConfiguration");
 
     var app = builder.Build();
 
