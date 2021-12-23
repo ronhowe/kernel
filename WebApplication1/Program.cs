@@ -4,12 +4,22 @@ using Microsoft.FeatureManagement;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using Serilog;
+using Serilog.Events;
+
+// Match this to appsettings.json for consistency.
+const string outputTemplate = "**ConsoleTemplate** [{MachineName}] {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
-    //.WriteTo.Console()
-    .WriteTo.Trace()
-    //.CreateBootstrapLogger();
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .WriteTo.Console(outputTemplate: outputTemplate)
     .CreateLogger();
+
+Log.Debug("**Log.Debug()**");
+Log.Information("**Log.Information()**");
+Log.ForContext("SourceContext", "**SourceContext**").Information("**Log.ForContext().Information()**");
 
 try
 {
@@ -18,6 +28,11 @@ try
     Tag.How("Program");
 
     var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((hostContext, LoggerConfiguration) =>
+    {
+        LoggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+    });
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
@@ -54,6 +69,8 @@ try
     Tag.Why("PostAddAzureAppConfiguration");
 
     var app = builder.Build();
+
+    app.UseSerilogRequestLogging();
 
     app.UseHttpsRedirection();
 
@@ -149,6 +166,5 @@ catch (Exception ex)
 }
 finally
 {
-    Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }

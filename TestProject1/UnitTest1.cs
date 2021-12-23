@@ -1,4 +1,5 @@
 using ClassLibrary1;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -54,25 +55,26 @@ namespace TestProject1
 
             Tag.What($"host={host}");
 
+            using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+
+            using var client = application.CreateClient(new() { BaseAddress = new Uri(host) });
+
             var color = Color.Green;
 
             Tag.Why("PreRunCall");
 
-            await Run(host, color);
+            await Run(client, color);
 
             Tag.Why("PostRunCall");
 
             Tag.Shout($"OK {color}");
         }
 
-        private static async Task Run(string uriString, Color color)
+        private static async Task Run(HttpClient client, Color color)
         {
             Tag.Where("Run");
 
-            Tag.What($"uriString={uriString}");
             Tag.What($"color={color}");
-
-            HttpClient client = new() { BaseAddress = new Uri(uriString) };
 
             #region Client Authentication
 
