@@ -7,7 +7,7 @@ using Serilog;
 using Serilog.Events;
 
 // Match this to appsettings.json for consistency.
-const string outputTemplate = "**ConsoleTemplate** [{MachineName}] {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string outputTemplate = "**SERVER** [{MachineName}] {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -17,15 +17,15 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(outputTemplate: outputTemplate)
     .CreateLogger();
 
-Log.Debug("**Log.Debug()**");
-Log.Information("**Log.Information()**");
-Log.ForContext("SourceContext", "**SourceContext**").Information("**Log.ForContext().Information()**");
+//Log.Debug("**Log.Debug()**");
+//Log.Information("**Log.Information()**");
+//Log.ForContext("SourceContext", "**SourceContext**").Information("**Log.ForContext().Information()**");
 
 try
 {
-    Log.Information("Starting up");
+    //Log.Information("Starting up");
 
-    Tag.How("Program");
+    //Tag.How("Program");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +47,7 @@ try
 
     var connectionString = builder.Configuration.GetConnectionString("AzureAppConfiguration");
 
-    Tag.Why("PreAddAzureAppConfiguration");
+    //Tag.Why("PreAddAzureAppConfiguration");
 
     builder.Configuration.AddAzureAppConfiguration(options =>
     {
@@ -66,7 +66,7 @@ try
             });
     });
 
-    Tag.Why("PostAddAzureAppConfiguration");
+    //Tag.Why("PostAddAzureAppConfiguration");
 
     var app = builder.Build();
 
@@ -84,29 +84,29 @@ try
 
     app.MapGet(ApplicationEndpoint.BasicInputOutputService, (Guid id, HttpContext httpContext) =>
     {
-        app.Logger.LogInformation("MapGet".TagWhere());
+        app.Logger.LogDebug("MapGet");
 
-        app.Logger.LogInformation($"id={id}".TagWhat());
+        app.Logger.LogDebug("{x}", $"id={id}".TagWhat());
 
-        app.Logger.LogInformation("MakeAuthorizationConfigurable".TagToDo());
+        //app.Logger.LogInformation(message: "MakeAuthorizationConfigurable".TagToDo());
 
-        app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
+        //app.Logger.LogInformation(message: "PreAuthorizationLogic".TagWhy());
 
         httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+        //app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
+        //app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
-        app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
+        //app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
 
-        app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
-        app.Logger.LogWarning("ImplementAsyncServiceRead".TagToDo());
+        //app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
+        //app.Logger.LogWarning("ImplementAsyncServiceRead".TagToDo());
         var photon = NullStorageService.Read(id).Result;
 
-        app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
+        //app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
 
-        app.Logger.LogTrace("GET".TagShout());
+        //app.Logger.LogTrace("GET".TagShout());
 
         return photon;
     })
@@ -114,7 +114,7 @@ try
 
     app.MapPost(ApplicationEndpoint.BasicInputOutputService, (Photon photon, HttpContext httpContext) =>
     {
-        app.Logger.LogInformation("MapPost".TagWhere());
+        //app.Logger.LogInformation("MapPost".TagWhere());
 
         if (app.Configuration.GetValue<string>("this") == "that")
         {
@@ -126,33 +126,33 @@ try
             throw new ApplicationException("MOCK DEATH BY FEATURE");
         }
 
-        app.Logger.LogInformation(app.Configuration.GetValue<string>("this"));
+        //app.Logger.LogInformation(app.Configuration.GetValue<string>("this"));
 
-        app.Logger.LogInformation($"photon={photon}".TagWhat());
+        //app.Logger.LogInformation($"photon={photon}".TagWhat());
 
-        app.Logger.LogInformation("MakeAuthorizationConfigurable".TagToDo());
+        //app.Logger.LogInformation("MakeAuthorizationConfigurable".TagToDo());
 
-        app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
+        //app.Logger.LogInformation("PreAuthorizationLogic".TagWhy());
 
         httpContext.ValidateAppRole(ApplicationRole.CanRead);
 
-        app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
+        //app.Logger.LogInformation("ValidatedCanReadPermission".TagWhy());
 
         httpContext.ValidateAppRole(ApplicationRole.CanWrite);
 
-        app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
+        //app.Logger.LogInformation("ValidatedCanWritePermission".TagWhy());
 
-        app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
+        //app.Logger.LogInformation("PostAuthorizationLogic".TagWhy());
 
-        app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
+        //app.Logger.LogInformation("Pre<IStorageService>Call".TagWhy());
 
-        app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
-        app.Logger.LogWarning("ImplementAsyncServiceWrite".TagToDo());
+        //app.Logger.LogWarning("ImplementIStorageServiceInterface".TagToDo());
+        //app.Logger.LogWarning("ImplementAsyncServiceWrite".TagToDo());
         var result = NullStorageService.Write(photon);
 
-        app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
+        //app.Logger.LogInformation("Post<IStorageService>Call".TagWhy());
 
-        app.Logger.LogTrace($"POST {photon.Color}".TagShout());
+        //app.Logger.LogTrace($"POST {photon.Color}".TagShout());
 
         return photon;
     })
