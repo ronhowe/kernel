@@ -180,19 +180,25 @@ namespace TestProject1
                 //Tag.Comment("Runbook12345");
                 throw ex;
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (NotSupportedException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 //Tag.Error("ContentTypeNotSupported");
                 //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (JsonException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 //Tag.Error("InvalidJson");
                 //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 //Tag.Error("UnknownException");
                 //Tag.Error(ex.Message);
@@ -217,13 +223,17 @@ namespace TestProject1
                 receivedPhoton = await client.GetFromJsonAsync<Photon>(uri);
             }
             // TODO This is likely NOT the exception thrown, but shows we can handle different kinds differently.
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (JsonException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 //Tag.Error("InvalidJson");
                 //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 //Tag.Error("UnknownException");
                 //Tag.Error(ex.Message);
