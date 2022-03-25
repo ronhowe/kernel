@@ -1,7 +1,10 @@
 using ClassLibrary1;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -34,7 +37,7 @@ namespace TestProject1
                     }
                 }
 
-                Tag.What($"BuildConfiguration={Constant.BuildConfiguration}");
+                //Tag.What($"BuildConfiguration={Constant.BuildConfiguration}");
 
                 await Task.Run(() => Tag.Where("TestInitialize"));
             }
@@ -50,36 +53,53 @@ namespace TestProject1
         [DataRow("https://localhost:9999")]
         public async Task WebApplication1(string host)
         {
-            Tag.Where("WebApplication1");
+            // Match this to appsettings.json for consistency.
+            const string outputTemplate = "**CLIENT** [{MachineName}] {Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
-            Tag.What($"host={host}");
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .WriteTo.Console(outputTemplate: outputTemplate)
+                .CreateLogger();
+
+            //Log.Debug("**Log.Debug()**");
+            //Log.Information("**Log.Information()**");
+            //Log.ForContext("SourceContext", "**SourceContext**").Information("**Log.ForContext().Information()**");
+
+            //Log.Information("WebApplication1".TagWhere());
+
+            //Tag.What($"host={host}");
+
+            using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+
+            using var client = application.CreateClient(new() { BaseAddress = new Uri(host) });
 
             var color = Color.Green;
 
-            Tag.Why("PreRunCall");
+            //Tag.Why("PreRunCall");
 
-            await Run(host, color);
+            await Run(client, color);
 
-            Tag.Why("PostRunCall");
+            //Tag.Why("PostRunCall");
 
-            Tag.Shout($"OK {color}");
+            //Tag.Shout($"OK {color}");
         }
 
-        private static async Task Run(string uriString, Color color)
+        private static async Task Run(HttpClient client, Color color)
         {
-            Tag.Where("Run");
+            //Log.Information("***********************".TagWhere());
+            //Tag.Where("Run");
 
-            Tag.What($"uriString={uriString}");
-            Tag.What($"color={color}");
-
-            HttpClient client = new() { BaseAddress = new Uri(uriString) };
+            //Tag.What($"color={color}");
 
             #region Client Authentication
 
-            Tag.ToDo("RefactorClientAuthentication");
+            //Tag.ToDo("RefactorClientAuthentication");
             if (true)
             {
-                Tag.Why("PreClientAuthentication");
+                //Tag.Why("PreClientAuthentication");
 
                 // @TODO @ReadFromKeyVault
                 AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.secrets.json");
@@ -111,11 +131,11 @@ namespace TestProject1
                 string[] scopes = new string[] { config.TodoListScope };
                 try
                 {
-                    Tag.Why("PreAcquireTokenForClient");
+                    //Tag.Why("PreAcquireTokenForClient");
 
                     var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
-                    Tag.Why("PostAcquireTokenForClient");
+                    //Tag.Why("PostAcquireTokenForClient");
                     if (result != null)
                     {
                         if (!string.IsNullOrEmpty(result.AccessToken))
@@ -136,7 +156,7 @@ namespace TestProject1
                     Tag.Error("ScopeProvidedNotSupported");
                 }
 
-                Tag.Why("PostClientAuthentication");
+                //Tag.Why("PostClientAuthentication");
             }
 
             #endregion Client Authentication
@@ -145,7 +165,7 @@ namespace TestProject1
 
             Photon sentPhoton = PhotonFactory.Create(color);
 
-            Tag.Why("PrePostAsJsonAsyncCall");
+            //Tag.Why("PrePostAsJsonAsyncCall");
 
             try
             {
@@ -153,33 +173,39 @@ namespace TestProject1
             }
             catch (HttpRequestException ex)
             {
-                Tag.Error("HttpRequestException");
-                Tag.Error(ex.Message);
+                //Tag.Error("HttpRequestException");
+                //Tag.Error(ex.Message);
                 // TODO Example how to codify remediations.
-                Tag.ToDo("CreateRunbook12345");
-                Tag.Comment("Runbook12345");
+                //Tag.ToDo("CreateRunbook12345");
+                //Tag.Comment("Runbook12345");
                 throw ex;
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (NotSupportedException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
-                Tag.Error("ContentTypeNotSupported");
-                Tag.Error(ex.Message);
+                //Tag.Error("ContentTypeNotSupported");
+                //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (JsonException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
-                Tag.Error("InvalidJson");
-                Tag.Error(ex.Message);
+                //Tag.Error("InvalidJson");
+                //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
-                Tag.Error("UnknownException");
-                Tag.Error(ex.Message);
+                //Tag.Error("UnknownException");
+                //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
 
-            Tag.Why("PostPostAsJsonAsyncCall");
+            //Tag.Why("PostPostAsJsonAsyncCall");
 
             #endregion Send/Write
 
@@ -187,37 +213,41 @@ namespace TestProject1
 
             Photon? receivedPhoton;
 
-            Tag.Why("PreGetFromJsonAsyncCall");
+            //Tag.Why("PreGetFromJsonAsyncCall");
 
             string uri = $"{ApplicationEndpoint.BasicInputOutputService}?id={sentPhoton.Id}";
-            Tag.What($"uri={uri}");
+            //Tag.What($"uri={uri}");
 
             try
             {
                 receivedPhoton = await client.GetFromJsonAsync<Photon>(uri);
             }
             // TODO This is likely NOT the exception thrown, but shows we can handle different kinds differently.
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (JsonException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
-                Tag.Error("InvalidJson");
-                Tag.Error(ex.Message);
+                //Tag.Error("InvalidJson");
+                //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
-                Tag.Error("UnknownException");
-                Tag.Error(ex.Message);
+                //Tag.Error("UnknownException");
+                //Tag.Error(ex.Message);
                 throw new ApplicationException();
             }
 
-            Tag.Why("PostGetFromJsonAsyncCall");
+            //Tag.Why("PostGetFromJsonAsyncCall");
 
             #endregion Read/Receive
 
-            Tag.What($"sentPhoton={sentPhoton}");
-            Tag.What($"receivedPhoton={receivedPhoton}");
+            //Tag.What($"sentPhoton={sentPhoton}");
+            //Tag.What($"receivedPhoton={receivedPhoton}");
 
-            Tag.ToDo("ImplementSentAndReceivedProperties");
+            //Tag.ToDo("ImplementSentAndReceivedProperties");
 
             Assert.IsNotNull(receivedPhoton);
             Assert.AreEqual(sentPhoton.Id, receivedPhoton.Id);
@@ -226,7 +256,7 @@ namespace TestProject1
 
         private static bool AppUsesClientSecret(AuthenticationConfig config)
         {
-            Tag.Where("AppUsesClientSecret");
+            //Tag.Where("AppUsesClientSecret");
 
             const string clientSecretPlaceholderValue = "[Enter here a client secret for your application]";
             const string certificatePlaceholderValue = "[Or instead of client secret: Enter here the name of a certificate (from the user cert store) as registered with your application]";
@@ -243,18 +273,18 @@ namespace TestProject1
 
             else
             {
-                Tag.What("IsNullOrWhiteSpace");
+                //Tag.What("IsNullOrWhiteSpace");
                 throw new Exception("IsNullOrWhiteSpace".TagError());
             }
         }
 
         private static X509Certificate2 ReadCertificate(string certificateName)
         {
-            Tag.Where("ReadCertificate");
+            //Tag.Where("ReadCertificate");
 
             if (string.IsNullOrWhiteSpace(certificateName))
             {
-                Tag.Error("IsNullOrWhiteSpace");
+                //Tag.Error("IsNullOrWhiteSpace");
                 throw new ArgumentException("IsNullOrWhiteSpace".TagError());
             }
 
@@ -266,7 +296,7 @@ namespace TestProject1
 
             if (certificateDescription.Certificate == null)
             {
-                Tag.Error("null");
+                //Tag.Error("null");
                 throw new Exception("null".TagError());
             }
 
